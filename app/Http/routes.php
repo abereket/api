@@ -14,3 +14,13 @@
 $app->get('/', function () use ($app) {
     return $app->welcome();
 });
+
+$app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($app){
+
+    //users
+    $app->post('users', 'UserController@create');                 //creates users
+    $app->get('users',  'UserController@retrieve');               //retrieve users
+    $app->get('users/{user_id}',  'UserController@retrieveOne');  //retrieve one
+    $app->put('users/{user_id}',  'UserController@update');       //updates the user
+    $app->delete('users/{user_id}','UserController@delete');      //deletes the user
+});
