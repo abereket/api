@@ -3,7 +3,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 
 class teamController extends Controller{
-
+    /**
+     * creates a team
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function create()
     {
         $team=array('id'=>1,'uuid'=>'12659-adfad-767','name'=>'Team awesome','agency_id'=>1,'category'=>'Financing','createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s'));
@@ -11,6 +14,10 @@ class teamController extends Controller{
         return response()->json(["status"=>"success","code"=>200,"results"=>$team]);
     }
 
+    /**
+     * retrieves a team
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function retrieve()
     {
         $team=array(array('id'=>1,'uuid'=>'12659-adfad-767','name'=>'Team one','agency_id'=>1,'category'=>'Financing','createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s')),
@@ -20,6 +27,11 @@ class teamController extends Controller{
         return response()->json(["status"=>"success","code"=>200,"count"=>$count,"results"=>$team]);
     }
 
+    /**
+     * accepts team id as a parameter and retrieves the corresponding team
+     * @param $team_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function retrieveOne($team_id)
     {
 
@@ -35,6 +47,11 @@ class teamController extends Controller{
         return response()->json(["message"=>"The team you want to be returned not exists"]);
     }
 
+    /**
+     * accepts team id as a parameter and updates the corresponding team
+     * @param $team_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function update($team_id)
     {
         $team=array(array('id'=>1,'uuid'=>'12659-adfad-767','name'=>'Team one','agency_id'=>1,'category'=>'Financing','createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s')),
@@ -54,6 +71,12 @@ class teamController extends Controller{
         return response()->json(["message"=>"The entry you want to be updated is not found"]);
 
     }
+
+    /**
+     * accepts team id as a parameter and deletes the corresponding team
+     * @param $team_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function delete($team_id)
     {
         $team=array(array('id'=>1,'uuid'=>'12659-adfad-767','name'=>'Team one','agency_id'=>1,'category'=>'Financing','createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s')),
