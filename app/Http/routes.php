@@ -14,3 +14,14 @@
 $app->get('/', function () use ($app) {
     return $app->welcome();
 });
+
+$app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($app){
+
+    //teams
+    $app->post('teams','TeamController@create');                         //creates teams
+    $app->get('teams','TeamController@retrieve');                        //retrieve teams
+    $app->get('teams/{team_id}','TeamController@retrieveOne');           //retrieves one team
+    $app->put('teams/{team_id}','TeamController@update');                //updates a team
+    $app->delete('teams/{team_id}','TeamController@delete');             //soft deletes a team
+
+});
