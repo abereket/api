@@ -48,7 +48,9 @@ class AgencyController extends Controller{
 
          foreach($agency as $agencies){
              if(in_array($agency_id,$agencies)){
-                 return response()->json(["status" => "success","code" => 200,"results" => $agencies]);
+                 if($agencies['id']==$agency_id) {
+                     return response()->json(["status" => "success", "code" => 200, "results" => $agencies]);
+                 }
              }
          }
         return response()->json(["message"=>"The entry you want not found"]);
@@ -70,11 +72,13 @@ class AgencyController extends Controller{
         foreach($agency as $agencies)
         {
             if(in_array($agency_id,$agencies)){
-                $agencies['name']        =   "Arch software solutions Updated";
-                $agencies['description'] =   "Staffing company based in California Updated";
-                $agencies['user']['id']  = 10;
+                if($agencies['id']==$agency_id) {
+                    $agencies['name'] = "Arch software solutions Updated";
+                    $agencies['description'] = "Staffing company based in California Updated";
+                    $agencies['user']['id'] = 10;
 
-                return response()->json(["status" => "success","code" => 200,"results" => $agencies]);
+                    return response()->json(["status" => "success", "code" => 200, "results" => $agencies]);
+                }
             }
         }
         return response()->json(["message"=>"There is no entry found to be updated"]);
@@ -95,9 +99,11 @@ class AgencyController extends Controller{
 
         foreach($agency as $agencies){
             if(in_array($agency_id,$agencies)){
-                unset($agencies);
+                if($agencies['id']==$agency_id) {
+                    unset($agencies);
 
-                return response()->json(["status"=>"success","code"=>"204"]);
+                    return response()->json(["status" => "success", "code" => "204"]);
+                }
             }
         }
         return response()->json(["message"=>"The entry you want to be deleted not found"]);
