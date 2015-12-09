@@ -41,7 +41,9 @@ class teamController extends Controller{
         foreach($team as $teams)
         {
             if(in_array($team_id,$teams)){
-                return response()->json(["status"=>"success","code"=>"200","results"=>$teams]);
+                if($teams['id']==$team_id) {
+                    return response()->json(["status" => "success", "code" => "200", "results" => $teams]);
+                }
             }
         }
         return response()->json(["message"=>"The team you want to be returned not exists"]);
@@ -61,11 +63,13 @@ class teamController extends Controller{
         {
             if(in_array($team_id,$teams))
             {
-              $teams['name']   =  'Team America';
-              $teams['category']   =  'IT';
-              $teams['agency_id']   =  2;
+                if($teams['id']==$team_id) {
+                    $teams['name'] = 'Team America';
+                    $teams['category'] = 'IT';
+                    $teams['agency_id'] = 2;
 
-                return response()->json(["status"=>"success","code"=>200,"results" => $teams]);
+                    return response()->json(["status" => "success", "code" => 200, "results" => $teams]);
+                }
             }
         }
         return response()->json(["message"=>"The entry you want to be updated is not found"]);
@@ -84,8 +88,10 @@ class teamController extends Controller{
 
         foreach($team as $teams){
             if(in_array($team_id,$teams)){
-                unset($teams);
-                return response()->json(["status"=>"success","code"=>204]);
+                if($teams['id']==$team_id) {
+                    unset($teams);
+                    return response()->json(["status" => "success", "code" => 204]);
+                }
             }
         }
         return response()->json(["message"=>"The enetry you want to be deleted is not found"]);
