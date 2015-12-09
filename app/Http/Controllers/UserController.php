@@ -100,8 +100,9 @@ class UserController extends Controller
         );
         foreach ($user as $users) {
             if (in_array($user_id, $users)) {
-                return response()->json(["success" => "success", "code" => "200", "results" => $users]);
-
+                if($users['id']==$user_id) {
+                    return response()->json(["success" => "success", "code" => "200", "results" => $users]);
+                }
             }
         }
         return response()->json(["message"  =>  "there is no available user according to your data"]);
@@ -140,14 +141,16 @@ class UserController extends Controller
 
         foreach($user as $users){
             if(in_array($user_id,$users)) {
-                $users['firstName']  = 'kibretB';
-                $users['lastName']   = 'bereketB';
-                $users['email']      = 'kibretB@example.com';
-                $users['type']       = 'candidate';
-                $users['type']       = 'candidate';
+                if($users['id']==$user_id) {
+                    $users['firstName'] = 'kibretB';
+                    $users['lastName'] = 'bereketB';
+                    $users['email'] = 'kibretB@example.com';
+                    $users['type'] = 'candidate';
+                    $users['type'] = 'candidate';
 
-                unset($users["password"]);
-                return response()->json(["status" => "success", "code" => "200", "results" => $users]);
+                    unset($users["password"]);
+                    return response()->json(["status" => "success", "code" => "200", "results" => $users]);
+                }
                 }
         }
         return response()->json(["message"=>"there is no any entry to be updated"]);
@@ -184,8 +187,10 @@ class UserController extends Controller
         );
         foreach($user as $users){
             if(in_array($user_id,$users)){
-                unset($users);
-                return response()->json(["status"=>"success","code"=>204]);
+                if($users['id']==$user_id) {
+                    unset($users);
+                    return response()->json(["status" => "success", "code" => 204]);
+                }
             }
         }
         return response()->json(["message"=>"the entry you want to be deleted is not found"]);
