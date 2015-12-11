@@ -1,10 +1,8 @@
 <?php
-
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Faker\Provider\Uuid;
-
-class CreateUsersTable extends Migration
+use \Faker\Provider\Base;
+class CreateTableUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +13,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->binary('uuid',32);
+            $table->string('uuid',36)->default(\Faker\Provider\Uuid::uuid());
             $table->string('first_name',50);
             $table->string('last_name',50);
             $table->string('email',60)->index();
