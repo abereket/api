@@ -1,17 +1,23 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Services\users;
+use Illuminate\Http\Request;
+
+
 class AgencyController extends Controller{
 
     /**
      * creates an agency
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $agency = array("uuid" => "12659-adfad-7671", "name" => "Arch Software Solutions", "description" => "Staffing company based in California",
-                        "createdAt" => date("Y-m-d H:i:s"), "updatedAt" => date("Y-m-d H:i:s"), "user" => array("id" => 1,
-                        "firstName" => "Amanuel", "lastName" => "Yohannes", "email" => "kibret@example.com"));
+        $rules=['name'        =>     'required|max:50',  'user_id'   => 'required',       'description'=>  'required',
+                'firstName'   =>     'required|max:50',  'lastName'  => 'required|max:50','email'      =>  'required|max:60'];
+        $this->validate($request,$rules);
+        $userService = new Users();
+        $agency = $userService->create($request);
 
         return response()->json(["status" => "success", "code" => 200, "results" => $agency]);
     }
