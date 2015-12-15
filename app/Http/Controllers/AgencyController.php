@@ -1,7 +1,8 @@
 <?php
 namespace App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
-use App\Services\users;
+use App\Services\Agencies;
 use Illuminate\Http\Request;
 
 
@@ -13,11 +14,11 @@ class AgencyController extends Controller{
      */
     public function create(Request $request)
     {
-        $rules=['name'        =>     'required|max:50',  'user_id'   => 'required',       'description'=>  'required',
+        $rules=['name'        =>     'required|max:50',  'userId'   => 'required',
                 'firstName'   =>     'required|max:50',  'lastName'  => 'required|max:50','email'      =>  'required|max:60'];
         $this->validate($request,$rules);
-        $userService = new Users();
-        $agency = $userService->create($request);
+        $agencyService = new Agencies();
+        $agency = $agencyService->create($request);
 
         return response()->json(["status" => "success", "code" => 200, "results" => $agency]);
     }
@@ -46,20 +47,12 @@ class AgencyController extends Controller{
     public function retrieveOne($agency_id)
     {
 
-        $agency =array(array("id"=>1,"uuid" => "12659-adfad-7671", "name" => "Arch Software Solutions", "description" => "Staffing company based in California",
-                             "createdAt" => date("Y-m-d H:i:s"), "updatedAt" => date("Y-m-d H:i:s"), "user" => array("id" => 1,
-                             "firstName" => "Amanuel", "lastName" => "Yohannes", "email" => "kibret@example.com")),array("id"=>2,"uuid" => "12659-adfad-7672", "name" => "Accenture", "description" => "Staffing company based in Idaho",
-                             "createdAt" => date("Y-m-d H:i:s"), "updatedAt" => date("Y-m-d H:i:s"), "user" => array("id" => 2,
-                             "firstName" => "Kibret", "lastName" => "Bereket", "email" => "kibret@example.com")));
+        $agencyService = new Agencies();
+        $agency  = $agencyService->retrieveOne($agency_id);
 
-         foreach($agency as $agencies){
-             if(in_array($agency_id,$agencies)){
-                 if($agencies['id']==$agency_id) {
-                     return response()->json(["status" => "success", "code" => 200, "results" => $agencies]);
-                 }
-             }
-         }
-        return response()->json(["message"=>"The entry you want not found"]);
+                     return response()->json(["status" => "success", "code" => 200, "results" => [$agency]]);
+
+        //return response()->json(["message"=>"The entry you want not found"]);
     }
 
     /**
@@ -67,26 +60,16 @@ class AgencyController extends Controller{
      * @param $user_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function update($agency_id){
+    public function update(Request $request,$agency_id){
 
-        $agency =array(array("id"=>1,"uuid" => "12659-adfad-7671", "name" => "Arch Software Solutions", "description" => "Staffing company based in California",
-                             "createdAt" => date("Y-m-d H:i:s"), "updatedAt" => date("Y-m-d H:i:s"), "user" => array("id" => 1,
-                             "firstName" => "Amanuel", "lastName" => "Yohannes", "email" => "kibret@example.com")),array("id"=>2,"uuid" => "12659-adfad-7672", "name" => "Accenture", "description" => "Staffing company based in Idaho",
-                             "createdAt" => date("Y-m-d H:i:s"), "updatedAt" => date("Y-m-d H:i:s"), "user" => array("id" => 2,
-                             "firstName" => "Kibret", "lastName" => "Bereket", "email" => "kibret@example.com")));
+          $rules=['name'        =>     'required|max:50',  'userId'   => 'required'];
 
-        foreach($agency as $agencies)
-        {
-            if(in_array($agency_id,$agencies)){
-                if($agencies['id']==$agency_id) {
-                    $agencies['name'] = "Arch software solutions Updated";
-                    $agencies['description'] = "Staffing company based in California Updated";
-                    $agencies['user']['id'] = 10;
-
-                    return response()->json(["status" => "success", "code" => 200, "results" => $agencies]);
+          $this->validate($request,$rules);
+          $agencyService=new Agencies();
+          $agency=$agencyService->update($request,$agency_id);
+                if($agency!==null) {
+                    return response()->json(["status" => "success", "code" => 200, "results" => $agency]);
                 }
-            }
-        }
         return response()->json(["message"=>"There is no entry found to be updated"]);
     }
 
@@ -97,22 +80,15 @@ class AgencyController extends Controller{
      */
     public function delete($agency_id)
     {
-        $agency =array(array("id"=>1,"uuid" => "12659-adfad-7671", "name" => "Arch Software Solutions", "description" => "Staffing company based in California",
-                             "createdAt" => date("Y-m-d H:i:s"), "updatedAt" => date("Y-m-d H:i:s"), "user" => array("id" => 1,
-                             "firstName" => "Amanuel", "lastName" => "Yohannes", "email" => "kibret@example.com")),array("id"=>2,"uuid" => "12659-adfad-7672", "name" => "Accenture", "description" => "Staffing company based in Idaho",
-                             "createdAt" => date("Y-m-d H:i:s"), "updatedAt" => date("Y-m-d H:i:s"), "user" => array("id" => 2,
-                             "firstName" => "Kibret", "lastName" => "Bereket", "email" => "kibret@example.com")));
-
-        foreach($agency as $agencies){
-            if(in_array($agency_id,$agencies)){
-                if($agencies['id']==$agency_id) {
-                    unset($agencies);
-
-                    return response()->json(["status" => "success", "code" => "204"]);
-                }
-            }
+        $agencyService = new Agencies();
+        $agency=$agencyService ->delete($agency_id);
+        if($agency=="success"){
+            return response()->json(["status" => "success", "code" => "204"]);
         }
         return response()->json(["message"=>"The entry you want to be deleted not found"]);
+
+
+
     }
 
 }
