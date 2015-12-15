@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Services\TeamMember;
+use Illuminate\Http\Request;
+
 
 class TeamMemberController extends Controller
 {
@@ -8,11 +11,14 @@ class TeamMemberController extends Controller
      * creates the team member
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-      $team_member=array('id'=>1,'uuid'=>'12659-adfad-7671','teamId'=>1,'userId'=>2,'createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s'));
+        $rules=['userId'=>'required|max:11','teamId'=>'required|max:11'];
+        $this->validate($request,$rules);
 
-        return response()->json(["status"=>"success","code"=>200,"results"=>$team_member]);
+        $teamMemberService = new TeamMember();
+        $teamMember = new $teamMemberService->create($request->userId,$request->teamId);
+        return response()->json(["status"=>"success","code"=>200,"results"=>$teamMember]);
     }
 
     /**
