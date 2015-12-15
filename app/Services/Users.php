@@ -26,7 +26,7 @@ class Users
         //2. Save it to the database
 
         //3. Return user array data
-        $result = User::get(array('id', 'uuid', 'first_name', 'last_name', 'email', 'type', 'verified', 'created_at', 'updated_at'));
+        $result = User::where('id',$user->id)->get(array('id', 'uuid', 'first_name', 'last_name', 'email', 'type', 'verified', 'created_at', 'updated_at'));
         return $result;
     }
 
@@ -39,7 +39,6 @@ class Users
 
     public function update($request, $user_id)
     {
-        //return $request;
         $user = User::find($user_id);
         if ($user) {
             $user->first_name = $request->input('firstName');
@@ -48,8 +47,8 @@ class Users
             $user->password = $request->input('password');
             $user->type = $request->input('type');
             $user->save();
+            unset($user['password'], $user['deleted_at']);
         }
-        unset($user['password'], $user['deleted_at']);
         return $user;
 
     }
@@ -58,10 +57,9 @@ class Users
         $user=User::find($user_id);
         if($user){
             $user->delete();
-            $status='success';
-            return $status;
+            $user='success';
+            return $user;
         }
-        $status='failure';
-        return $status;
+        return $user;
     }
 }
