@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Services\TeamMember;
+use App\Services\TeamMembers;
 use Illuminate\Http\Request;
 
 
@@ -16,8 +17,8 @@ class TeamMemberController extends Controller
         $rules=['userId'=>'required|max:11','teamId'=>'required|max:11'];
         $this->validate($request,$rules);
 
-        $teamMemberService = new TeamMember();
-        $teamMember = new $teamMemberService->create($request->userId,$request->teamId);
+        $teamMemberService = new TeamMembers();
+        $teamMember = $teamMemberService->create($request->userId,$request->teamId);
         return response()->json(["status"=>"success","code"=>200,"results"=>$teamMember]);
     }
 
