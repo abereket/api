@@ -1,15 +1,20 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Services\Teams;
+use Illuminate\Http\Request;
 
 class teamController extends Controller{
     /**
      * creates a team
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $team=array('id'=>1,'uuid'=>'12659-adfad-767','name'=>'Team awesome','agency_id'=>1,'category'=>'Financing','createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s'));
+        $rules=['name'=>'required|max:50','category'=>'max:75','agency_id'=>'required'];
+        $this->validate($request,$rules);
+        $teamService = new Teams();
+        $team=$teamService->create($request->name,$request->category,$request->agency_id);
 
         return response()->json(["status"=>"success","code"=>200,"results"=>$team]);
     }
