@@ -62,7 +62,7 @@ class AgencyController extends Controller{
      */
     public function update(Request $request,$agency_id){
 
-          $rules=['name'        =>     'required|max:50',  'userId'   => 'required'];
+          $rules=['id'    =>  'required|max:11','name'        =>     'required|max:50',  'userId'   => 'required'];
 
           $this->validate($request,$rules);
           $agencyService=new Agencies();
@@ -82,7 +82,7 @@ class AgencyController extends Controller{
     {
         $agencyService = new Agencies();
         $agency=$agencyService ->delete($agency_id);
-        if($agency=="success"){
+        if($agency){
             return response()->json(["status" => "success", "code" => "204"]);
         }
         return response()->json(["message"=>"The entry you want to be deleted not found"]);

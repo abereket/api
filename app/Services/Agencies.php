@@ -37,9 +37,10 @@ class Agencies
             if($agency){
                 $user=User::find($agency->user_id);
                 if($user) {
-                    $agency->name = $request->name;
-                    $agency->description = $request->description;
-                    $agency->user_id = $request->userId;
+                    $agency->id           =   $request->id;
+                    $agency->name         =   $request->name;
+                    $agency->description  =   $request->description;
+                    $agency->user_id      =   $request->userId;
                     $agency->save();
                     $user->id = $request->userId;
                     $user->save();
@@ -54,7 +55,7 @@ class Agencies
         $agency=Agency::find($agency_id);
         if($agency){
             $agency->delete();
-           return $agency="success";
+            return $agency;
         }
         return $agency;
     }

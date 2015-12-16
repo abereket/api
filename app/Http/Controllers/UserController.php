@@ -90,11 +90,12 @@ class UserController extends Controller
     {
 
         $rules = [
-            'firstName' => 'required|max:50',
-            'lastName' => 'required|max:50',
-            'email' => 'required|email|max:60',
-            'password' => 'required|max:60',
-            'type' => 'required'
+            'id'            => 'required|max:11',
+            'firstName'     => 'required|max:50',
+            'lastName'      => 'required|max:50',
+            'email'         => 'required|email|max:60',
+            'password'      => 'required|max:60',
+            'type'          => 'required'
         ];
 
         $this->validate($request, $rules);
@@ -109,8 +110,8 @@ class UserController extends Controller
     public function delete($user_id)
     {
         $userService = new Users();
-        $status= $userService->delete($user_id);
-        if($status=='success') {
+        $user= $userService->delete($user_id);
+        if($user) {
             return response()->json(["status" => $status, "code" => 204]);
         }
         return response()->json(["message"=>"the entry you want to be deleted is not found"]);

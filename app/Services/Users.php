@@ -10,11 +10,11 @@ class Users
     {
 
         $user = new User();
-        $user->first_name = $firstName;
-        $user->last_name = $lastName;
-        $user->email = $email;
-        $user->password = $password;
-        $user->type = $type;
+        $user->first_name     =     $firstName;
+        $user->last_name      =     $lastName;
+        $user->email          =     $email;
+        $user->password       =     $password;
+        $user->type           =     $type;
         $user->save();
 
         //2. Save it to the database
@@ -36,11 +36,12 @@ class Users
         //return $request;
         $user = User::find($user_id);
         if ($user) {
-            $user->first_name = $request->input('firstName');
-            $user->last_name = $request->input('lastName');
-            $user->email = $request->input('email');
-            $user->password = $request->input('password');
-            $user->type = $request->input('type');
+            $user->id              =   $request->input('id');
+            $user->first_name      =   $request->input('firstName');
+            $user->last_name       =   $request->input('lastName');
+            $user->email           =   $request->input('email');
+            $user->password        =   $request->input('password');
+            $user->type            =   $request->input('type');
             $user->save();
         }
         unset($user['password'], $user['deleted_at']);
@@ -52,7 +53,7 @@ class Users
         $user=User::find($user_id);
         if($user){
             $user->delete();
-            $user='success';
+            return $user;
         }
         return $user;
     }
