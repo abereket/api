@@ -38,11 +38,11 @@ class teamController extends Controller{
 
     public function update(Request $request,$team_id)
     {
-        $rules=['name'=>'required|max:50','category'=>'max:75','agencyId'=>'required'];
+        $rules=['id' => 'required|max:11', 'name'=>'required|max:50', 'category'=>'max:75', 'agencyId'=>'required'];
         $this->validate($request,$rules);
 
         $teamService =   new Teams();
-        $team        =   $teamService->update($request->name,$request->category,$request->agencyId,$team_id);
+        $team        =   $teamService->update($request->id,$request->name,$request->category,$request->agencyId,$team_id);
 
         if($team!==null)
         {
@@ -57,7 +57,7 @@ class teamController extends Controller{
     {
         $teamService=new Teams();
         $team=$teamService->delete($team_id);
-        if($team == 'success'){
+        if($team){
             return response()->json(["status" => "success", "code" => 204]);
         }
         return response()->json(["message"=>"The enetry you want to be deleted is not found"]);
