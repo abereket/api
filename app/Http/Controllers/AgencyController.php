@@ -50,9 +50,11 @@ class AgencyController extends Controller{
         $agencyService = new Agencies();
         $agency  = $agencyService->retrieveOne($agency_id);
 
-                     return response()->json(["status" => "success", "code" => 200, "results" => [$agency]]);
+         if($agency){
+             return response()->json(["status" => "success", "code" => 200, "results" => [$agency]]);
+         }
 
-        //return response()->json(["message"=>"The entry you want not found"]);
+        return response()->json(["message"=>"The entry you want not found"]);
     }
 
     /**
