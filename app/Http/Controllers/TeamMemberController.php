@@ -60,7 +60,7 @@ class TeamMemberController extends Controller
      */
     public function update(Request $request,$team_member_id){
 
-        $rules=['id'=>'required|max:11','userId'=>'required|max:11','teamId'=>'required|max:11'];
+        $rules=['id' =>'required|max:11','userId'=>'required|max:11','teamId'=>'required|max:11'];
         $this->validate($request,$rules);
 
         $teamMemberService = new TeamMembers();
