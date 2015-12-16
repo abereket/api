@@ -60,11 +60,11 @@ class TeamMemberController extends Controller
      */
     public function update(Request $request,$team_member_id){
 
-        $rules=['userId'=>'required|max:11','teamId'=>'required|max:11'];
+        $rules=['id'=>'required|max:11','userId'=>'required|max:11','teamId'=>'required|max:11'];
         $this->validate($request,$rules);
 
         $teamMemberService = new TeamMembers();
-        $teamMember = $teamMemberService->update($request->userId,$request->teamId,$team_member_id);
+        $teamMember = $teamMemberService->update($request->id,$request->userId,$request->teamId,$team_member_id);
         if($teamMember!==null){
 
             return response()->json(["status" => "success", "code" => "200", "results" => $teamMember]);
