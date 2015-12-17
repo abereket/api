@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 class TeamMemberController extends Controller
 {
     /**
-     * creates the team member
+     * calls the create method in the Services.TeamMembers
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function create(Request $request)
@@ -21,10 +22,6 @@ class TeamMemberController extends Controller
         return response()->json(["status"=>"success","code"=>200,"results"=>$teamMember]);
     }
 
-    /**
-     * retrieves the team member
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function retrieve(){
 
         $team_member=array(array('id'=>1,'uuid'=>'12659-adfad-7671','teamId'=>1,'userId'=>2, 'createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s')),
@@ -36,7 +33,7 @@ class TeamMemberController extends Controller
     }
 
     /**
-     * accepts team member id as parameter and retrieves the corresponding team member
+     * calls the retrieveOne method in Services.TeamMembers
      * @param $team_member_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -54,7 +51,8 @@ class TeamMemberController extends Controller
     }
 
     /**
-     * accepts team member id as parameter and updates the corresponding team member
+     * calls the update method in the Services.TeamMembers
+     * @param Request $request
      * @param $team_member_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -73,7 +71,7 @@ class TeamMemberController extends Controller
     }
 
     /**
-     * accepts team member id as parameter and soft deletes the corresponding team member
+     * calls the delete method in Services.TeamMembers
      * @param $team_member_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
