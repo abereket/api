@@ -5,7 +5,11 @@ use App\Services\Teams;
 use Illuminate\Http\Request;
 
 class teamController extends Controller{
-
+    /**
+     * validates the user input and calls the create method in Services.Teams
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function create(Request $request)
     {
         $rules=['name'=>'required|max:50','category'=>'max:75','agencyId'=>'required'];
@@ -25,6 +29,11 @@ class teamController extends Controller{
         return response()->json(["status"=>"success","code"=>200,"count"=>$count,"results"=>$team]);
     }
 
+    /**
+     * calls the retrieveOne method in Services.Teams
+     * @param $team_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function retrieveOne($team_id)
     {
         $temService = new Teams();
@@ -35,7 +44,12 @@ class teamController extends Controller{
         return response()->json(["message"=>"The team you want to be returned not exists"]);
     }
 
-
+    /**
+     * validates the user input and calls the update method in the Services.Teams
+     * @param Request $request
+     * @param $team_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function update(Request $request,$team_id)
     {
         $rules=['id' => 'required|max:11', 'name'=>'required|max:50', 'category'=>'max:75', 'agencyId'=>'required'];
@@ -53,6 +67,11 @@ class teamController extends Controller{
 
     }
 
+    /**
+     * calls the delete method in the Services.teams
+     * @param $team_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function delete($team_id)
     {
         $teamService=new Teams();
