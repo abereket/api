@@ -16,7 +16,8 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     /**
-     * takes all the fields and creates the user
+     * validates the user input and calls the create method in services.users
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
 
@@ -35,7 +36,7 @@ class UserController extends Controller
         $this->validate($request, $rules);
 
         $userService = new Users();
-        $result = $userService->create($firstName, $lastName, $email, $password, $type, $request);
+        $result = $userService->create($firstName, $lastName, $email, $password, $type);
 
 
         return response()->json(["status" => "success", "code" => "200", "results" => $result]);
@@ -75,6 +76,11 @@ class UserController extends Controller
         return response()->json(["status" => "success", "code" => "200", "count" => $count, "results" => $user]);
     }
 
+    /**
+     * takes the user id as a parameter and calls and passes the parameter to the retrieveOne method in Services.users
+     * @param $user_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function retrieveOne($user_id)
     {
         $userService = new Users();
@@ -85,7 +91,12 @@ class UserController extends Controller
         return response()->json(["message" => "there is no available user according to your data"]);
     }
 
-
+    /**
+     * validates the user input and calls the update method in the Services.update
+     * @param Request $request
+     * @param $user_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function update(Request $request, $user_id)
     {
 
@@ -107,6 +118,11 @@ class UserController extends Controller
         return response()->json(["message" => "there is no any entry to be updated"]);
     }
 
+    /**
+     * takes the user id parameter calls and passes to the delete method in the Services.users
+     * @param $user_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function delete($user_id)
     {
         $userService = new Users();

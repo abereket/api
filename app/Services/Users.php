@@ -12,8 +12,16 @@ use Faker\Provider\Uuid;
 
 class Users
 {
-
-    public function create($firstName, $lastName, $email, $password, $type, $request)
+    /**takes first name last name email password and type and creates user
+     * @param $firstName
+     * @param $lastName
+     * @param $email
+     * @param $password
+     * @param $type
+     * @param $request
+     * @return mixed
+     */
+    public function create($firstName, $lastName, $email, $password, $type)
     {
 
         $user = new User();
@@ -32,6 +40,10 @@ class Users
         return $result;
     }
 
+    /** takes user id as a parameter and returns the corresponding user
+     * @param $user_id
+     * @return mixed
+     */
     public function retrieveOne($user_id)
     {
         $user = User::find($user_id);
@@ -39,6 +51,12 @@ class Users
         return $user;
     }
 
+    /**
+     * takes user id as a parameter and updates the corresponding user
+     * @param $request
+     * @param $user_id
+     * @return mixed
+     */
     public function update($request, $user_id)
     {
         $user = User::find($user_id);
@@ -56,6 +74,11 @@ class Users
 
     }
 
+    /**
+     * takes user id as a parameter and deletes the corresponding user
+     * @param $user_id
+     * @return mixed
+     */
     public function delete($user_id){
         $user=User::find($user_id);
         if($user){
