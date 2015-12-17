@@ -8,6 +8,7 @@
 
 namespace App\Services;
 use App\Models\User;
+use Faker\Provider\Uuid;
 
 class Users
 {
@@ -16,6 +17,7 @@ class Users
     {
 
         $user = new User();
+        $user->uuid         =  Uuid::uuid();
         $user->first_name   =  $firstName;
         $user->last_name    =  $lastName;
         $user->email        =  $email;
