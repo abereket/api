@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTeamsTable extends Migration
+class CreateTableTeams extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class CreateTeamsTable extends Migration
             $table->string('name',50);
             $table->integer('agency_id')->unsigned();
             $table->foreign('agency_id')->references('id')->on('agencies');
-            $table->string('category',75);
+            $table->string('category',75)->nullable();
             $table->timestamps();
             $table->softDeletes()->nullable();
         });

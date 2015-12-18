@@ -15,7 +15,7 @@ class teamController extends Controller{
         $rules=['name'=>'required|max:50','category'=>'max:75','agencyId'=>'required'];
         $this->validate($request,$rules);
         $teamService = new Teams();
-        $team=$teamService->create($request->name,$request->category,$request->agencyId);
+        $team=$teamService->create($request->name,$request->input('category'),$request->agencyId);
 
         return response()->json(["status"=>"success","code"=>200,"results"=>$team]);
     }
