@@ -1,12 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
-use App\Services\Teams;
+use App\Services\TeamsService;
 use Illuminate\Http\Request;
 
 class teamController extends Controller{
     /**
-     * validates the user input and calls the create method in Services.Teams
+     * validates the user input and calls the create method in Services.TeamsService
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -14,10 +14,10 @@ class teamController extends Controller{
     {
         $rules=['name'=>'required|max:50','category'=>'max:75','agencyId'=>'required'];
         $this->validate($request,$rules);
-        $teamService = new Teams();
+        $teamService = new TeamsService();
         $team=$teamService->create($request->name,$request->input('category'),$request->agencyId);
 
-        return response()->json(["status"=>"success","code"=>200,"results"=>$team]);
+        return response()->json(["status"=>"success","code"=>parent::HTTP_200,"results"=>$team]);
     }
 
     public function retrieve()
@@ -26,26 +26,26 @@ class teamController extends Controller{
                    array('id'=>2,'uuid'=>'12659-adfad-768','name'=>'Team two','agency_id'=>1,'category'=>'Financing','createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s')));
 
         $count = count($team);
-        return response()->json(["status"=>"success","code"=>200,"count"=>$count,"results"=>$team]);
+        return response()->json(["status"=>"success","code" => parent::HTTP_200,"count"=>$count,"results" => $team]);
     }
 
     /**
-     * calls the retrieveOne method in Services.Teams
+     * calls the retrieveOne method in Services.TeamsService
      * @param $team_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function retrieveOne($team_id)
     {
-        $temService = new Teams();
+        $temService = new TeamsService();
         $team=$temService->retrieveOne($team_id);
-          if($team!==null) {
-              return response()->json(["status" => "success", "code" => "200", "results" => $team]);
+          if($team == null) {
+              return response()->json(["message"=>"The team you want to be returned not exists"]);
           }
-        return response()->json(["message"=>"The team you want to be returned not exists"]);
+           return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $team]);
     }
 
     /**
-     * validates the user input and calls the update method in the Services.Teams
+     * validates the user input and calls the update method in the Services.TeamsService
      * @param Request $request
      * @param $team_id
      * @return \Symfony\Component\HttpFoundation\Response
@@ -55,15 +55,15 @@ class teamController extends Controller{
         $rules=['id' => 'required|max:11', 'name'=>'required|max:50', 'category'=>'max:75', 'agencyId'=>'required'];
         $this->validate($request,$rules);
 
-        $teamService =   new Teams();
+        $teamService =   new TeamsService();
         $team        =   $teamService->update($request->id,$request->name,$request->category,$request->agencyId,$team_id);
 
-        if($team!==null)
+        if($team == null)
         {
-            return response()->json(["status" => "success", "code" => 200, "results" => $team]);
+            return response()->json(["message"=>"The entry you want to be updated is not found"]);
         }
+        return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $team]);
 
-        return response()->json(["message"=>"The entry you want to be updated is not found"]);
 
     }
 
@@ -74,11 +74,11 @@ class teamController extends Controller{
      */
     public function delete($team_id)
     {
-        $teamService=new Teams();
+        $teamService=new TeamsService();
         $team=$teamService->delete($team_id);
-        if($team){
-            return response()->json(["status" => "success", "code" => 204]);
+        if(!$team){
+            return response()->json(["message"=>"The entry you want to be deleted is not found"]);
         }
-        return response()->json(["message"=>"The enetry you want to be deleted is not found"]);
+        return response()->json(["status" => "success", "code" => parent::HTTP_204]);
     }
 }
