@@ -2,7 +2,7 @@
 namespace App\Services;
 use App\Models\TeamMember;
 
-class TeamMembers {
+class TeamMembersService {
     /**
      * creates the team member
      * @param $user_id
@@ -65,8 +65,8 @@ class TeamMembers {
         $teamMember=TeamMember::find($team_member_id);
         if($teamMember){
             $teamMember->delete();
-            return $teamMember;
         }
         return $teamMember;
+
     }
 }
