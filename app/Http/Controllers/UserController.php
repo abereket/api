@@ -9,7 +9,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Services\Users;
+use App\Services\UsersServices;
 use Illuminate\Http\Request;
 
 
@@ -35,11 +35,11 @@ class UserController extends Controller
 
         $this->validate($request, $rules);
 
-        $userService = new Users();
+        $userService = new UsersServices();
         $result = $userService->create($firstName, $lastName, $email, $password, $type);
 
 
-        return response()->json(["status" => "success", "code" => "200", "results" => $result]);
+        return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $result]);
 
 
     }
@@ -73,7 +73,7 @@ class UserController extends Controller
         )
         );
         $count = count($user);
-        return response()->json(["status" => "success", "code" => "200", "count" => $count, "results" => $user]);
+        return response()->json(["status" => "success", "code" => parent::HTTP_200, "count" => $count, "results" => $user]);
     }
 
     /**
@@ -83,12 +83,13 @@ class UserController extends Controller
      */
     public function retrieveOne($user_id)
     {
-        $userService = new Users();
+        $userService = new UsersServices();
         $result = $userService->retrieveOne($user_id);
-        if ($result !== null) {
-            return response()->json(["success" => "success", "code" => "200", "results" => $result]);
+        if ($result == null) {
+            return response()->json(["message" => "there is no available user according to your data"]);
         }
-        return response()->json(["message" => "there is no available user according to your data"]);
+        return response()->json(["success" => "success", "code" => parent::HTTP_200, "results" => $result]);
+
     }
 
     /**
@@ -110,12 +111,13 @@ class UserController extends Controller
         ];
 
         $this->validate($request, $rules);
-        $userService = new Users();
+        $userService = new UsersServices();
         $result = $userService->update($request, $user_id);
-        if ($result !== null) {
-            return response()->json(["status" => "success", "code" => "200", "results" => $result]);
+        if ($result == null) {
+            return response()->json(["message" => "there is no any entry to be updated"]);
         }
-        return response()->json(["message" => "there is no any entry to be updated"]);
+        return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $result]);
+
     }
 
     /**
@@ -125,12 +127,12 @@ class UserController extends Controller
      */
     public function delete($user_id)
     {
-        $userService = new Users();
+        $userService = new UsersServices();
         $user= $userService->delete($user_id);
-        if($user) {
-            return response()->json(["status" => "success", "code" => 204]);
+        if(!$user) {
+            return response()->json(["message"=>"the entry you want to be deleted is not found"]);
         }
-        return response()->json(["message"=>"the entry you want to be deleted is not found"]);
+        return response()->json(["status" => "success", "code" =>parent::HTTP_204]);
     }
 }
 ?>

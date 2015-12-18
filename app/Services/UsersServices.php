@@ -10,7 +10,7 @@ namespace App\Services;
 use App\Models\User;
 use Faker\Provider\Uuid;
 
-class Users
+class UsersServices
 {
     /**takes first name last name email password and type and creates user
      * @param $firstName
@@ -33,9 +33,6 @@ class Users
         $user->type         =  $type;
         $user->save();
 
-        //2. Save it to the database
-
-        //3. Return user array data
         $result = User::where('id',$user->id)->get(array('id', 'uuid', 'first_name', 'last_name', 'email', 'type', 'verified', 'created_at', 'updated_at'));
         return $result;
     }
@@ -81,10 +78,10 @@ class Users
      */
     public function delete($user_id){
         $user=User::find($user_id);
-        if($user){
-            $user->delete();
+        if(!$user){
             return $user;
         }
+        $user->delete();
         return $user;
     }
 }
