@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 class AgencyController extends Controller{
 
     /**
-     * creates an agency
+     * calls the create method in Services.Agencies
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function create(Request $request)
@@ -40,8 +41,8 @@ class AgencyController extends Controller{
     }
 
     /**
-     * takes agency id as parameter and retrieves the corresponding agency
-     * @param $user_id
+     * calls the retrieveOne method in Services.Agencies
+     * @param $agency_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function retrieveOne($agency_id)
@@ -58,8 +59,9 @@ class AgencyController extends Controller{
     }
 
     /**
-     * take agency id as parameter and updates the corresponding agency
-     * @param $user_id
+     * calls the update method in Services.update
+     * @param Request $request
+     * @param $agency_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function update(Request $request,$agency_id){
@@ -76,7 +78,7 @@ class AgencyController extends Controller{
     }
 
     /**
-     * takes agency id as parameter and deletes the corresponding agency
+     * calls the delete method in Services.Agencies
      * @param $agency_id
      * @return \Symfony\Component\HttpFoundation\Response
      */

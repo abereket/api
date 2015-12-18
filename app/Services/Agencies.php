@@ -6,7 +6,11 @@ use App\Models\User;
 
 class Agencies
 {
-
+    /**
+     * creates an agency
+     * @param $request
+     * @return static
+     */
     public function create($request)
     {
         $user=User::create(['id'=>$request->userId,'first_name'=>$request->firstName,'last_name'=>$request->lastName,'email'=>$request->email]);
@@ -15,6 +19,11 @@ class Agencies
         return $agency;
     }
 
+    /**
+     * retrieves an(one) agency
+     * @param $agency_id
+     * @return array
+     */
     public function retrieveOne($agency_id)
     {
          $agency=Agency::find($agency_id);
@@ -31,7 +40,12 @@ class Agencies
         return $agency;
     }
 
-
+    /**
+     * updates an agency
+     * @param $request
+     * @param $agency_id
+     * @return mixed
+     */
     public function update($request,$agency_id)
     {
         $agency=Agency::find($agency_id);
@@ -52,6 +66,11 @@ class Agencies
         return $agency;
     }
 
+    /**
+     * deletes an agency
+     * @param $agency_id
+     * @return mixed
+     */
     public function delete($agency_id){
         $agency=Agency::find($agency_id);
         if($agency){
