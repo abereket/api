@@ -128,7 +128,7 @@ class UserController extends Controller
         $userService = new Users();
         $user= $userService->delete($user_id);
         if($user) {
-            return response()->json(["status" => $status, "code" => 204]);
+            return response()->json(["status" => "success", "code" => 204]);
         }
         return response()->json(["message"=>"the entry you want to be deleted is not found"]);
     }
