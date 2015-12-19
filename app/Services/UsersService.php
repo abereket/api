@@ -3,7 +3,7 @@
 namespace App\Services;
 use App\Models\User;
 
-class Users
+class UsersService
 {
 
     public function create($firstName, $lastName, $email, $password, $type, $request)
@@ -17,9 +17,6 @@ class Users
         $user->type           =     $type;
         $user->save();
 
-        //2. Save it to the database
-
-        //3. Return user array data
         $result = User::get(array('id', 'uuid', 'first_name', 'last_name', 'email', 'type', 'verified', 'created_at', 'updated_at'))->last();
         return $result;
     }
@@ -43,8 +40,8 @@ class Users
             $user->password        =   $request->input('password');
             $user->type            =   $request->input('type');
             $user->save();
+            unset($user['password'], $user['deleted_at']);
         }
-        unset($user['password'], $user['deleted_at']);
         return $user;
 
     }
@@ -53,7 +50,6 @@ class Users
         $user=User::find($user_id);
         if($user){
             $user->delete();
-            return $user;
         }
         return $user;
     }

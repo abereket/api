@@ -4,7 +4,7 @@ namespace App\Services;
 use App\Models\Agency;
 use App\Models\User;
 
-class Agencies
+class AgenciesService
 {
     /**
      * creates an agency
@@ -52,13 +52,15 @@ class Agencies
             if($agency){
                 $user=User::find($agency->user_id);
                 if($user) {
-                    $agency->id           =   $request->id;
-                    $agency->name         =   $request->name;
-                    $agency->description  =   $request->description;
-                    $agency->user_id      =   $request->userId;
-                    $agency->save();
                     $user->id = $request->userId;
                     $user->save();
+                    $agency->id           =   $request->id;
+                    $agency->name         =   $request->name;
+                    $agency->description  =   $request->input('description');
+                    $agency->user_id      =   $request->userId;
+                    $agency->save();
+
+
 
                 }
                 return $agency;
@@ -75,7 +77,6 @@ class Agencies
         $agency=Agency::find($agency_id);
         if($agency){
             $agency->delete();
-            return $agency;
         }
         return $agency;
     }
