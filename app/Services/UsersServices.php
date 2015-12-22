@@ -10,7 +10,7 @@ namespace App\Services;
 use App\Models\User;
 use Faker\Provider\Uuid;
 
-class UsersService
+class UsersServices
 {
     /**takes first name last name email password and type and creates user
      * @param $firstName

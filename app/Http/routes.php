@@ -15,24 +15,21 @@ $app->get('/', function () use ($app) {
     return $app->welcome();
 });
 
-////Mapping of Agency controller
+////Mapping of Team controller
 
 $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($app){
 
-//user mapping
-    $app->post('users','UserController@create');                  //creates agencies
-    $app->get('users','UserController@retrieve');                 //retrieves the user
-    $app->get('users/{user_id}','UserController@retrieveOne');    //retrieves one user
-    $app->put('users/{user_id}','UserController@update') ;        //updates agencies
-    $app->delete('users/{user_id}','UserController@delete');      //soft deletes agency
+//team mapping
 
-//agency mapping
-    $app->post('agencies','AgencyController@create');                  //creates agencies
-    $app->get('agencies','AgencyController@retrieve');                 //retrieves the user
-    $app->get('agencies/{agency_id}','AgencyController@retrieveOne');    //retrieves one user
-    $app->put('agencies/{agency_id}','AgencyController@update') ;        //updates agencies
-    $app->delete('agencies/{agency_id}','AgencyController@delete');      //soft deletes agency
+    $app->post('teams', 'TeamController@create');                        //creates teams
+    $app->get('teams','TeamController@retrieve');                        //retrieves the team
+    $app->get('teams/{team_id}','TeamController@retrieveOne');           //retrieves one team
+    $app->put('teams/{team_id}','TeamController@update') ;               //updates teams
+    $app->delete('teams/{team_id}','TeamController@delete');             //soft deletes team
 
-
-
+    $app->post('team-members','TeamMemberController@create');              //creates team members
+    $app->get('team-members','TeamMemberController@retrieve');             //retrieves team members
+    $app->get('team-members/{id}','TeamMemberController@retrieveOne');     //retrieves one team member
+    $app->put('team-members/{id}','TeamMemberController@update');          //updates team member
+    $app->delete('team-members/{id}','TeamMemberController@delete');       //soft deletes a team member
 });
