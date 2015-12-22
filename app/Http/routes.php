@@ -27,5 +27,9 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
     $app->put('teams/{team_id}','TeamController@update') ;               //updates teams
     $app->delete('teams/{team_id}','TeamController@delete');             //soft deletes team
 
-
+    $app->post('team-members','TeamMemberController@create');              //creates team members
+    $app->get('team-members','TeamMemberController@retrieve');             //retrieves team members
+    $app->get('team-members/{id}','TeamMemberController@retrieveOne');     //retrieves one team member
+    $app->put('team-members/{id}','TeamMemberController@update');          //updates team member
+    $app->delete('team-members/{id}','TeamMemberController@delete');       //soft deletes a team member
 });
