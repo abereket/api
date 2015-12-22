@@ -9,14 +9,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Services\UsersServices;
+use App\Services\UsersService;
 use Illuminate\Http\Request;
 
 
 class UserController extends Controller
 {
     /**
-     * validates the user input and calls the create method in services.users
+     * calls the create method in services.UsersService
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -35,8 +35,8 @@ class UserController extends Controller
 
         $this->validate($request, $rules);
 
-        $userService = new UsersServices();
-        $result = $userService->create($firstName, $lastName, $email, $password, $type);
+        $userService = new UsersService();
+        $result = $userService->create($firstName, $lastName, $email, $password, $type, $request);
 
 
         return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $result]);
@@ -77,13 +77,13 @@ class UserController extends Controller
     }
 
     /**
-     * takes the user id as a parameter and calls and passes the parameter to the retrieveOne method in Services.users
+     * calls the retrieveOne method in services.UsersService
      * @param $user_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function retrieveOne($user_id)
     {
-        $userService = new UsersServices();
+        $userService = new UsersService();
         $result = $userService->retrieveOne($user_id);
         if ($result == null) {
             return response()->json(["message" => "there is no available user according to your data"]);
@@ -93,7 +93,7 @@ class UserController extends Controller
     }
 
     /**
-     * validates the user input and calls the update method in the Services.update
+     * calls the update method in services.UsersService
      * @param Request $request
      * @param $user_id
      * @return \Symfony\Component\HttpFoundation\Response
@@ -102,16 +102,16 @@ class UserController extends Controller
     {
 
         $rules = [
-            'id'        => 'required|max:11',
-            'firstName' => 'required|max:50',
-            'lastName'  => 'required|max:50',
-            'email'     => 'required|email|max:60',
-            'password'  => 'required|max:60',
-            'type'      => 'required'
+            'id'            => 'required|max:11',
+            'firstName'     => 'required|max:50',
+            'lastName'      => 'required|max:50',
+            'email'         => 'required|email|max:60',
+            'password'      => 'required|max:60',
+            'type'          => 'required'
         ];
 
         $this->validate($request, $rules);
-        $userService = new UsersServices();
+        $userService = new UsersService();
         $result = $userService->update($request, $user_id);
         if ($result == null) {
             return response()->json(["message" => "there is no any entry to be updated"]);
@@ -121,18 +121,19 @@ class UserController extends Controller
     }
 
     /**
-     * takes the user id parameter calls and passes to the delete method in the Services.users
+     * calls the delete method in services.UsersService
      * @param $user_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function delete($user_id)
     {
-        $userService = new UsersServices();
+        $userService = new UsersService();
         $user= $userService->delete($user_id);
         if(!$user) {
             return response()->json(["message"=>"the entry you want to be deleted is not found"]);
         }
-        return response()->json(["status" => "success", "code" =>parent::HTTP_204]);
+        return response()->json(["status" => "success", "code" => parent::HTTP_204]);
+
     }
 }
 ?>
