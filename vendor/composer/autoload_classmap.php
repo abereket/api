@@ -9,7 +9,7 @@ return array(
     'CreateTeamMembersTable'=> $baseDir . '/database/migrations/2015_12_16_190620_create_team_members_table.php',
     'CreateTableTeams'      => $baseDir . '/database/migrations/2015_12_15_212639_create_table_teams.php',
     'CreateTableUsers'      => $baseDir . '/database/migrations/2015_12_15_201228_create_table_users.php',
-    'CreateTableAgencies'   => $baseDir . '/database/migrations/2015_12_19_005115_create_table_agencies.php',
+    'CreateTableAgencies'   => $baseDir . '/database/migrations/2015_12_15_205115_create_table_agencies.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'ExampleTest' => $baseDir . '/tests/ExampleTest.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
