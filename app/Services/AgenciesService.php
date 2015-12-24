@@ -3,6 +3,8 @@ namespace App\Services;
 
 use App\Models\Agency;
 use App\Models\User;
+use App\Services\UsersService;
+
 
 class AgenciesService
 {
@@ -19,7 +21,7 @@ class AgenciesService
         if($valError){
          return $valError;
         }
-        $agency=Agency::create(['name'=>$request->name,'user_id'=>$request->userId,'description'=>$request->input('description')]);
+        $agency=Agency::create(['name'=>$request->input('name'),'user_id'=>$request->input('userId'),'description'=>$request->input('description')]);
         //send invitation email to the user
         $valError        =   $this->validateCreateA($agency);
         if($valError){
@@ -64,9 +66,9 @@ class AgenciesService
         if($valError){
         return $valError;
         }
-        $agency->name         =   $request->name;
+        $agency->name         =   $request->input('name');
         $agency->description  =   $request->input('description');
-        $agency->user_id      =   $request->userId;
+        $agency->user_id      =   $request->input('userId');
         $agency->save();
         return $agency;
     }
