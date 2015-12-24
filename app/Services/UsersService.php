@@ -21,16 +21,16 @@ class UsersService
      * @param $request
      * @return mixed
      */
-    public function create($firstName, $lastName, $email, $password, $type)
+    public function create($request)
     {
 
         $user = new User();
         $user->uuid         =  Uuid::uuid();
-        $user->first_name   =  $firstName;
-        $user->last_name    =  $lastName;
-        $user->email        =  $email;
-        $user->password     =  $password;
-        $user->type         =  $type;
+        $user->first_name   =  $request->input('firstName');
+        $user->last_name    =  $request->input('lastName');
+        $user->email        =  $request->input('email');
+        $user->password     =  $request->input('password');
+        $user->type         =  $request->input('type');
         $user->save();
 
         $result = User::where('id',$user->id)->get(array('id', 'uuid', 'first_name', 'last_name', 'email', 'type', 'verified', 'created_at', 'updated_at'));

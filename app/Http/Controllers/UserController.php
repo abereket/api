@@ -23,20 +23,13 @@ class UserController extends Controller
 
     public function create(Request $request)
     {
-
-        $firstName = $request->input('firstName');
-        $lastName = $request->input('lastName');
-        $email = $request->input('email');
-        $password = $request->input('password');
-        $type = $request->input('type');
-
         $rules = ['firstName' => 'required|max:50', 'lastName' => 'required|max:50', 'email' => 'required|email|max:60',
             'password' => 'required|max:60', 'type' => 'required'];
 
         $this->validate($request, $rules);
 
         $userService = new UsersService();
-        $result = $userService->create($firstName, $lastName, $email, $password, $type, $request);
+        $result = $userService->create($request);
 
 
         return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $result]);
