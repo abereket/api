@@ -9,28 +9,25 @@
 namespace App\Services;
 use App\Models\User;
 use Faker\Provider\Uuid;
+use Illuminate\Http\Request;
 
 class UsersService
 {
-    /**takes first name last name email password and type and creates user
-     * @param $firstName
-     * @param $lastName
-     * @param $email
-     * @param $password
-     * @param $type
+    /**
+     * takes request as a parameter and  creates a user
      * @param $request
      * @return mixed
      */
     public function create($request)
     {
-
         $user = new User();
+        $user->id           = ($request->input('userId'))?($request->input('userId')):'';
         $user->uuid         =  Uuid::uuid();
         $user->first_name   =  $request->input('firstName');
         $user->last_name    =  $request->input('lastName');
         $user->email        =  $request->input('email');
-        $user->password     =  $request->input('password');
-        $user->type         =  $request->input('type');
+        $user->password     =  ($request->input('password'))?$request->input('password'):'';
+        $user->type         =  $request->input('type')?$request->input('type'):'';
         $user->save();
 
         $result = User::where('id',$user->id)->get(array('id', 'uuid', 'first_name', 'last_name', 'email', 'type', 'verified', 'created_at', 'updated_at'));
@@ -65,7 +62,7 @@ class UsersService
             $user->password    =   $request->input('password');
             $user->type        =   $request->input('type');
             $user->save();
-            unset($user['password'], $user['deleted_at']);
+            unset($user['password']);
         }
         return $user;
 
