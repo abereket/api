@@ -27,6 +27,7 @@ class AgenciesService
         if($valError){
          return $valError;
         }
+        $agency = Agency::where('id',$agency->id)->first();
         return $agency;
     }
 

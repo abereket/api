@@ -42,10 +42,9 @@ class TeamMembersService {
      * @param $team_member_id
      * @return mixed
      */
-    public function update($id,$user_id,$team_id,$team_member_id){
+    public function update($user_id,$team_id,$team_member_id){
       $teamMember=TeamMember::find($team_member_id);
         if($teamMember){
-            $teamMember->id      =  $id;
             $teamMember->user_id =  $user_id;
             $teamMember->team_id =  $team_id;
             $teamMember->save();

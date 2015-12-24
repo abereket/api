@@ -16,12 +16,12 @@ class AgencyController extends Controller{
     public function create(Request $request)
     {
         $rules=['name'        =>     'required|max:50',  'userId'   => 'required',
-                'firstName'   =>     'required|max:50',  'lastName'  => 'required|max:50','email'      =>  'required|max:60'];
+                'firstName'   =>     'max:50',  'lastName'  => 'max:50','email'      =>  'required|max:60'];
         $this->validate($request,$rules);
         $agencyService = new AgenciesService();
         $agency = $agencyService->create($request);
 
-        return response()->json([$agency]);
+        return response()->json($agency);
     }
 
     /**
@@ -50,7 +50,7 @@ class AgencyController extends Controller{
 
         $agencyService = new AgenciesService();
         $agency  = $agencyService->retrieveOne($agency_id);
-        return response()->json([$agency]);
+        return response()->json($agency);
     }
 
     /**
@@ -65,7 +65,7 @@ class AgencyController extends Controller{
           $this->validate($request,$rules);
           $agencyService=new AgenciesService();
           $agency=$agencyService->update($request,$agency_id);
-          return response()->json([$agency]);
+          return response()->json($agency);
     }
 
     /**

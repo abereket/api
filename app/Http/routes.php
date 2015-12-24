@@ -36,7 +36,7 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
     $app->post('agencies','AgencyController@create');              //creates agencies
     $app->get('agencies','AgencyController@retrieve');             //retrieves agencies
     $app->get('agencies/{id}','AgencyController@retrieveOne');     //retrieves one agency
-    $app->put('agencies{id}','AgencyController@update');          //updates an agency
+    $app->put('agencies/{id}','AgencyController@update');          //updates an agency
     $app->delete('agencies/{id}','AgencyController@delete');       //soft deletes an agency
 
     $app->post('users','UserController@create');              //creates users
