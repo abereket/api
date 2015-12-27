@@ -18,7 +18,7 @@ class UsersService
      * @param $request
      * @return mixed
      */
-    public function create($request)
+    public function create($request,$agency)
     {
         $user = new User();
         $user->uuid         =  Uuid::uuid();
@@ -26,7 +26,7 @@ class UsersService
         $user->last_name    =  $request->input('lastName');
         $user->email        =  $request->input('email');
         $user->password     =  $request->input('password');
-        $user->type         =  $request->input('type');
+        $user->type         =  $agency;
         $user->save();
 
         $result = User::where('id',$user->id)->first();

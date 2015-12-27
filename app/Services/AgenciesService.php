@@ -3,7 +3,7 @@ namespace App\Services;
 
 use App\Models\Agency;
 use App\Models\User;
-
+use Faker\Provider\Uuid;
 
 class AgenciesService
 {
@@ -15,12 +15,12 @@ class AgenciesService
     public function create($request)
     {
         $userService = new UsersService();
-        $user  =    $userService->create($request);
+        $user  =    $userService->create($request,"agency");
         if(!$user instanceof User){
             return $user;
         }
 
-        $agency = Agency::create(['name'=>$request->input('name'),'user_id'=>$user->id,'description'=>$request->input('description')]);
+        $agency = Agency::create(['uuid' =>  Uuid::uuid(),'name'=>$request->input('name'),'user_id'=>$user->id,'description'=>$request->input('description')]);
         $valError        =   $this->validateCreate($agency);
         if($valError){
             return $valError;
