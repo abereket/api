@@ -27,6 +27,7 @@ class AgenciesService
         }
         $emailVerification = new EmailVerificationsService();
         $emailVerification->create('agency',$agency->user_id);
+        $agency->user = $user;
         $agency=$this->buildCreateSuccessMessage("success",$agency);
 
         return $agency;
