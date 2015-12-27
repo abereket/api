@@ -3,7 +3,6 @@ namespace App\Services;
 
 use App\Models\Agency;
 use App\Models\User;
-use App\Services\UsersService;
 
 
 class AgenciesService
@@ -16,18 +15,20 @@ class AgenciesService
     public function create($request)
     {
         $userService = new UsersService();
-        $user          =    $userService->create($request);
-        $valError      =    $this->validateCreate($user);
-        if($valError){
-         return $valError;
+        $user  =    $userService->create($request);
+        if(!$user instanceof User){
+            return $user;
         }
-        $agency=Agency::create(['name'=>$request->input('name'),'user_id'=>$request->input('userId'),'description'=>$request->input('description')]);
-        //send invitation email to the user
-        $valError        =   $this->validateCreateA($agency);
+
+        $agency = Agency::create(['name'=>$request->input('name'),'user_id'=>$user->id,'description'=>$request->input('description')]);
+        $valError        =   $this->validateCreate($agency);
         if($valError){
-         return $valError;
+            return $valError;
         }
-        $agency = Agency::where('id',$agency->id)->first();
+        $emailVerification = new EmailVerificationsService();
+        $emailVerification->create('agency',$agency->user_id);
+        $agency=$this->buildCreateSuccessMessage("success",$agency);
+
         return $agency;
     }
 
@@ -39,18 +40,13 @@ class AgenciesService
     public function retrieveOne($agency_id)
     {
         $agency=Agency::find($agency_id);
-        $valError = $this->ValidateRetrieveOneA($agency);
+        $valError = $this->validateRetrieveOne($agency);
         if($valError){
             return $valError;
         }
-        $user     = User::find($agency->user_id);
-        $valError   =$this->ValidateRetrieveOne($user);
-        if($valError) {
-            return $valError;
-        }
-
-        $object=array('agency'=>$agency,
-                      'user'=>array('id'=>$agency->user_id,'first_name'=>$user->first_name,'last_name'=>$user->last_name, 'email'=>$user->email));
+        $user           =    User::find($agency->user_id);
+        $agency->user   = $user;
+        $object=$this->buildRetrieveOneSuccessMessage("success",$agency);
         return $object;
     }
 
@@ -71,10 +67,15 @@ class AgenciesService
         $agency->description  =   $request->input('description');
         $agency->user_id      =   $request->input('userId');
         $agency->save();
+
+        $agency=$this->buildUpdateSuccessMessage("success",$agency);
         return $agency;
     }
 
-
+    /**
+     * @param $agency_id
+     * @return array
+     */
     public function delete($agency_id){
         $agency = Agency::find($agency_id);
         $valError = $this->validateDelete($agency);
@@ -86,47 +87,50 @@ class AgenciesService
         return $agency;
     }
 
-    //Buisness class validation
+    /**
+     * @param $agency
+     * @return array
+     */
+    protected function validateCreate($agency){
+        $errors = array();
+        if(!$agency){
+            $errors[] = array("message" => "please provide a valid agency");
+        }
+        return $errors;
+    }
 
-    protected function validateCreate($user){
-        $errors = array();
-        if(!$user){
-            $errors[] = "please provide a valid user";
-        }
-        return $errors;
-    }
-    protected function validateCreateA($agency){
+    /**
+     * @param $agency
+     * @return array
+     */
+    protected function validateRetrieveOne($agency){
         $errors = array();
         if(!$agency){
-            $errors[] = "please provide a valid agency";
+            $errors[] = array("message" => "please provide a valid agency");
         }
         return $errors;
     }
-    protected function validateRetrieveOneA($agency){
-        $errors = array();
-        if(!$agency){
-            $errors[] = "please provide a valid agency";
-        }
-        return $errors;
-    }
-    protected function validateRetrieveOne($user){
-        $errors = array();
-        if(!$user){
-            $errors[] = "please provide a valid agency";
-        }
-        return $errors;
-    }
+
+    /**
+     * @param $agency
+     * @return array
+     */
     protected function validateUpdate($agency){
         $errors = array();
         if(!$agency){
-            $errors[] = "please provide a valid agency";
+            $errors[] = array("message" => "please provide a valid agency");
         }
         return $errors;
     }
+
+    /**
+     * @param $agency
+     * @return array
+     */
     protected function validateDelete($agency) {
         $errors = array();
         if (!$agency) {
-            $errors[] = array('message' => 'Please provide valid agency id', 'code' => 400);
+            $errors[] = array("message" => "Please provide valid agency id");
         }
 
         return $errors;
@@ -134,22 +138,47 @@ class AgenciesService
 
     //success messages
 
+    /**
+     * @param $successMessage
+     * @return array
+     */
     protected function buildDeleteSuccessMessage($successMessage){
         $message = array();
         $message[] = array('message' => $successMessage, 'code' => 204);
         return $message;
     }
+
+    /**
+     * @param $successMessage
+     * @param $entity
+     * @return array
+     */
     protected function buildCreateSuccessMessage($successMessage, $entity){
         $message = array();
-        $message[] = array('message' => $successMessage, 'code' => 201,'results' => $entity);
+        $message[] = array('message' => $successMessage, 'code' => 200,'results' => $entity);
+        return $message;
     }
+
+    /**
+     * @param $successMessage
+     * @param $entity
+     * @return array
+     */
     protected function buildUpdateSuccessMessage($successMessage, $entity){
         $message = array();
         $message[] = array('message' => $successMessage, 'code' => 201,'results' => $entity);
+        return $message;
     }
+
+    /**
+     * @param $successMessage
+     * @param $entity
+     * @return array
+     */
     protected function buildRetrieveOneSuccessMessage($successMessage, $entity){
         $message = array();
         $message[] = array('message' => $successMessage, 'code' => 201,'results' => $entity);
+        return $message;
     }
 }
 

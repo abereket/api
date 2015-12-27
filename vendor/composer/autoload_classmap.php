@@ -6,10 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'CreateTeamMembersTable'=> $baseDir . '/database/migrations/2015_12_16_190620_create_team_members_table.php',
-    'CreateTableTeams'      => $baseDir . '/database/migrations/2015_12_15_212639_create_table_teams.php',
-    'CreateTableUsers'      => $baseDir . '/database/migrations/2015_12_15_201228_create_table_users.php',
-    'CreateTableAgencies'   => $baseDir . '/database/migrations/2015_12_15_205115_create_table_agencies.php',
+    'CreateEmailVerificationsTable' => $baseDir . '/database/migrations/2015_12_25_002550_create_email_verifications_table.php',
+    'CreateTableAgencies' => $baseDir . '/database/migrations/2015_12_15_205115_create_table_agencies.php',
+    'CreateTableTeams' => $baseDir . '/database/migrations/2015_12_15_212639_create_table_teams.php',
+    'CreateTableUsers' => $baseDir . '/database/migrations/2015_12_27_204823_create_table_users.php',
+    'CreateTeamMembersTable' => $baseDir . '/database/migrations/2015_12_16_190620_create_team_members_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'ExampleTest' => $baseDir . '/tests/ExampleTest.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',

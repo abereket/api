@@ -21,13 +21,12 @@ class UsersService
     public function create($request)
     {
         $user = new User();
-        $user->id           = ($request->input('userId'))?($request->input('userId')):'';
         $user->uuid         =  Uuid::uuid();
-        $user->first_name   =  ($request->input('firstName'))?($request->input('firstName')):'';
-        $user->last_name    =  ($request->input('lastName'))?($request->input('firstName')):'';
+        $user->first_name   =  $request->input('firstName');
+        $user->last_name    =  $request->input('lastName');
         $user->email        =  $request->input('email');
-        $user->password     =  ($request->input('password'))?$request->input('password'):'';
-        $user->type         =  $request->input('type')?$request->input('type'):'';
+        $user->password     =  $request->input('password');
+        $user->type         =  $request->input('type');
         $user->save();
 
         $result = User::where('id',$user->id)->first();
