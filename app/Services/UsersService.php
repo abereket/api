@@ -18,19 +18,21 @@ class UsersService
      * @param $request
      * @return mixed
      */
-    public function create($request,$agency)
+    public function create($request)
     {
         $user = new User();
         $user->uuid         =  Uuid::uuid();
         $user->first_name   =  $request->input('firstName');
         $user->last_name    =  $request->input('lastName');
-        $user->email        =  $request->input('email');
+        $user->email        =  $request->json()->get('email');
         $user->password     =  $request->input('password');
-        $user->type         =  $agency;
+        $user->type         =  $request->json()->get('type');
         $user->save();
-
-        $result = User::where('id',$user->id)->first();
-        return $result;
+        $valError = $this->validateCreate($user);
+        if($valError){
+            return $valError;
+        }
+        return $user;
     }
 
     /** takes user id as a parameter and returns the corresponding user
@@ -40,7 +42,11 @@ class UsersService
     public function retrieveOne($user_id)
     {
         $user = User::find($user_id);
-        unset($user['password'], $user['deleted_at']);
+        $valError = $this->validateRetrieveOne($user);
+        if($valError){
+            return $valError;
+        }
+        unset($user['password']);
         return $user;
     }
 
@@ -53,16 +59,21 @@ class UsersService
     public function update($request, $user_id)
     {
         $user = User::find($user_id);
-        if ($user) {
+        $valError = $this->validateUpdate($user);
+        if($valError){
+            return $valError;
+        }
+
             $user->id          =   $request->input('id');
             $user->first_name  =   $request->input('firstName');
             $user->last_name   =   $request->input('lastName');
             $user->email       =   $request->input('email');
             $user->password    =   $request->input('password');
             $user->type        =   $request->input('type');
+            $user->verified    =   $request->input('verified');
             $user->save();
             unset($user['password']);
-        }
+
         return $user;
 
     }
@@ -74,10 +85,40 @@ class UsersService
      */
     public function delete($user_id){
         $user=User::find($user_id);
-        if(!$user){
-            return $user;
+        $valError=$this->validateDelete($user);
+        if($valError){
+            return $valError;
         }
         $user->delete();
         return $user;
+    }
+
+    protected function validateCreate($user){
+        $errors = array();
+        if(!$user){
+            $errors[] = array("message"=>"please provide a valid user");
+        }
+        return $errors;
+    }
+    protected function validateRetrieveOne($user){
+        $errors = array();
+        if(!$user){
+            $errors[] = array("message"=>"please provide a valid user");
+        }
+        return $errors;
+    }
+    protected function validateUpdate($user){
+        $errors = array();
+        if(!$user){
+            $errors[] = array("message"=>"please provide a valid user");
+        }
+        return $errors;
+    }
+    protected function validateDelete($user){
+        $errors = array();
+        if(!$user){
+            $errors[] = array("message"=>"please provide a valid user");
+        }
+       return $errors;
     }
 }

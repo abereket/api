@@ -78,9 +78,7 @@ class UserController extends Controller
     {
         $userService = new UsersService();
         $result = $userService->retrieveOne($user_id);
-        if ($result == null) {
-            return response()->json(["message" => "there is no available user according to your data"]);
-        }
+
         return response()->json(["success" => "success", "code" => parent::HTTP_200, "results" => $result]);
 
     }
@@ -106,9 +104,7 @@ class UserController extends Controller
         $this->validate($request, $rules);
         $userService = new UsersService();
         $result = $userService->update($request, $user_id);
-        if ($result == null) {
-            return response()->json(["message" => "there is no any entry to be updated"]);
-        }
+
         return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $result]);
 
     }

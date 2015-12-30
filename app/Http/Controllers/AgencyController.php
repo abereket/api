@@ -7,6 +7,7 @@ use App\Services\AgenciesService;
 use Illuminate\Http\Request;
 
 
+
 class AgencyController extends Controller{
 
     /**
@@ -16,7 +17,7 @@ class AgencyController extends Controller{
     public function create(Request $request)
     {
         $rules=['name'        =>     'required|max:50',
-                'firstName'   =>     'max:50',  'lastName'  => 'max:50','email'      =>  'required|max:60'];
+                'firstName'   =>     'max:50',  'lastName'  => 'max:50','email'      =>  'required|max:60|email'];
         $this->validate($request,$rules);
         $agencyService = new AgenciesService();
         $agency = $agencyService->create($request);
@@ -41,8 +42,8 @@ class AgencyController extends Controller{
     }
 
     /**
-     * takes agency id as parameter and retrieves the corresponding agency
-     * @param $user_id
+     * retrieves one agency
+     * @param $agency_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function retrieveOne($agency_id)
@@ -54,13 +55,14 @@ class AgencyController extends Controller{
     }
 
     /**
-     * take agency id as parameter and updates the corresponding agency
-     * @param $user_id
+     * updates an agency
+     * @param Request $request
+     * @param $agency_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function update(Request $request,$agency_id){
 
-          $rules=['name'        =>     'required|max:50',  'userId'   => 'required'];
+          $rules=['name'        =>     'max:50',  'userId'   => 'max:11'];
 
           $this->validate($request,$rules);
           $agencyService=new AgenciesService();
@@ -80,9 +82,6 @@ class AgencyController extends Controller{
         return response()->json($agency);
 
     }
-
-
-
 
 
 }

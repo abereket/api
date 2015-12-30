@@ -1,15 +1,72 @@
 <?php
 namespace App\Services;
 
+use App\Models\EmailVerification;
 use App\Models\User;
 use App\Models\Agency;
-
-
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 
 class EmailVerificationsService{
 
-    public function create($verificationType,$agencyId){
-        $user = User::find($agencyId);
+    public function create($verificationType,$userId){
 
+        $emailVerification = EmailVerification::create(['verification_type'=>$verificationType,'token'      =>bin2hex(openssl_random_pseudo_bytes(16)),
+                                                        'user_id'           =>$userId,          'expired_at'=>date("Y-m-d H:i:s",(time()+(15*60)))]);
+
+        //$valError=$this->validateCreate($emailVerification);
+        //if($valError){
+          //return $valError;
+        //}
+        $userService = new UsersService();
+        $user=$userService->retrieveOne($emailVerification->user_id);
+        $code =base64_encode($emailVerification->token.':'.time($emailVerification->expired_at).':'.$emailVerification->verificaton_type);
+        return $emailVerification->expired_at;
+        //send the email
+        //Mail::send($code,array('url'=>'www.zemployee.com/email-verification','code'=>$code),function($message) use ($user){
+            //$message->to($user->email)->subject('activate your account');
+        //});
     }
+
+    public function update($request,$code)
+    {
+        $code = base64_decode($code);
+        $code = explode(':', $code);
+        $token = $code[0];
+        $expired_at = $code[1];
+        $verification_type = $code[2];
+        return date("Y-m-d H:i:s",$expired_at);
+
+        if (time() > $expired_at) {
+            $message = array("message" => "Your token has been expired");
+            return $message;
+        }
+
+        $emailVerification = EmailVerification::where("token", $token)->where("expired_at", $expired_at)->where("verification_type", $verification_type)->first();
+        $valError = $this->validateUpdate($emailVerification);
+        if ($valError) {
+            return $valError;
+        }
+        $emailVerification->is_verified = 1;
+        $emailVerification->save();
+        $userService = new UsersService();
+        $request->input('verified', 1);
+        $user = $userService->update($request, $emailVerification->user_id);
+    }
+        //protected function validateCreate($emailVerification){
+        //$errors = array();
+        //if(!$emailVerification){
+            //$errors[]=array("message"=>"Failed to create email verification");
+        //}
+        //return $errors;
+        //}
+        protected function validateUpdate($emailVerification){
+          $errors = array();
+            if(!$emailVerification){
+              $errors[] = array("message" => "you can not activate your account");
+          }
+            return $errors;
+        }
+
+
 }

@@ -15,12 +15,12 @@ class AgenciesService
     public function create($request)
     {
         $userService = new UsersService();
-        $user  =    $userService->create($request,"agency");
+        $user  =    $userService->create($request);
         if(!$user instanceof User){
             return $user;
         }
 
-        $agency = Agency::create(['uuid' =>  Uuid::uuid(),'name'=>$request->input('name'),'user_id'=>$user->id,'description'=>$request->input('description')]);
+        $agency = Agency::create(['uuid' =>  Uuid::uuid(),'name'=>$request->json()->get('name'),'user_id'=>$user->id,'description'=>$request->json()->get('description')]);
         $valError        =   $this->validateCreate($agency);
         if($valError){
             return $valError;
@@ -60,13 +60,14 @@ class AgenciesService
     public function update($request,$agency_id)
     {
         $agency   = Agency::find($agency_id);
-        $valError = $this->validateUpdate($agency);
+        $valError = $this->validateUpdate($agency, $request->json()->get('userId'));
         if($valError){
-        return $valError;
+            return $valError;
         }
-        $agency->name         =   $request->input('name');
-        $agency->description  =   $request->input('description');
-        $agency->user_id      =   $request->input('userId');
+
+        $agency->name         =   ($request->json()->get('name'))?($request->json()->get('name')):$agency->name;
+        $agency->description  =   ($request->json()->get('description'))?($request->json()->get('description')):$agency->description;
+        $agency->user_id      =   ($request->json()->get('userId'))?($request->json()->get('userId')):$agency->user_id;
         $agency->save();
 
         $agency=$this->buildUpdateSuccessMessage("success",$agency);
@@ -114,14 +115,23 @@ class AgenciesService
 
     /**
      * @param $agency
+     * @param $userId
      * @return array
      */
-    protected function validateUpdate($agency){
+    protected function validateUpdate($agency, $userId){
         $errors = array();
         if(!$agency){
             $errors[] = array("message" => "please provide a valid agency");
         }
+        if($userId) {
+            $user = User::find($userId);
+            if(!$user){
+                $message=array("message"=>"The value you entered not exists.please enter a valid user id");
+                return $message;
+            }
+        }
         return $errors;
+
     }
 
     /**
