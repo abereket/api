@@ -14,20 +14,29 @@ class AgenciesService
      */
     public function create($request)
     {
+        //Perform business specific validations
         $userService = new UsersService();
-        $user  =    $userService->create($request,"agency");
-        if(!$user instanceof User){
-            return $user;
-        }
-
-        $agency = Agency::create(['uuid' =>  Uuid::uuid(),'name'=>$request->json()->get('name'),'user_id'=>$user->id,'description'=>$request->json()->get('description')]);
-        $valError        =   $this->validateCreate($agency);
-        if($valError){
+        $user        =    $userService->retrieveOne($request->json()->get('userId'));
+        $valError    =   $this->validateCreate($user);
+        if ($valError) {
             return $valError;
         }
+
+        //create the agency
+        $agency = Agency::create(['uuid' =>  Uuid::uuid(),'name'=>$request->json()->get('name'),'user_id'=>$request->json()->get('userId'),'description'=>$request->json()->get('description')]);
+
+        //Create email verification entry
         $emailVerification = new EmailVerificationsService();
-        $emailVerification->create('agency',$agency->user_id);
-        $agency->user = $user;
+        $code = $emailVerification->create('agency',$agency->user_id);
+
+        //Send agency-user activation email
+        $emailService = new EmailsService();
+        $from         = "info@zemployee.com";
+        $subject      = "Agency, please active your email";
+        $body         = "Please click the link below to active your account " . $code;
+        $emailService->send($user->email, $from, $subject, $body);
+
+        //build success message
         $agency=$this->buildCreateSuccessMessage("success",$agency);
 
         return $agency;
@@ -95,13 +104,13 @@ class AgenciesService
     }
 
     /**
-     * @param $agency
+     * @param $user
      * @return array
      */
-    protected function validateCreate($agency){
+    protected function validateCreate($user){
         $errors = array();
-        if(!$agency){
-            $errors[] = array("message" => "please provide a valid agency");
+        if (! $user instanceof User){
+            $errors = array_merge($errors, $user);
         }
         return $errors;
     }
