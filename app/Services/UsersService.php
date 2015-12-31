@@ -20,13 +20,14 @@ class UsersService
      */
     public function create($request)
     {
+        $type=func_get_args();
         $user = new User();
         $user->uuid         =  Uuid::uuid();
-        $user->first_name   =  $request->input('firstName');
-        $user->last_name    =  $request->input('lastName');
+        $user->first_name   =  $request->json()->get('firstName');
+        $user->last_name    =  $request->json()->get('lastName');
         $user->email        =  $request->json()->get('email');
-        $user->password     =  $request->input('password');
-        $user->type         =  $request->json()->get('type');
+        $user->password     =  $request->json()->get('password');
+        $user->type         =  ($request->json()->get('type'))?($request->json()->get('type')):$type[1];
         $user->save();
         $valError = $this->validateCreate($user);
         if($valError){

@@ -20,8 +20,8 @@ class EmailVerificationsService{
         //}
         $userService = new UsersService();
         $user=$userService->retrieveOne($emailVerification->user_id);
-        $code =base64_encode($emailVerification->token.':'.time($emailVerification->expired_at).':'.$emailVerification->verificaton_type);
-        return $emailVerification->expired_at;
+        $code =base64_encode($emailVerification->token.':'.strtotime($emailVerification->expired_at).':'.$emailVerification->verificaton_type);
+        return $code;
         //send the email
         //Mail::send($code,array('url'=>'www.zemployee.com/email-verification','code'=>$code),function($message) use ($user){
             //$message->to($user->email)->subject('activate your account');
@@ -35,14 +35,18 @@ class EmailVerificationsService{
         $token = $code[0];
         $expired_at = $code[1];
         $verification_type = $code[2];
-        return date("Y-m-d H:i:s",$expired_at);
-
+        $expiredAt = date("Y-m-d H:i:s",$expired_at);
         if (time() > $expired_at) {
             $message = array("message" => "Your token has been expired");
             return $message;
         }
 
-        $emailVerification = EmailVerification::where("token", $token)->where("expired_at", $expired_at)->where("verification_type", $verification_type)->first();
+        $emailVerification = EmailVerification::where('token','=',$token)
+                                               ->where('expired_at','=',$expiredAt)
+                                               ->where('verification_type','=',$verification_type)
+                                               ->get();
+
+        return $emailVerification;
         $valError = $this->validateUpdate($emailVerification);
         if ($valError) {
             return $valError;
@@ -52,6 +56,7 @@ class EmailVerificationsService{
         $userService = new UsersService();
         $request->input('verified', 1);
         $user = $userService->update($request, $emailVerification->user_id);
+        return ("success");
     }
         //protected function validateCreate($emailVerification){
         //$errors = array();
