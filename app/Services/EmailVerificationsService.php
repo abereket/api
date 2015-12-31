@@ -21,7 +21,6 @@ class EmailVerificationsService{
         $userService = new UsersService();
         $user=$userService->retrieveOne($emailVerification->user_id);
         $code =base64_encode($emailVerification->token.':'.strtotime($emailVerification->expired_at).':'.$emailVerification->verificaton_type);
-        return $code;
         //send the email
         //Mail::send($code,array('url'=>'www.zemployee.com/email-verification','code'=>$code),function($message) use ($user){
             //$message->to($user->email)->subject('activate your account');
@@ -32,9 +31,9 @@ class EmailVerificationsService{
     {
         $code = base64_decode($code);
         $code = explode(':', $code);
-        $token = $code[0];
-        $expired_at = $code[1];
-        $verification_type = $code[2];
+        $token = isset($code[0])?$code[0]:'';
+        $expired_at = isset($code[1])?$code[1]:'';
+        $verification_type = isset($code[2])?$code[2]:'';
         $expiredAt = date("Y-m-d H:i:s",$expired_at);
         if (time() > $expired_at) {
             $message = array("message" => "Your token has been expired");
@@ -46,7 +45,7 @@ class EmailVerificationsService{
                                                ->where('verification_type','=',$verification_type)
                                                ->get();
 
-        return $emailVerification;
+        //return $emailVerification;
         $valError = $this->validateUpdate($emailVerification);
         if ($valError) {
             return $valError;
