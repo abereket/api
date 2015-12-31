@@ -81,7 +81,7 @@ abstract class Bundle extends ContainerAware implements BundleInterface
                 $expectedAlias = Container::underscore($basename);
                 if ($expectedAlias != $extension->getAlias()) {
                     throw new \LogicException(sprintf(
-                        'UsersService will expect the alias of the default extension of a bundle to be the underscored version of the bundle name ("%s"). You can override "Bundle::getContainerExtension()" if you want to use "%s" or another alias.',
+                        'Users will expect the alias of the default extension of a bundle to be the underscored version of the bundle name ("%s"). You can override "Bundle::getContainerExtension()" if you want to use "%s" or another alias.',
                         $expectedAlias, $extension->getAlias()
                     ));
                 }
@@ -164,6 +164,10 @@ abstract class Bundle extends ContainerAware implements BundleInterface
     {
         if (!is_dir($dir = $this->getPath().'/Command')) {
             return;
+        }
+
+        if (!class_exists('Symfony\Component\Finder\Finder')) {
+            throw new \RuntimeException('You need the symfony/finder component to register bundle commands.');
         }
 
         $finder = new Finder();
