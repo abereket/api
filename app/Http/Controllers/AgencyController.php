@@ -3,7 +3,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Services\Agencies;
+use App\Services\AgenciesService;
 use Illuminate\Http\Request;
+
 
 
 class AgencyController extends Controller{
@@ -14,13 +16,13 @@ class AgencyController extends Controller{
      */
     public function create(Request $request)
     {
-        $rules=['name'        =>     'required|max:50',  'userId'   => 'required',
-                'firstName'   =>     'required|max:50',  'lastName'  => 'required|max:50','email'      =>  'required|max:60'];
+        $rules=['name'        =>     'required|max:50',
+                'firstName'   =>     'max:50',  'lastName'  => 'max:50','email'      =>  'required|max:60|email'];
         $this->validate($request,$rules);
-        $agencyService = new Agencies();
+        $agencyService = new AgenciesService();
         $agency = $agencyService->create($request);
 
-        return response()->json(["status" => "success", "code" => 200, "results" => $agency]);
+        return response()->json($agency);
     }
 
     /**
@@ -40,37 +42,32 @@ class AgencyController extends Controller{
     }
 
     /**
-     * takes agency id as parameter and retrieves the corresponding agency
-     * @param $user_id
+     * retrieves one agency
+     * @param $agency_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function retrieveOne($agency_id)
     {
 
-        $agencyService = new Agencies();
+        $agencyService = new AgenciesService();
         $agency  = $agencyService->retrieveOne($agency_id);
-
-                     return response()->json(["status" => "success", "code" => 200, "results" => [$agency]]);
-
-        //return response()->json(["message"=>"The entry you want not found"]);
+        return response()->json($agency);
     }
 
     /**
-     * take agency id as parameter and updates the corresponding agency
-     * @param $user_id
+     * updates an agency
+     * @param Request $request
+     * @param $agency_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function update(Request $request,$agency_id){
 
-          $rules=['name'        =>     'required|max:50',  'userId'   => 'required'];
+          $rules=['name'        =>     'max:50',  'userId'   => 'max:11'];
 
           $this->validate($request,$rules);
-          $agencyService=new Agencies();
+          $agencyService=new AgenciesService();
           $agency=$agencyService->update($request,$agency_id);
-                if($agency!==null) {
-                    return response()->json(["status" => "success", "code" => 200, "results" => $agency]);
-                }
-        return response()->json(["message"=>"There is no entry found to be updated"]);
+          return response()->json($agency);
     }
 
     /**
@@ -80,16 +77,12 @@ class AgencyController extends Controller{
      */
     public function delete($agency_id)
     {
-        $agencyService = new Agencies();
-        $agency=$agencyService ->delete($agency_id);
-        if($agency=="success"){
-            return response()->json(["status" => "success", "code" => "204"]);
-        }
-        return response()->json(["message"=>"The entry you want to be deleted not found"]);
-
-
+        $agencyService = new AgenciesService();
+        $agency=$agencyService->delete($agency_id);
+        return response()->json($agency);
 
     }
+
 
 }
 ?>

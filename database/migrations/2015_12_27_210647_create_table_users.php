@@ -15,10 +15,10 @@ class CreateTableUsers extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->binary('uuid',32);
-            $table->string('first_name',50);
-            $table->string('last_name',50);
+            $table->string('first_name',50)->nullable();
+            $table->string('last_name',50)->nullable();
             $table->string('email',60);
-            $table->string('password',60);
+            $table->string('password',60)->nullable();
             $table->enum('type',['recruiter','candidate','agency','zemployee']);
             $table->boolean('verified')->default(0);
             $table->timestamps();

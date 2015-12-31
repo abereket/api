@@ -9,32 +9,31 @@
 namespace App\Services;
 use App\Models\User;
 use Faker\Provider\Uuid;
+use Illuminate\Http\Request;
 
 class UsersService
 {
-    /**takes first name last name email password and type and creates user
-     * @param $firstName
-     * @param $lastName
-     * @param $email
-     * @param $password
-     * @param $type
+    /**
+     * takes request as a parameter and  creates a user
      * @param $request
      * @return mixed
      */
-    public function create($firstName, $lastName, $email, $password, $type)
+    public function create($request)
     {
-
+        $type=func_get_args();
         $user = new User();
         $user->uuid         =  Uuid::uuid();
-        $user->first_name   =  $firstName;
-        $user->last_name    =  $lastName;
-        $user->email        =  $email;
-        $user->password     =  $password;
-        $user->type         =  $type;
+        $user->first_name   =  $request->json()->get('firstName');
+        $user->last_name    =  $request->json()->get('lastName');
+        $user->email        =  $request->json()->get('email');
+        $user->password     =  $request->json()->get('password');
+        $user->type         =  ($request->json()->get('type'))?($request->json()->get('type')):$type[1];
         $user->save();
-
-        $result = User::where('id',$user->id)->get(array('id', 'uuid', 'first_name', 'last_name', 'email', 'type', 'verified', 'created_at', 'updated_at'));
-        return $result;
+        $valError = $this->validateCreate($user);
+        if($valError){
+            return $valError;
+        }
+        return $user;
     }
 
     /** takes user id as a parameter and returns the corresponding user
@@ -44,7 +43,11 @@ class UsersService
     public function retrieveOne($user_id)
     {
         $user = User::find($user_id);
-        unset($user['password'], $user['deleted_at']);
+        $valError = $this->validateRetrieveOne($user);
+        if($valError){
+            return $valError;
+        }
+        unset($user['password']);
         return $user;
     }
 
@@ -57,16 +60,21 @@ class UsersService
     public function update($request, $user_id)
     {
         $user = User::find($user_id);
-        if ($user) {
+        $valError = $this->validateUpdate($user);
+        if($valError){
+            return $valError;
+        }
+
             $user->id          =   $request->input('id');
             $user->first_name  =   $request->input('firstName');
             $user->last_name   =   $request->input('lastName');
             $user->email       =   $request->input('email');
             $user->password    =   $request->input('password');
             $user->type        =   $request->input('type');
+            $user->verified    =   $request->input('verified');
             $user->save();
-            unset($user['password'], $user['deleted_at']);
-        }
+            unset($user['password']);
+
         return $user;
 
     }
@@ -78,10 +86,40 @@ class UsersService
      */
     public function delete($user_id){
         $user=User::find($user_id);
-        if(!$user){
-            return $user;
+        $valError=$this->validateDelete($user);
+        if($valError){
+            return $valError;
         }
         $user->delete();
         return $user;
+    }
+
+    protected function validateCreate($user){
+        $errors = array();
+        if(!$user){
+            $errors[] = array("message"=>"please provide a valid user");
+        }
+        return $errors;
+    }
+    protected function validateRetrieveOne($user){
+        $errors = array();
+        if(!$user){
+            $errors[] = array("message"=>"please provide a valid user");
+        }
+        return $errors;
+    }
+    protected function validateUpdate($user){
+        $errors = array();
+        if(!$user){
+            $errors[] = array("message"=>"please provide a valid user");
+        }
+        return $errors;
+    }
+    protected function validateDelete($user){
+        $errors = array();
+        if(!$user){
+            $errors[] = array("message"=>"please provide a valid user");
+        }
+       return $errors;
     }
 }
