@@ -24,7 +24,7 @@ class UserController extends Controller
     public function create(Request $request)
     {
         $rules = ['firstName' => 'required|max:50', 'lastName' => 'required|max:50', 'email' => 'required|email|max:60',
-            'password' => 'required|max:60', 'type' => 'required|in:recruiter,candidate,agency,zemployee'];
+            'password' => 'max:60', 'type' => 'required|in:recruiter,candidate,agency,zemployee'];
 
         $this->validate($request, $rules);
 
@@ -93,12 +93,11 @@ class UserController extends Controller
     {
 
         $rules = [
-            'id'            => 'required|max:11',
-            'firstName'     => 'required|max:50',
-            'lastName'      => 'required|max:50',
-            'email'         => 'required|email|max:60',
-            'password'      => 'required|max:60',
-            'type'          => 'required'
+            'firstName'     => 'max:50',
+            'lastName'      => 'max:50',
+            'email'         => 'email|max:60',
+            'password'      => 'max:60',
+            'type'          => 'in:recruiter,candidate,agency,zemployee'
         ];
 
         $this->validate($request, $rules);
