@@ -34,7 +34,7 @@ class EmailVerificationsService{
         $token = isset($code[0])?$code[0]:'';
         $expired_at = isset($code[1])?$code[1]:'';
         $verification_type = isset($code[2])?$code[2]:'';
-        $expiredAt = date("Y-m-d H:i:s",$expired_at);
+        $expiredAt = date("Y-m-d H:i:s",(int)$expired_at);
         if (time() > $expired_at) {
             $message = array("message" => "Your token has been expired");
             return $message;
@@ -43,34 +43,30 @@ class EmailVerificationsService{
         $emailVerification = EmailVerification::where('token','=',$token)
                                                ->where('expired_at','=',$expiredAt)
                                                ->where('verification_type','=',$verification_type)
-                                               ->get();
+                                               ->get()
+                                               ->first();
 
-        //return $emailVerification;
         $valError = $this->validateUpdate($emailVerification);
         if ($valError) {
             return $valError;
         }
         $emailVerification->is_verified = 1;
         $emailVerification->save();
-        $userService = new UsersService();
-        $request->input('verified', 1);
-        $user = $userService->update($request, $emailVerification->user_id);
-        return ("success");
+        $user = User::find($emailVerification->user_id);
+        $user->verified = 1;
+        $user->save();
+       // $userService = new UsersService();
+       //$user = $userService->update($request, $emailVerification->user_id);
+        return ["message"=>"your account is activated"];
     }
-        //protected function validateCreate($emailVerification){
-        //$errors = array();
-        //if(!$emailVerification){
-            //$errors[]=array("message"=>"Failed to create email verification");
-        //}
-        //return $errors;
-        //}
-        protected function validateUpdate($emailVerification){
-          $errors = array();
-            if(!$emailVerification){
-              $errors[] = array("message" => "you can not activate your account");
-          }
-            return $errors;
+
+    protected function validateUpdate($emailVerification){
+        $errors = array();
+        if(!$emailVerification){
+            $errors[] = array("message" => "you can not activate your account");
         }
+        return $errors;
+    }
 
 
 }
