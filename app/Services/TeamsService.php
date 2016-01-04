@@ -76,8 +76,9 @@ class TeamsService {
            $errors[] = array("message" => "Please provide a valid team");
        }
        if($agencyId){
-           $agencyService =   new AgenciesService();
-           $agency        =   $agencyService->retrieveOne($agencyId);
+           //$agencyService =   new AgenciesService();
+           //$agency        =   $agencyService->retrieveOne($agencyId);
+           $agency = Agency::find($agencyId);
            if(!$agency instanceof Agency){
                $message = array("message" => "The value you entered not exists.please enter a valid agency id");
                return $message;
@@ -98,8 +99,9 @@ class TeamsService {
             $errors[] = array("message" => "Please provide a valid team");
         }
         if($agencyId) {
-            $agencyService =  new AgenciesService();
-            $agency        =  $agencyService->retrieveOne($agencyId);
+            //$agencyService =  new AgenciesService();
+            //$agency        =  $agencyService->retrieveOne($agencyId);
+            $agency = Agency::find($agencyId);
             if(!$agency instanceof Agency) {
                 $message = array("message" => "The value you entered not exists.please enter a valid agency id");
                 return $message;
