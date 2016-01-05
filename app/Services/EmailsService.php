@@ -7,8 +7,9 @@ use App\Models\Agency;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
-require 'lib/SendGrid.php';
-require 'lib/Client.php';
+require_once __DIR__.'/../../vendor/sendgrid/sendgrid/lib/SendGrid.php';
+require_once __DIR__.'/../../vendor/sendgrid/sendgrid/lib/Client.php';
+
 
 class EmailsService{
     /**
@@ -24,6 +25,7 @@ class EmailsService{
     {
         $sendGridApiKey = "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";
         $sendGrid = new SendGrid($sendGridApiKey);
+        $x = 1;
         $email    = new SendGrid\Email();
 
         $email->addTo($to)
