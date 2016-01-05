@@ -1,20 +1,24 @@
 <?php
 namespace App\Services;
+use App\Models\Team;
 use App\Models\TeamMember;
+use App\Models\User;
 
 class TeamMembersService {
     /**
-     * creates the team member
-     * @param $user_id
-     * @param $team_id
+     * @param $request
      * @return static
      */
-    public function create($user_id,$team_id){
-
-        $teamMember=TeamMember::create(['user_id'=>$user_id,'team_id'=>$team_id]);
-        $teamMember=TeamMember::where('id',$teamMember->id)->first();
-
-        unset($teamMember['deleted_at']);
+    public function create($request){
+        $valError    =  $this->validateCreate($request,$request->json()->get('userId'),$request->json()->get('teamId'));
+        if($valError){
+            return $valError;
+        }
+        $teamMember  =  TeamMember::create(['user_id'=>$request->json()->get('userId'),'team_id'=>$request->json()->get('teamId')]);
+        $valError    =  $this->validateCreate($teamMember,$request->json()->get('userId'),$request->json()->get('teamId'));
+        if($valError){
+            return $valError;
+        }
 
         return $teamMember;
     }
@@ -26,33 +30,32 @@ class TeamMembersService {
      */
     public function retrieveOne($team_member_id){
 
-        $teamMember=TeamMember::find($team_member_id);
-        if($teamMember) {
-            unset($teamMember['deleted_at']);
-            return $teamMember;
-        }
-        return $teamMember;
+       $teamMember  =  TeamMember::find($team_member_id);
+       $valError    =  $this->validateRetrieveOne($teamMember);
+       if($valError){
+           return $valError;
+       }
+
+       return $teamMember;
     }
 
     /**
-     * updates a team member
-     * @param $id
-     * @param $user_id
-     * @param $team_id
+     * @param $request
      * @param $team_member_id
      * @return mixed
      */
-    public function update($user_id,$team_id,$team_member_id){
-      $teamMember=TeamMember::find($team_member_id);
-        if($teamMember){
-            $teamMember->user_id =  $user_id;
-            $teamMember->team_id =  $team_id;
-            $teamMember->save();
-            unset($teamMember['deleted_at']);
-            return $teamMember;
-        }
-        return $teamMember;
+    public function update($request,$team_member_id){
 
+      $teamMember =  TeamMember::find($team_member_id);
+      $valError   =  $this->validateUpdate($teamMember,$request->json()->get('userId'),$request->json()->get('teamId'));
+      if($valError) {
+           return $valError;
+      }
+      $teamMember->user_id =  ($request->json()->get('userId'))?($request->json()->get('userId')):$teamMember->user_id;
+      $teamMember->team_id =  ($request->json()->get('teamId'))?($request->json()->get('teamId')):$teamMember->team_id;
+      $teamMember->save();
+
+      return $teamMember;
     }
 
     /**
@@ -61,11 +64,74 @@ class TeamMembersService {
      * @return mixed
      */
     public function delete($team_member_id){
-        $teamMember=TeamMember::find($team_member_id);
-        if($teamMember){
-            $teamMember->delete();
+        $teamMember  =  TeamMember::find($team_member_id);
+        $valError    =  $this->validateDelete($teamMember);
+        if($valError){
+            return $valError;
         }
-        return $teamMember;
+        $teamMember->delete();
 
+        return $teamMember;
+    }
+
+    protected function validateCreate($teamMember,$userId,$teamId){
+        $errors = array();
+        if(!$teamMember){
+          $errors[] = array("message" => "Please provide a valid teamMember");
+        }
+        if($userId){
+           $userService   =   new UsersService();
+           $user          =   $userService->retrieveOne($userId);
+           if(!$user instanceof User){
+              $message = array("message" => "The value you entered not exists.please enter a valid user id");
+              return $message;
+           }
+        }
+        if($teamId){
+           $teamService =  new TeamsService();
+           $team        =  $teamService->retrieveOne($teamId);
+           if(!$team instanceof Team){
+              $message = array("message" =>  "The value you entered not exists.please enter a valid team id");
+              return $message;
+           }
+        }
+        return $errors;
+    }
+    protected function validateRetrieveOne($teamMember){
+        $errors = array();
+        if(!$teamMember){
+          $errors[] = array("message" => "Please provide a valid teamMember");
+        }
+        return $errors;
+    }
+    protected function validateUpdate($teamMember,$userId,$teamId){
+        $errors = array();
+        if(!$teamMember){
+           $errors[] = array("message" => "Please provide a valid teamMember");
+        }
+        if($userId){
+        $userService  =  new UsersService();
+        $user         =  $userService->retrieveOne($userId);
+        if(!$user instanceof User){
+          $message=array("message"=>"The value you entered not exists.please enter a valid user id");
+          return $message;
+        }
+        }
+        if($teamId){
+        $teamService  =   new TeamsService();
+        $team         =   $teamService->retrieveOne($teamId);
+        if(!$team instanceof Team){
+          $message=array("message"=>"The value you entered not exists.please enter a valid team id");
+          return $message;
+        }
+        }
+        return $errors;
+    }
+    protected function validateDelete($teamMember){
+        $errors = array();
+        if(!$teamMember){
+           $errors[] = array("message" => "Please provide a valid teamMember");
+        }
+        return $errors;
     }
 }

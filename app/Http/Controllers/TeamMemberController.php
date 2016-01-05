@@ -18,7 +18,7 @@ class TeamMemberController extends Controller
         $this->validate($request,$rules);
 
         $teamMemberService = new TeamMembersService();
-        $teamMember = $teamMemberService->create($request->input('userId'),$request->input('teamId'));
+        $teamMember = $teamMemberService->create($request);
         return response()->json(["status"=>"success","code"=>parent::HTTP_200,"results"=>$teamMember]);
     }
 
@@ -58,11 +58,11 @@ class TeamMemberController extends Controller
      */
     public function update(Request $request,$team_member_id){
 
-        $rules=['id' =>'required|max:11','userId'=>'required|max:11','teamId'=>'required|max:11'];
+        $rules=['userId'=>'max:11','teamId'=>'max:11'];
         $this->validate($request,$rules);
 
         $teamMemberService = new TeamMembersService();
-        $teamMember = $teamMemberService->update($request->input('userId'),$request->input('teamId'),$team_member_id);
+        $teamMember = $teamMemberService->update($request,$team_member_id);
         if($teamMember==null){
             return response()->json(["message"=>"The entry you want to be updated not found"]);
         }

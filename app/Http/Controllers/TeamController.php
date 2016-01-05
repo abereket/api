@@ -12,10 +12,10 @@ class teamController extends Controller{
      */
     public function create(Request $request)
     {
-        $rules=['name'=>'required|max:50','category'=>'max:75','agencyId'=>'required'];
+        $rules=['name'=>'required|max:50','category'=>'max:75','agencyId'=>'required|integer'];
         $this->validate($request,$rules);
         $teamService = new TeamsService();
-        $team=$teamService->create($request->name,$request->input('category'),$request->agencyId);
+        $team=$teamService->create($request);
 
         return response()->json(["status"=>"success","code"=>parent::HTTP_200,"results"=>$team]);
     }
@@ -52,11 +52,11 @@ class teamController extends Controller{
      */
     public function update(Request $request,$team_id)
     {
-        $rules=['id' => 'required|max:11', 'name'=>'required|max:50', 'category'=>'max:75', 'agencyId'=>'required'];
+        $rules=['name'=>'max:50', 'category'=>'max:75', 'agencyId'=>'max:11'];
         $this->validate($request,$rules);
 
         $teamService =   new TeamsService();
-        $team        =   $teamService->update($request->id,$request->name,$request->category,$request->agencyId,$team_id);
+        $team        =   $teamService->update($request,$team_id);
 
         if($team == null)
         {
