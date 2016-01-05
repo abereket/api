@@ -24,9 +24,12 @@ class EmailsService{
     public function send($to, $from, $subject, $html)
     {
         $sendGridApiKey = "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";
-        $sendGrid = new SendGrid($sendGridApiKey);
-        $x = 1;
-        $email    = new SendGrid\Email();
+
+        $sendGridClass = new \ReflectionClass('SendGrid');
+        $sendGrid = $sendGridClass->newInstanceArgs(array($sendGridApiKey));
+
+        $emailClass  = new \ReflectionClass('\\SendGrid\\Email');
+        $email = $emailClass->newInstance();
 
         $email->addTo($to)
             ->setFrom($from)
