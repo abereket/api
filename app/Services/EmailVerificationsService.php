@@ -14,17 +14,8 @@ class EmailVerificationsService{
         $emailVerification = EmailVerification::create(['verification_type'=>$verificationType,'token'      =>bin2hex(openssl_random_pseudo_bytes(16)),
                                                         'user_id'           =>$userId,          'expired_at'=>date("Y-m-d H:i:s",(time()+(15*60)))]);
 
-        //$valError=$this->validateCreate($emailVerification);
-        //if($valError){
-          //return $valError;
-        //}
-        $userService = new UsersService();
-        $user=$userService->retrieveOne($emailVerification->user_id);
-        $code =base64_encode($emailVerification->token.':'.strtotime($emailVerification->expired_at).':'.$emailVerification->verificaton_type);
-        //send the email
-        //Mail::send($code,array('url'=>'www.zemployee.com/email-verification','code'=>$code),function($message) use ($user){
-            //$message->to($user->email)->subject('activate your account');
-        //});
+        $code = base64_encode($emailVerification->token.':'.strtotime($emailVerification->expired_at).':'.$emailVerification->verificaton_type);
+        return $code;
     }
 
     public function update($request,$code)

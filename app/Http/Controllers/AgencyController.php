@@ -16,8 +16,8 @@ class AgencyController extends Controller{
      */
     public function create(Request $request)
     {
-        $rules=['name'        =>     'required|max:50',
-                'firstName'   =>     'max:50',  'lastName'  => 'max:50','email'      =>  'required|max:60|email'];
+        $rules=['name'     =>     'required|max:50',
+                'userId'   =>     'required'];
         $this->validate($request,$rules);
         $agencyService = new AgenciesService();
         $agency = $agencyService->create($request);
