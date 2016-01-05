@@ -25,6 +25,7 @@ class EmailsService{
     {
         $sendGridApiKey = "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";
 
+        //Solution to instantiate a class which have d/t namespace from namespaced class
         $sendGridClass = new \ReflectionClass('SendGrid');
         $sendGrid = $sendGridClass->newInstanceArgs(array($sendGridApiKey));
 
