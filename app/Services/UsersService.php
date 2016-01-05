@@ -65,13 +65,12 @@ class UsersService
             return $valError;
         }
 
-            $user->id          =   $request->input('id');
-            $user->first_name  =   $request->input('firstName');
-            $user->last_name   =   $request->input('lastName');
-            $user->email       =   $request->input('email');
-            $user->password    =   $request->input('password');
-            $user->type        =   $request->input('type');
-            $user->verified    =   $request->input('verified');
+            $user->first_name  =   ($request->json()->get('firstName'))?($request->json()->get('firstName')):$user->first_name;
+            $user->last_name   =   ($request->json()->get('lastName'))?($request->json()->get('lastName')):$user->last_name;
+            $user->email       =   ($request->json()->get('email'))?($request->json()->get('email')):$user->email;
+            $user->password    =   ($request->json()->get('password'))?($request->json()->get('password')):$user->password;
+            $user->type        =   ($request->json()->get('type'))?($request->json()->get('type')):$user->type;
+            $user->verified    =   ($request->json()->get('verified'))?($request->json()->get('verified')):$user->verified;
             $user->save();
             unset($user['password']);
 

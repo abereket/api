@@ -138,8 +138,9 @@ class AgenciesService
             $errors[] = array("message" => "please provide a valid agency");
         }
         if($userId) {
-            $user = User::find($userId);
-            if(!$user){
+            $userService = new UsersService();
+            $user = $userService->retrieveOne($userId);
+            if(!$user instanceof User){
                 $message=array("message"=>"The value you entered not exists.please enter a valid user id");
                 return $message;
             }
