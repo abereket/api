@@ -18,19 +18,15 @@ class EmailVerificationsService{
         return $code;
     }
 
-    public function update($request,$code)
+    public function update($code)
     {
-        $code = base64_decode($code);
-        $code = explode(':', $code);
-        $token = isset($code[0])?$code[0]:'';
-        $expired_at = isset($code[1])?$code[1]:'';
-        $verification_type = isset($code[2])?$code[2]:'';
-        $expiredAt = date("Y-m-d H:i:s",(int)$expired_at);
+        list($token, $verification_type, $expired_at) = $this->decomposeCode($code);
         if (time() > $expired_at) {
             $message = array("message" => "Your token has been expired");
             return $message;
         }
 
+        $expiredAt = date("Y-m-d H:i:s",(int)$expired_at);
         $emailVerification = EmailVerification::where('token','=',$token)
                                                ->where('expired_at','=',$expiredAt)
                                                ->where('verification_type','=',$verification_type)
@@ -46,9 +42,6 @@ class EmailVerificationsService{
         $user = User::find($emailVerification->user_id);
         $user->verified = 1;
         $user->save();
-       // $userService = new UsersService();
-       //$user = $userService->update($request, $emailVerification->user_id);
-        return ["message"=>"your account is activated"];
     }
 
     protected function validateUpdate($emailVerification){
@@ -59,5 +52,19 @@ class EmailVerificationsService{
         return $errors;
     }
 
+
+    /**
+     * @param $code
+     * @return array
+     */
+    protected function decomposeCode($code) {
+        $code = base64_decode($code);
+        $code = explode(':', $code);
+        $token = isset($code[0])?$code[0]:'';
+        $expired_at = isset($code[1])?$code[1]:'';
+        $verification_type = isset($code[2])?$code[2]:'';
+
+        return array($token, $verification_type, $expired_at);
+    }
 
 }
