@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 
 class EmailVerificationController extends Controller{
 
-    public function update(Request $request,$code){
+    public function update($code){
 
         $EmailVerificationService = new EmailVerificationsService();
-        $emailVerification=$EmailVerificationService->update($request,$code);
+        $emailVerification=$EmailVerificationService->update($code);
         return response()->json([$emailVerification]);
     }
 }
