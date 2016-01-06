@@ -15,8 +15,7 @@ class AgenciesService
     public function create($request)
     {
         //Perform business specific validations
-        $userService = new UsersService();
-        $user        =    $userService->retrieveOne($request->json()->get('userId'));
+        $user = User::find($request->json()->get('userId'));
         $valError    =   $this->validateCreate($user);
         if ($valError) {
             return $valError;
@@ -109,8 +108,8 @@ class AgenciesService
      */
     protected function validateCreate($user){
         $errors = array();
-        if (! $user instanceof User){
-            $errors = array_merge($errors, $user);
+        if (!$user){
+            $errors[] = 'Please provide valid userId';
         }
         return $errors;
     }
