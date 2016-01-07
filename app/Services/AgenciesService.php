@@ -54,10 +54,7 @@ class AgenciesService
         if($valError){
             return $valError;
         }
-        $userService = new UsersService();
-        $user  =    $userService->retrieveOne($agency->user_id);
-        $user = ($user instanceof User)?$user:null;
-        $agency->user   = $user;
+
         $object=$this->buildRetrieveOneSuccessMessage("success",$agency);
         return $object;
     }
@@ -80,10 +77,7 @@ class AgenciesService
         $agency->description  =   ($request->json()->get('description'))?($request->json()->get('description')):$agency->description;
         $agency->user_id      =   ($request->json()->get('userId'))?($request->json()->get('userId')):$agency->user_id;
         $agency->save();
-        $userService = new UsersService();
-        $user  =    $userService->retrieveOne($agency->user_id);
-        $user = ($user instanceof User)?$user:null;
-        $agency->user   = $user;
+
         $agency=$this->buildUpdateSuccessMessage("success",$agency);
         return $agency;
     }
