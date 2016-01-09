@@ -134,7 +134,7 @@ class AgenciesService extends Base
     protected function validateUpdate($agency, $userId){
         $errors        =  array();
         if(!$agency){
-            $errors    =  "please provide a valid agency";
+            $errors[]    =  "please provide a valid agency";
         }
         if($userId) {
             $user      =   User::find($userId);
@@ -155,7 +155,7 @@ class AgenciesService extends Base
     protected function validateDelete($agency) {
         $errors        =   array();
         if (!$agency){
-            $errors    =  "Please provide valid agency id";
+            $errors    =  array("message" => "Please provide valid agency id");
         }
 
         return $errors;

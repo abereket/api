@@ -133,7 +133,7 @@ class UsersService extends Base
     protected function validateUpdate($user){
         $errors        = array();
         if(!$user){
-            $errors[]  = array("message"=>"please provide a valid user");
+            $errors  = array("message"=>"please provide a valid user");
         }
         return $errors;
     }
@@ -146,7 +146,7 @@ class UsersService extends Base
     protected function validateDelete($user){
         $errors        =  array();
         if(!$user){
-            $errors[]  =  array("message"=>"please provide a valid user");
+            $errors  =  ["message"=>"please provide a valid user"];
         }
        return $errors;
     }

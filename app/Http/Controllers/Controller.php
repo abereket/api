@@ -10,7 +10,7 @@ class Controller extends BaseController
 {
     protected function buildFailedValidationResponse(Request $request, array $errors)
     {
-        return new JsonResponse($errors, self::HTTP_422);
+        return new JsonResponse($errors, 422);
 
     }
 }
