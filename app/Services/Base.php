@@ -53,7 +53,7 @@ abstract class Base
     protected function buildRetrieveOneSuccessMessage($successMessage, $entity)
     {
         $message = array();
-        $message[] = array('message' => $successMessage, 'code' => HTTP_200, 'results' => $entity);
+        $message[] = array('message' => $successMessage, 'code' => self::HTTP_200, 'results' => $entity);
         return $message;
     }
 
