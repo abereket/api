@@ -8,9 +8,6 @@ Use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Controller extends BaseController
 {
-    const HTTP_422 = 422;
-    const HTTP_200 = 200;
-    const HTTP_204 = 204;
     protected function buildFailedValidationResponse(Request $request, array $errors)
     {
         return new JsonResponse($errors, self::HTTP_422);

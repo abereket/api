@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Agencies;
 use App\Services\AgenciesService;
 use Illuminate\Http\Request;
+use App\Services\Base;
 
 
 
@@ -48,7 +49,6 @@ class AgencyController extends Controller{
      */
     public function retrieveOne($agency_id)
     {
-
         $agencyService = new AgenciesService();
         $agency  = $agencyService->retrieveOne($agency_id);
         return response()->json($agency);

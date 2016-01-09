@@ -4,8 +4,9 @@ namespace App\Services;
 use App\Models\Agency;
 use App\Models\User;
 use Faker\Provider\Uuid;
+//use app\Services\Base;
 
-class AgenciesService
+class AgenciesService extends Base
 {
     /**
      * creates an agency
@@ -15,30 +16,29 @@ class AgenciesService
     public function create($request)
     {
         //Perform business specific validations
-        $userService = new UsersService();
-        $user        =    $userService->retrieveOne($request->json()->get('userId'));
+        $user        =    User::find($request->json()->get('userId'));
         $valError    =   $this->validateCreate($user);
         if ($valError) {
+            $valError = $this->failureMessage($valError,Parent::HTTP_404);
             return $valError;
         }
 
         //create the agency
-        $agency = Agency::create(['uuid' =>  Uuid::uuid(),'name'=>$request->json()->get('name'),'user_id'=>$request->json()->get('userId'),'description'=>$request->json()->get('description')]);
+        $agency   =   Agency::create(['uuid' =>  Uuid::uuid(),'name'=>$request->json()->get('name'),'user_id'=>$request->json()->get('userId'),'description'=>$request->json()->get('description')]);
 
         //Create email verification entry
-        $emailVerification = new EmailVerificationsService();
-        $code = $emailVerification->create('agency',$agency->user_id);
-
+        $emailVerification     =  new EmailVerificationsService();
+        $code                  =  $emailVerification->create('agency',$agency->user_id);
         //Send agency-user activation email
         $emailService = new EmailsService();
         $from         = "info@zemployee.com";
         $subject      = "Agency, please active your email";
         $body         = "Please click the link below to active your account " . $code;
+
         $emailService->send($user->email, $from, $subject, $body);
 
-        //build success message
-        $agency=$this->buildCreateSuccessMessage("success",$agency);
 
+        $agency=$this->buildCreateSuccessMessage("success",$agency);
         return $agency;
     }
 
@@ -49,14 +49,14 @@ class AgenciesService
      */
     public function retrieveOne($agency_id)
     {
-        $agency=Agency::find($agency_id);
-        $valError = $this->validateRetrieveOne($agency);
+        $agency            =     Agency::find($agency_id);
+        $valError          =     $this->validateRetrieveOne($agency);
         if($valError){
+            $valError      =     $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
-
-        $object=$this->buildRetrieveOneSuccessMessage("success",$agency);
-        return $object;
+        $agency=$this->buildRetrieveOneSuccessMessage("success",$agency);
+        return $agency;
     }
 
     /**
@@ -67,9 +67,10 @@ class AgenciesService
      */
     public function update($request,$agency_id)
     {
-        $agency   = Agency::find($agency_id);
-        $valError = $this->validateUpdate($agency, $request->json()->get('userId'));
+        $agency        =     Agency::find($agency_id);
+        $valError      =     $this->validateUpdate($agency, $request->json()->get('userId'));
         if($valError){
+            $valError  =     $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
 
@@ -78,7 +79,7 @@ class AgenciesService
         $agency->user_id      =   ($request->json()->get('userId'))?($request->json()->get('userId')):$agency->user_id;
         $agency->save();
 
-        $agency=$this->buildUpdateSuccessMessage("success",$agency);
+        $agency               =    $this->buildUpdateSuccessMessage("success",$agency);
         return $agency;
     }
 
@@ -87,55 +88,58 @@ class AgenciesService
      * @return array
      */
     public function delete($agency_id){
-        $agency = Agency::find($agency_id);
-        $valError = $this->validateDelete($agency);
-        if ($valError) {
+        $agency           =   Agency::find($agency_id);
+        $valError         =   $this->validateDelete($agency);
+        if ($valError){
+            $valError     =   $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
         $agency->delete();
-        $agency = $this->buildDeleteSuccessMessage("success");
+        $agency           =   $this->buildDeleteSuccessMessage("success");
         return $agency;
     }
 
     /**
+     * This method performs business class validation for agencies create method
      * @param $user
      * @return array
      */
     protected function validateCreate($user){
-        $errors = array();
-        if (! $user instanceof User){
-            $errors = array_merge($errors, $user);
+        $errors        =    array();
+        if (!$user){
+            $errors    =    "Please provide a valid user id.The value you entered not exists";
         }
         return $errors;
     }
 
     /**
+     * This method performs business class validation for agencies retrieveOne method
      * @param $agency
      * @return array
      */
     protected function validateRetrieveOne($agency){
-        $errors = array();
+        $errors       =    array();
         if(!$agency){
-            $errors[] = array("message" => "please provide a valid agency");
+            $errors   =    "please provide a valid agency";
         }
         return $errors;
     }
 
     /**
+     * This method performs business class validation for agencies update method
      * @param $agency
      * @param $userId
      * @return array
      */
     protected function validateUpdate($agency, $userId){
-        $errors = array();
+        $errors        =  array();
         if(!$agency){
-            $errors[] = array("message" => "please provide a valid agency");
+            $errors    =  "please provide a valid agency";
         }
         if($userId) {
-            $userService = new UsersService();
-            $user = $userService->retrieveOne($userId);
-            if(!$user instanceof User){
-                $message=array("message"=>"The value you entered not exists.please enter a valid user id");
+            $user      =   User::find($userId);
+            if(!$user){
+                $message  =  array("message"=>"The value you entered not exists.please enter a valid user id");
                 return $message;
             }
         }
@@ -144,61 +148,17 @@ class AgenciesService
     }
 
     /**
+     * This method performs business class validation for agencies delete method
      * @param $agency
      * @return array
      */
     protected function validateDelete($agency) {
-        $errors = array();
-        if (!$agency) {
-            $errors[] = array("message" => "Please provide valid agency id");
+        $errors        =   array();
+        if (!$agency){
+            $errors    =  "Please provide valid agency id";
         }
 
         return $errors;
-    }
-
-    //success messages
-
-    /**
-     * @param $successMessage
-     * @return array
-     */
-    protected function buildDeleteSuccessMessage($successMessage){
-        $message = array();
-        $message[] = array('message' => $successMessage, 'code' => 204);
-        return $message;
-    }
-
-    /**
-     * @param $successMessage
-     * @param $entity
-     * @return array
-     */
-    protected function buildCreateSuccessMessage($successMessage, $entity){
-        $message = array();
-        $message[] = array('message' => $successMessage, 'code' => 200,'results' => $entity);
-        return $message;
-    }
-
-    /**
-     * @param $successMessage
-     * @param $entity
-     * @return array
-     */
-    protected function buildUpdateSuccessMessage($successMessage, $entity){
-        $message = array();
-        $message[] = array('message' => $successMessage, 'code' => 201,'results' => $entity);
-        return $message;
-    }
-
-    /**
-     * @param $successMessage
-     * @param $entity
-     * @return array
-     */
-    protected function buildRetrieveOneSuccessMessage($successMessage, $entity){
-        $message = array();
-        $message[] = array('message' => $successMessage, 'code' => 201,'results' => $entity);
-        return $message;
     }
 }
 

@@ -17,7 +17,7 @@ class teamController extends Controller{
         $teamService = new TeamsService();
         $team=$teamService->create($request);
 
-        return response()->json(["status"=>"success","code"=>parent::HTTP_200,"results"=>$team]);
+        return response()->json($team);
     }
 
     public function retrieve()
@@ -38,10 +38,7 @@ class teamController extends Controller{
     {
         $temService = new TeamsService();
         $team=$temService->retrieveOne($team_id);
-          if($team == null) {
-              return response()->json(["message"=>"The team you want to be returned not exists"]);
-          }
-           return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $team]);
+        return response()->json($team);
     }
 
     /**
@@ -57,14 +54,7 @@ class teamController extends Controller{
 
         $teamService =   new TeamsService();
         $team        =   $teamService->update($request,$team_id);
-
-        if($team == null)
-        {
-            return response()->json(["message"=>"The entry you want to be updated is not found"]);
-        }
-        return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $team]);
-
-
+        return response()->json($team);
     }
 
     /**
@@ -76,9 +66,6 @@ class teamController extends Controller{
     {
         $teamService=new TeamsService();
         $team=$teamService->delete($team_id);
-        if(!$team){
-            return response()->json(["message"=>"The entry you want to be deleted is not found"]);
-        }
-        return response()->json(["status" => "success", "code" => parent::HTTP_204]);
+        return response()->json($team);
     }
 }
