@@ -31,7 +31,7 @@ class UsersService
         $user->first_name   =  $request->json()->get('firstName');
         $user->last_name    =  $request->json()->get('lastName');
         $user->email        =  $request->json()->get('email');
-        $user->password     =  $request->json()->get('password');
+        $user->password     =  hash('sha512',$request->json()->get('password'));
         $user->type         =  ($request->json()->get('type'));
 
         $user->save();
@@ -77,7 +77,7 @@ class UsersService
             $user->save();
             unset($user['password']);
 
-        return $user;
+        return $user->type;
 
     }
 
