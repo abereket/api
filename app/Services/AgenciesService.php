@@ -4,7 +4,9 @@ namespace App\Services;
 use App\Models\Agency;
 use App\Models\User;
 use Faker\Provider\Uuid;
-//use app\Services\Base;
+use Illuminate\Pagination;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AgenciesService extends Base
 {
@@ -42,6 +44,35 @@ class AgenciesService extends Base
         return $agency;
     }
 
+    /**
+     * @param $request
+     * @return string
+     */
+    public function retrieve($request)
+    {
+        $limit          =   ($request->input('per_page'))?($request->input('per_page')) : 15;
+        $name           =   $request->input('name');
+        $description    =   $request->input('description');
+        $page           =   ($request->input('page'))?($request->input('page')):1;
+        $order_by       =   ($request->input('order_by'))?($request->input('order_by')):'updated_at';
+
+        if(empty($name) and empty($description)){
+            $agency     =   Agency::orderby($order_by)->paginate($limit);
+            return ($agency->total()==0)? "Sorry there are no any pages":$agency;
+        }
+        if(empty($description)) {
+            $agency         =   Agency::where('name' ,           'like',     '%'.$name.'%')
+                                        ->whereNull('description')
+                                        ->orderby($order_by)
+                                        ->paginate($limit);
+            return ($agency->total()==0)? "Sorry there are no any pages":$agency;
+        }
+            $agency         =     Agency::where('name' ,           'like',     '%'.$name.'%')
+                                         ->where('description',   'like',     '%'.$description.'%')
+                                         ->orderby($order_by)
+                                         ->paginate($limit);
+        return ($agency->total()==0)? " Sorry there are no any pages":$agency;
+    }
     /**
      * retrieves an(one) agency
      * @param $agency_id
