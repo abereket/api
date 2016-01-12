@@ -8,8 +8,12 @@ $baseDir = dirname($vendorDir);
 return array(
     'phpDocumentor' => array($vendorDir . '/phpdocumentor/reflection-docblock/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
+    'Smtpapi' => array($vendorDir . '/sendgrid/smtpapi/lib'),
+    'SendGrid' => array($vendorDir . '/sendgrid/sendgrid/lib'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'Dotenv' => array($vendorDir . '/vlucas/phpdotenv/src'),
+    'Guzzle\\Tests' => array($vendorDir . '/guzzle/guzzle/tests'),
+    'Guzzle' => array($vendorDir . '/guzzle/guzzle/src'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
     'Cron' => array($vendorDir . '/mtdowling/cron-expression/src'),
 );
