@@ -45,5 +45,5 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
     $app->put('users/{id}','UserController@update');                              //updates a user
     $app->delete('users/{id}','UserController@delete');                           //soft deletes a user
 
-    $app->get('email-verification/{code}','EmailVerificationController@update');    //updates email verification
+    $app->put('email-verification/{code}','EmailVerificationController@update');    //updates email verification
 });
