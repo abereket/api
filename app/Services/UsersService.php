@@ -9,6 +9,7 @@
 namespace App\Services;
 use App\Models\User;
 use Faker\Provider\Uuid;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class UsersService extends Base
@@ -18,22 +19,23 @@ class UsersService extends Base
      * @param $request
      * @return mixed
      */
-    public function create($request,$type = '')
+    public function create($request)
     {
+        $valError = $this->validateCreate($request->json()->get('email'));
+        if($valError){
+            return $valError;
+        }
+
         $user = new User();
         $user->uuid         =  Uuid::uuid();
         $user->first_name   =  $request->json()->get('firstName');
         $user->last_name    =  $request->json()->get('lastName');
         $user->email        =  $request->json()->get('email');
-        $user->password     =  $request->json()->get('password');
-        $user->type         =  ($request->json()->get('type'))?($request->json()->get('type')):$type;
+        $user->password     =  hash('sha512',$request->json()->get('password'));
+        $user->type         =  ($request->json()->get('type'));
+
         $user->save();
-        $valError = $this->validateCreate($user);
-        if($valError){
-            $valError       =  $this->failureMessage($valError,parent::HTTP_404);
-            return $valError;
-        }
-        $user               =  $this->buildCreateSuccessMessage('success',$user);
+
         return $user;
     }
 
@@ -71,15 +73,39 @@ class UsersService extends Base
             $user->first_name  =   ($request->json()->get('firstName'))?($request->json()->get('firstName')):$user->first_name;
             $user->last_name   =   ($request->json()->get('lastName'))?($request->json()->get('lastName')):$user->last_name;
             $user->email       =   ($request->json()->get('email'))?($request->json()->get('email')):$user->email;
-            $user->password    =   ($request->json()->get('password'))?($request->json()->get('password')):$user->password;
+            $user->password    =   ($request->json()->get('password'))?hash('sha512',($request->json()->get('password'))):$user->password;
             $user->type        =   ($request->json()->get('type'))?($request->json()->get('type')):$user->type;
             $user->verified    =   ($request->json()->get('verified'))?($request->json()->get('verified')):$user->verified;
             $user->save();
             unset($user['password']);
 
+        
         $user=$this->buildUpdateSuccessMessage('success',$user);
         return $user;
 
+    }
+
+    /**
+     * @param $userName
+     * @param $password
+     * @return mixed
+     * @throws Exception
+     */
+    public function authenticate($userName, $password)
+    {
+        $password = hash('sha512', $password);
+
+        $user = User::where('email', '=', $userName)
+            ->where('password', '=', $password)
+            ->where('verified', '=', 1)
+            ->get()
+            ->first();
+
+        if (!$user) {
+            throw new Exception("Please provide valid username and password");
+        }
+
+        return $user;
     }
 
     /**
