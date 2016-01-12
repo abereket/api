@@ -8,7 +8,11 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class EmailVerificationsService{
-
+    /**
+     * @param $verificationType
+     * @param $userId
+     * @return string
+     */
     public function create($verificationType,$userId){
 
         $emailVerification = EmailVerification::create(['verification_type'=>$verificationType,'token'      =>bin2hex(openssl_random_pseudo_bytes(16)),
@@ -18,11 +22,15 @@ class EmailVerificationsService{
         return $code;
     }
 
+    /**
+     * @param $code
+     */
     public function update($code)
     {
-        list($token, $verification_type, $expired_at) = $this->decomposeCode($code);
+        list($token,$expired_at,$verification_type) = $this->decomposeCode($code);
+
         if (time() > $expired_at) {
-            $message = array("message" => "Your token has been expired");
+            $message = array("message" => "Your token has no longer valid");
             return $message;
         }
 

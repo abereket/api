@@ -12,7 +12,7 @@ use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
-class UsersService
+class UsersService extends Base
 {
     /**
      * takes request as a parameter and  creates a user
@@ -45,12 +45,13 @@ class UsersService
      */
     public function retrieveOne($user_id)
     {
-        $user = User::find($user_id);
-        $valError = $this->validateRetrieveOne($user);
+        $user          =     User::find($user_id);
+        $valError      =     $this->validateRetrieveOne($user);
         if($valError){
+            $valError  =     $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
-        unset($user['password']);
+        $user          = $this->buildRetrieveOneSuccessMessage('success',$user);
         return $user;
     }
 
@@ -62,9 +63,10 @@ class UsersService
      */
     public function update($request, $user_id)
     {
-        $user = User::find($user_id);
-        $valError = $this->validateUpdate($user);
+        $user           = User::find($user_id);
+        $valError       = $this->validateUpdate($user);
         if($valError){
+            $valError   = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
 
@@ -77,7 +79,9 @@ class UsersService
             $user->save();
             unset($user['password']);
 
-        return $user->type;
+        
+        $user=$this->buildUpdateSuccessMessage('success',$user);
+        return $user;
 
     }
 
@@ -87,77 +91,66 @@ class UsersService
      * @return mixed
      */
     public function delete($user_id){
-        $user=User::find($user_id);
-        $valError=$this->validateDelete($user);
+        $user          =       User::find($user_id);
+        $valError      =       $this->validateDelete($user);
         if($valError){
+            $valError  =       $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
         $user->delete();
+        $user = $this->buildDeleteSuccessMessage('success');
         return $user;
     }
 
     /**
-     * @param $userName
-     * @param $password
-     * @return mixed
-     * @throws Exception
-     */
-    public function authenticate($userName, $password)
-    {
-        $password = hash('sha512', $password);
-
-        $user = User::where('email', '=', $userName)
-           ->where('password', '=', $password)
-           ->where('verified', '=', 1)
-           ->get()
-           ->first();
-
-        if (!$user) {
-           throw new Exception("Please provide valid username and password");
-        }
-
-        return $user;
-    }
-
-    /**
+     * This method performs business class validation for users create method
      * @param $user
      * @return array
      */
-    protected function validateCreate($user) {
-        $errors = array();
-        // Try to find a user with the same email.
+    protected function validateCreate($user){
+        $errors        =      array();
+        if(!$user){
+            $errors[]  =      array("message"=>"please provide a valid user");
+        }
+        return $errors;
+    }
 
-        if(!$user){
-            $errors[] = array("message"=>"please provide a valid user");
-        }
-        return $errors;
-    }
+    /**
+     * This method performs business class validation for users retrieveOne method
+     * @param $user
+     * @return array
+     */
     protected function validateRetrieveOne($user){
-        $errors = array();
+        $errors       = array();
         if(!$user){
-            $errors[] = array("message"=>"please provide a valid user");
+            $errors   = array("message"=>"please provide a valid user");
         }
         return $errors;
     }
+
+    /**
+     * This method performs business class validation for users update method
+     * @param $user
+     * @return array
+     */
     protected function validateUpdate($user){
-        $errors = array();
+        $errors        = array();
         if(!$user){
-            $errors[] = array("message"=>"please provide a valid user");
+            $errors  = array("message"=>"please provide a valid user");
         }
         return $errors;
     }
+
+    /**
+     * This method performs business class validation for users delete method
+     * @param $user
+     * @return array
+     */
     protected function validateDelete($user){
-        $errors = array();
+        $errors        =  array();
         if(!$user){
-            $errors[] = array("message"=>"please provide a valid user");
+            $errors  =  ["message"=>"please provide a valid user"];
         }
        return $errors;
-    }
-    protected function validateAuthenticate($user){
-        $errors = array();
-        if(!$user){
-           $errors = ["message" => "Unable to authenticate user"];
-        }
-        return $errors;
     }
 }

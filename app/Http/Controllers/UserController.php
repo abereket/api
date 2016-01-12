@@ -23,18 +23,15 @@ class UserController extends Controller
 
     public function create(Request $request)
     {
-        $rules = ['firstName' => 'required|max:50', 'lastName' => 'required|max:50', 'email' => 'required|email|max:60',
+        $rules = ['firstName' => 'required|max:50', 'lastName' => 'required|max:50', 'email' => 'required|email|max:60|unique:users',
             'password' => 'max:60', 'type' => 'required|in:recruiter,candidate,agency,zemployee'];
 
         $this->validate($request, $rules);
 
         $userService = new UsersService();
-        $result = $userService->create($request);
+        $user = $userService->create($request);
 
-
-        return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $result]);
-
-
+        return response()->json($user);
     }
 
     /**
@@ -77,9 +74,9 @@ class UserController extends Controller
     public function retrieveOne($user_id)
     {
         $userService = new UsersService();
-        $result = $userService->retrieveOne($user_id);
+        $user = $userService->retrieveOne($user_id);
 
-        return response()->json(["success" => "success", "code" => parent::HTTP_200, "results" => $result]);
+        return response()->json($user);
 
     }
 
@@ -95,16 +92,16 @@ class UserController extends Controller
         $rules = [
             'firstName'     => 'max:50',
             'lastName'      => 'max:50',
-            'email'         => 'email|max:60',
+            'email'         => 'email|max:60|unique:users',
             'password'      => 'max:60',
             'type'          => 'in:recruiter,candidate,agency,zemployee'
         ];
 
         $this->validate($request, $rules);
         $userService = new UsersService();
-        $result = $userService->update($request, $user_id);
+        $user = $userService->update($request, $user_id);
 
-        return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $result]);
+        return response()->json($user);
 
     }
 
@@ -117,10 +114,7 @@ class UserController extends Controller
     {
         $userService = new UsersService();
         $user= $userService->delete($user_id);
-        if(!$user) {
-            return response()->json(["message"=>"the entry you want to be deleted is not found"]);
-        }
-        return response()->json(["status" => "success", "code" => parent::HTTP_204]);
+        return response()->json($user);
 
     }
 }

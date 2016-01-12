@@ -19,7 +19,7 @@ class TeamMemberController extends Controller
 
         $teamMemberService = new TeamMembersService();
         $teamMember = $teamMemberService->create($request);
-        return response()->json(["status"=>"success","code"=>parent::HTTP_200,"results"=>$teamMember]);
+        return response()->json($teamMember);
     }
 
     public function retrieve(){
@@ -40,14 +40,8 @@ class TeamMemberController extends Controller
     public function retrieveOne($team_member_id){
 
         $teamMemberService = new TeamMembersService();
-
         $teamMember=$teamMemberService->retrieveOne($team_member_id);
-
-        if($teamMember==null){
-            return response()->json(["message"=>"The entry you want not found"]);
-        }
-        return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $teamMember]);
-
+        return response()->json($teamMember);
     }
 
     /**
@@ -63,11 +57,8 @@ class TeamMemberController extends Controller
 
         $teamMemberService = new TeamMembersService();
         $teamMember = $teamMemberService->update($request,$team_member_id);
-        if($teamMember==null){
-            return response()->json(["message"=>"The entry you want to be updated not found"]);
-        }
-        return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $teamMember]);
 
+        return response()->json($teamMember);
     }
 
     /**
@@ -79,11 +70,7 @@ class TeamMemberController extends Controller
 
         $teamMemberService = new TeamMembersService();
         $teamMember = $teamMemberService->delete($team_member_id);
-        if(!$teamMember) {
-            return response()->json(["message"=>"The entry you want to be deleted not found"]);
-        }
-        return response()->json(["status" => "success", "code" => parent::HTTP_204]);
-
+        return response()->json($teamMember);
     }
 
 }

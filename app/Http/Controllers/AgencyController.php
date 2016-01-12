@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 
 
+
 class AgencyController extends Controller{
 
     /**
@@ -29,16 +30,12 @@ class AgencyController extends Controller{
      * retrieves agencies
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function retrieve()
+    public function retrieve(Request $request)
     {
-        $agency =array(array("id"=>1,"uuid" => "12659-adfad-7671", "name" => "Arch Software Solutions", "description" => "Staffing company based in California",
-                             "createdAt" => date("Y-m-d H:i:s"), "updatedAt" => date("Y-m-d H:i:s"), "user" => array("id" => 1,
-                             "firstName" => "Amanuel", "lastName" => "Yohannes", "email" => "kibret@example.com")),array("id"=>2,"uuid" => "12659-adfad-7672", "name" => "Accenture", "description" => "Staffing company based in Idaho",
-                             "createdAt" => date("Y-m-d H:i:s"), "updatedAt" => date("Y-m-d H:i:s"), "user" => array("id" => 2,
-                             "firstName" => "Kibret", "lastName" => "Bereket", "email" => "kibret@example.com")));
+        $agencyService = new AgenciesService();
+        $agency        =$agencyService->retrieve($request);
+        return response()->json($agency);
 
-        $count=count($agency);
-        return response()->json(["status" => "success","code" => 200,"count"=>$count,"results" => $agency]);
     }
 
     /**
@@ -48,7 +45,6 @@ class AgencyController extends Controller{
      */
     public function retrieveOne($agency_id)
     {
-
         $agencyService = new AgenciesService();
         $agency  = $agencyService->retrieveOne($agency_id);
         return response()->json($agency);
