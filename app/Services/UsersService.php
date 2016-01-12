@@ -86,6 +86,29 @@ class UsersService extends Base
     }
 
     /**
+     * @param $userName
+     * @param $password
+     * @return mixed
+     * @throws Exception
+     */
+    public function authenticate($userName, $password)
+    {
+        $password = hash('sha512', $password);
+
+        $user = User::where('email', '=', $userName)
+            ->where('password', '=', $password)
+            ->where('verified', '=', 1)
+            ->get()
+            ->first();
+
+        if (!$user) {
+            throw new Exception("Please provide valid username and password");
+        }
+
+        return $user;
+    }
+
+    /**
      * takes user id as a parameter and deletes the corresponding user
      * @param $user_id
      * @return mixed
