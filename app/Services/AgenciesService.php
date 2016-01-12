@@ -54,24 +54,18 @@ class AgenciesService extends Base
         $name           =   $request->input('name');
         $description    =   $request->input('description');
         $page           =   ($request->input('page'))?($request->input('page')):1;
-        $order_by       =   ($request->input('order_by'))?($request->input('order_by')):'updated_at';
+        $order_by       =   ($request->input('order_by'))? ($request->input('order_by')) : 'updated_at';
 
-        if(empty($name) and empty($description)){
-            $agency     =   Agency::orderby($order_by)->paginate($limit);
-            return ($agency->total()==0)? "Sorry there are no any pages":$agency;
+        $agency =  new Agency();
+        if ($name) {
+            $agency = $agency->where('name' , 'like', '%'.$name.'%');
         }
-        if(empty($description)) {
-            $agency         =   Agency::where('name' ,           'like',     '%'.$name.'%')
-                                        ->whereNull('description')
-                                        ->orderby($order_by)
-                                        ->paginate($limit);
-            return ($agency->total()==0)? "Sorry there are no any pages":$agency;
+        if ($description) {
+            $agency = $agency->where('description',  'like', '%'.$description.'%');
         }
-            $agency         =     Agency::where('name' ,           'like',     '%'.$name.'%')
-                                         ->where('description',   'like',     '%'.$description.'%')
-                                         ->orderby($order_by)
-                                         ->paginate($limit);
-        return ($agency->total()==0)? " Sorry there are no any pages":$agency;
+
+        $agency = $agency->orderby($order_by)->paginate($limit);
+        return $agency;
     }
     /**
      * retrieves an(one) agency
