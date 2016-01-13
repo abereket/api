@@ -62,6 +62,11 @@ abstract class Base
         return $message;
     }
 
+    /**
+     * @param $successMessage
+     * @param $entity
+     * @return array
+     */
     protected function buildEmailVerificationSuccessMessage($successMessage,$entity){
        $message = array();
        $message[] = array("message" => $successMessage,'code' =>self::HTTP_200, 'results' =>$entity);
