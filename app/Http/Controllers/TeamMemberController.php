@@ -22,7 +22,14 @@ class TeamMemberController extends Controller
         return response()->json($teamMember);
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function retrieve(){
+
+        //You should always get team_id
+        //Use the team_id to get all users in the team sorted by udpated_at.
+        //Return array of users;
 
         $team_member=array(array('id'=>1,'uuid'=>'12659-adfad-7671','teamId'=>1,'userId'=>2, 'createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s')),
                            array('id'=>2,'uuid'=>'12659-adfad-7672','teamId'=>2,'userId'=>2, 'createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s')));

@@ -7,7 +7,7 @@ use App\Models\Agency;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
-class EmailVerificationsService{
+class EmailVerificationsService extends Base{
     /**
      * @param $verificationType
      * @param $userId
@@ -18,19 +18,21 @@ class EmailVerificationsService{
         $emailVerification = EmailVerification::create(['verification_type'=>$verificationType,'token'      =>bin2hex(openssl_random_pseudo_bytes(16)),
                                                         'user_id'           =>$userId,          'expired_at'=>date("Y-m-d H:i:s",(time()+(15*60)))]);
 
-        $code = base64_encode($emailVerification->token.':'.strtotime($emailVerification->expired_at).':'.$emailVerification->verificaton_type);
+        $code = base64_encode($emailVerification->token.':'.strtotime($emailVerification->expired_at).':'.$emailVerification->verification_type);
         return $code;
     }
 
     /**
      * @param $code
+     * @return array|string
      */
     public function update($code)
     {
-        list($token,$expired_at,$verification_type) = $this->decomposeCode($code);
 
+        list($token,$expired_at,$verification_type) = $this->decomposeCode($code);
         if (time() > $expired_at) {
-            $message = array("message" => "Your token has no longer valid");
+            $message = "Your token has no longer valid";
+            $message = $this->failureMessage($message,parent::HTTP_404);
             return $message;
         }
 
@@ -43,6 +45,7 @@ class EmailVerificationsService{
 
         $valError = $this->validateUpdate($emailVerification);
         if ($valError) {
+            $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
         $emailVerification->is_verified = 1;
@@ -50,12 +53,19 @@ class EmailVerificationsService{
         $user = User::find($emailVerification->user_id);
         $user->verified = 1;
         $user->save();
+        $user = $this->buildEmailVerificationSuccessMessage("success","your account is successfully updated");
+        return $user;
     }
 
+    /**
+     * This method performs business class validation for Email verifications update method
+     * @param $emailVerification
+     * @return array|string
+     */
     protected function validateUpdate($emailVerification){
         $errors = array();
         if(!$emailVerification){
-            $errors[] = array("message" => "you can not activate your account");
+            $errors = "You can not activate your account";
         }
         return $errors;
     }
@@ -72,7 +82,7 @@ class EmailVerificationsService{
         $expired_at = isset($code[1])?$code[1]:'';
         $verification_type = isset($code[2])?$code[2]:'';
 
-        return array($token, $verification_type, $expired_at);
+        return array($token, $expired_at, $verification_type);
     }
 
 }

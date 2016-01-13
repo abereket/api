@@ -46,7 +46,7 @@ class AgenciesService extends Base
 
     /**
      * @param $request
-     * @return string
+     * @return Agency|array
      */
     public function retrieve($request)
     {
@@ -63,8 +63,10 @@ class AgenciesService extends Base
         if ($description) {
             $agency = $agency->where('description',  'like', '%'.$description.'%');
         }
-
         $agency = $agency->orderby($order_by)->paginate($limit);
+
+        $agency = $this->buildRetrieveResponse($agency->toArray());
+        $agency = $this->buildRetrieveSuccessMessage("success",$agency);
         return $agency;
     }
     /**
@@ -98,7 +100,6 @@ class AgenciesService extends Base
             $valError  =     $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
-
         $agency->name         =   ($request->json()->get('name'))?($request->json()->get('name')):$agency->name;
         $agency->description  =   ($request->json()->get('description'))?($request->json()->get('description')):$agency->description;
         $agency->user_id      =   ($request->json()->get('userId'))?($request->json()->get('userId')):$agency->user_id;
@@ -131,8 +132,13 @@ class AgenciesService extends Base
      */
     protected function validateCreate($user){
         $errors        =    array();
-        if (!$user){
-            $errors    =    "Please provide a valid user id.The value you entered not exists";
+        if(!$user){
+            $errors = "Please provide a valid user id.The value you entered not exists";
+            return $errors;
+        }
+        $agency = Agency::where('user_id','=',$user->id)->get()->first();
+        if($agency and $user->verified ==1 ){
+            $errors = "There is already an active agency for the user";
         }
         return $errors;
     }
@@ -159,17 +165,21 @@ class AgenciesService extends Base
     protected function validateUpdate($agency, $userId){
         $errors        =  array();
         if(!$agency){
-            $errors[]    =  "please provide a valid agency";
+            $errors    =  "please provide a valid agency";
         }
         if($userId) {
-            $user      =   User::find($userId);
+            $user         =   User::find($userId);
             if(!$user){
-                $message  =  array("message"=>"The value you entered not exists.please enter a valid user id");
+                $message  =  "The value you entered not exists.please enter a valid user id";
                 return $message;
+            }
+            $agency = Agency::where('user_id','=',$user->id)->get()->first();
+            if($agency and $user->verified ==1){
+                $errors = "There is already an active agency for the user";
+                return $errors;
             }
         }
         return $errors;
-
     }
 
     /**
@@ -180,7 +190,7 @@ class AgenciesService extends Base
     protected function validateDelete($agency) {
         $errors        =   array();
         if (!$agency){
-            $errors    =  array("message" => "Please provide valid agency id");
+            $errors    = "Please provide valid agency id";
         }
 
         return $errors;

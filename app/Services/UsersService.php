@@ -11,6 +11,7 @@ use App\Models\User;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Pagination;
 
 class UsersService extends Base
 {
@@ -21,11 +22,6 @@ class UsersService extends Base
      */
     public function create($request)
     {
-        $valError = $this->validateCreate($request->json()->get('email'));
-        if($valError){
-            return $valError;
-        }
-
         $user = new User();
         $user->uuid         =  Uuid::uuid();
         $user->first_name   =  $request->json()->get('firstName');
@@ -33,9 +29,46 @@ class UsersService extends Base
         $user->email        =  $request->json()->get('email');
         $user->password     =  hash('sha512',$request->json()->get('password'));
         $user->type         =  ($request->json()->get('type'));
-
         $user->save();
 
+        $user=$this->buildCreateSuccessMessage('success',$user);
+        return $user;
+    }
+
+    /**
+     * @param $request
+     * @return mixed
+     */
+    public function retrieve($request){
+        $limit      =   ($request->input('per_page'))?($request->input('per_page')):15;
+        $firstName  =   $request->input('firstName');
+        $lastName   =   $request->input('lastName');
+        $email      =   $request->input('email');
+        $type       =   $request->input('type');
+        $verified   =   $request->input('verified');
+        $order_by   =  ($request->input('order_by'))? ($request->input('order_by')):'updated_at';
+
+        $user  =  User::whereNull('deleted_at');
+
+        if($firstName){
+           $user = $user->where('first_name', '=',$firstName);
+        }
+        if($lastName){
+            $user=$user->where('last_name', '=',$lastName);
+        }
+        if($email){
+           $user = $user->where('email','=',$email);
+        }
+        if($type){
+           $user = $user->where('type','=',$type);
+        }
+        if($verified){
+           $user = $user->where('verified','=',$verified);
+        }
+        $user = $user->orderby($order_by)->Paginate($limit);
+
+        $user = $this->buildRetrieveResponse($user->toArray());
+        $user = $this->buildRetrieveSuccessMessage("success",$user);
         return $user;
     }
 
@@ -70,14 +103,13 @@ class UsersService extends Base
             return $valError;
         }
 
-            $user->first_name  =   ($request->json()->get('firstName'))?($request->json()->get('firstName')):$user->first_name;
-            $user->last_name   =   ($request->json()->get('lastName'))?($request->json()->get('lastName')):$user->last_name;
-            $user->email       =   ($request->json()->get('email'))?($request->json()->get('email')):$user->email;
-            $user->password    =   ($request->json()->get('password'))?hash('sha512',($request->json()->get('password'))):$user->password;
-            $user->type        =   ($request->json()->get('type'))?($request->json()->get('type')):$user->type;
-            $user->verified    =   ($request->json()->get('verified'))?($request->json()->get('verified')):$user->verified;
-            $user->save();
-            unset($user['password']);
+        $user->first_name  =   ($request->json()->get('firstName'))?($request->json()->get('firstName')):$user->first_name;
+        $user->last_name   =   ($request->json()->get('lastName'))?($request->json()->get('lastName')):$user->last_name;
+        $user->password    =   ($request->json()->get('password'))?hash('sha512',($request->json()->get('password'))):$user->password;
+        $user->type        =   ($request->json()->get('type'))?($request->json()->get('type')):$user->type;
+        $user->verified    =   ($request->json()->get('verified'))?($request->json()->get('verified')):$user->verified;
+        $user->save();
+        unset($user['password']);
 
         
         $user=$this->buildUpdateSuccessMessage('success',$user);
@@ -126,19 +158,6 @@ class UsersService extends Base
     }
 
     /**
-     * This method performs business class validation for users create method
-     * @param $user
-     * @return array
-     */
-    protected function validateCreate($user){
-        $errors        =      array();
-        if(!$user){
-            $errors[]  =      array("message"=>"please provide a valid user");
-        }
-        return $errors;
-    }
-
-    /**
      * This method performs business class validation for users retrieveOne method
      * @param $user
      * @return array
@@ -146,7 +165,7 @@ class UsersService extends Base
     protected function validateRetrieveOne($user){
         $errors       = array();
         if(!$user){
-            $errors   = array("message"=>"please provide a valid user");
+            $errors   = "please provide a valid user";
         }
         return $errors;
     }
@@ -159,7 +178,7 @@ class UsersService extends Base
     protected function validateUpdate($user){
         $errors        = array();
         if(!$user){
-            $errors  = array("message"=>"please provide a valid user");
+            $errors  = "please provide a valid user";
         }
         return $errors;
     }
@@ -172,7 +191,7 @@ class UsersService extends Base
     protected function validateDelete($user){
         $errors        =  array();
         if(!$user){
-            $errors  =  ["message"=>"please provide a valid user"];
+            $errors  =  "please provide a valid user";
         }
        return $errors;
     }
