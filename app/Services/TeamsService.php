@@ -3,7 +3,7 @@ namespace App\Services;
 use App\Models\Agency;
 use App\Models\Team;
 use Illuminate\Http\Request;
-
+use Illuminate\Pagination;
 class TeamsService extends Base{
     /**
      * @param $request
@@ -19,6 +19,24 @@ class TeamsService extends Base{
 
          $team=$this->buildCreateSuccessMessage("success",$team);
          return $team;
+    }
+
+    /**
+     * @param $request
+     * @return array|string
+     */
+    public function retrieve($request){
+        $agencyId    =    $request->input('agencyId');
+        $limit       =    ($request->input('per_page'))?$request->input('per_page'):15;
+        $order_by    =    ($request->input('order_by'))?$request->input('order_by'):'updated_at';
+        if($agencyId){
+            $team = Team::where('agency_id',$agencyId)->orderby($order_by)->Paginate($limit);
+
+            $team = $this->buildRetrieveResponse($team->toArray());
+            $team = $this->buildRetrieveSuccessMessage("success",$team);
+            return $team;
+        }
+        return "You are advised to enter agencyId of the values you want to be searched";
     }
 
     /**

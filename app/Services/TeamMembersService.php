@@ -3,7 +3,7 @@ namespace App\Services;
 use App\Models\Team;
 use App\Models\TeamMember;
 use App\Models\User;
-
+use Illuminate\Pagination;
 class TeamMembersService extends Base{
     /**
      * @param $request
@@ -19,6 +19,32 @@ class TeamMembersService extends Base{
 
         $teamMember  =  $this->buildCreateSuccessMessage("success",$teamMember);
         return $teamMember;
+    }
+
+    /**
+     * @param $request
+     * @return array|string
+     */
+    public function retrieve($request){
+        $teamId      =   $request->input('teamId');
+        $limit       =   ($request->input('per_page'))?$request->input('per_page'):15;
+        $order_by    =   ($request->input('order_by'))?$request->input('order_by'):'updated_at';
+        if($teamId){
+            $teamMember = TeamMember::where('team_id',$teamId)->get();
+            if($teamMember->count()) {
+                foreach ($teamMember as $teamMember) {
+                    $userId[] = $teamMember->user_id;
+                }
+                $user = User::whereIn('id',$userId)->orderby($order_by)->Paginate($limit);
+
+                $user = $this->buildRetrieveResponse($user->toArray());
+                $user = $this->buildRetrieveSuccessMessage("success",$user);
+                return $user;
+            }else{
+                return "There is no corresponding data related to your  teamId ";
+            }
+        }
+        return 'You are advised to enter teamId of the values you want to be searched';
     }
 
     /**
