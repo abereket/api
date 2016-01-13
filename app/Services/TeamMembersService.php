@@ -10,17 +10,12 @@ class TeamMembersService extends Base{
      * @return static
      */
     public function create($request){
-        $valError     =  $this->validateCreate($request,$request->json()->get('userId'),$request->json()->get('teamId'));
+        $valError     =  $this->validateCreate($request->json()->get('userId'),$request->json()->get('teamId'));
         if($valError){
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
         $teamMember   =  TeamMember::create(['user_id'=>$request->json()->get('userId'),'team_id'=>$request->json()->get('teamId')]);
-        $valError     =  $this->validateCreate($teamMember,$request->json()->get('userId'),$request->json()->get('teamId'));
-        if($valError){
-            $valError =  $this->failureMessage($valError,parent::HTTP_404);
-            return $valError;
-        }
 
         $teamMember  =  $this->buildCreateSuccessMessage("success",$teamMember);
         return $teamMember;
@@ -54,7 +49,8 @@ class TeamMembersService extends Base{
       $teamMember    =  TeamMember::find($team_member_id);
       $valError      =  $this->validateUpdate($teamMember,$request->json()->get('userId'),$request->json()->get('teamId'));
       if($valError) {
-           return $valError;
+          $valError = $this->failureMessage($valError,parent::HTTP_404);
+          return $valError;
       }
       $teamMember->user_id  =  ($request->json()->get('userId'))?($request->json()->get('userId')):$teamMember->user_id;
       $teamMember->team_id  =  ($request->json()->get('teamId'))?($request->json()->get('teamId')):$teamMember->team_id;
@@ -83,29 +79,21 @@ class TeamMembersService extends Base{
 
     /**
      * This method performs business class validation for Team members create method
-     * @param $teamMember
      * @param $userId
      * @param $teamId
-     * @return array
+     * @return array|string
      */
-    protected function validateCreate($teamMember,$userId,$teamId){
+    protected function validateCreate($userId,$teamId){
         $errors = array();
-        if(!$teamMember){
-          $errors[]     =   array("message" => "Please provide a valid teamMember");
+        $user        =   User::find($userId);
+        if(!$user){
+            $message  =   "The value you entered not exists.please enter a valid user id";
+            return $message;
         }
-        if($userId){
-           $user        =   User::find($userId);
-           if(!$user){
-              $message  =   array("message" => "The value you entered not exists.please enter a valid user id");
-              return $message;
-           }
-        }
-        if($teamId){
-           $team        =   Team::find($teamId);
-           if(!$team){
-              $message  =   array("message" =>  "The value you entered not exists.please enter a valid team id");
-              return $message;
-           }
+        $team        =   Team::find($teamId);
+        if(!$team){
+            $message  = "The value you entered not exists.please enter a valid team id";
+            return $message;
         }
         return $errors;
     }
@@ -118,7 +106,7 @@ class TeamMembersService extends Base{
     protected function validateRetrieveOne($teamMember){
         $errors         =    array();
         if(!$teamMember){
-          $errors[]     =    array("message" => "Please provide a valid teamMember");
+          $errors     =     "Please provide a valid teamMember";
         }
         return $errors;
     }
@@ -133,19 +121,19 @@ class TeamMembersService extends Base{
     protected function validateUpdate($teamMember,$userId,$teamId){
         $errors = array();
         if(!$teamMember){
-           $errors[]  =   array("message" => "Please provide a valid teamMember");
+           $errors  =   "Please provide a valid teamMember";
         }
         if($userId){
         $user         =   User::find($userId);
         if(!$user){
-          $message    =   array("message"=>"The value you entered not exists.please enter a valid user id");
+          $message    =  "The value you entered not exists.please enter a valid user id";
           return $message;
         }
         }
         if($teamId){
         $team         =   Team::find($teamId);
         if(!$team ){
-          $message    =   array("message"=>"The value you entered not exists.please enter a valid team id");
+          $message    =   "The value you entered not exists.please enter a valid team id";
           return $message;
         }
         }
@@ -161,7 +149,7 @@ class TeamMembersService extends Base{
     protected function validateDelete($teamMember){
         $errors = array();
         if(!$teamMember){
-           $errors[] = array("message" => "Please provide a valid teamMember");
+           $errors =  "Please provide a valid teamMember";
         }
         return $errors;
     }

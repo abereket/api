@@ -39,7 +39,7 @@ class AgencyController extends Controller{
     }
 
     /**
-     * retrieves one agency
+     * This method retrieves a user corresponding to the given user id
      * @param $agency_id
      * @return \Symfony\Component\HttpFoundation\Response
      */

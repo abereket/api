@@ -10,16 +10,12 @@ class TeamsService extends Base{
      * @return array|static
      */
     public function create($request){
-         $valError          = $this->validateCreate($request,$request->json()->get('agencyId'));
+         $valError          = $this->validateCreate($request->json()->get('agencyId'));
          if($valError){
-            return $valError;
-         }
-         $team              = Team::create(['name'=>$request->json()->get('name'),'category'=>$request->json()->get('category'),'agency_id'=>$request->json()->get('agencyId')]);
-         $valError          = $this->validateCreate($team,$request->json()->get('agencyId'));
-         if($valError){
-             $valError      = $this->failureMessage($valError,'404');
+             $valError    =  $this->failureMessage($valError,parent::HTTP_404);
              return $valError;
          }
+         $team              = Team::create(['name'=>$request->json()->get('name'),'category'=>$request->json()->get('category'),'agency_id'=>$request->json()->get('agencyId')]);
 
          $team=$this->buildCreateSuccessMessage("success",$team);
          return $team;
@@ -82,23 +78,17 @@ class TeamsService extends Base{
 
     /**
      * This method performs business class validation for teams  create method
-     * @param $team
      * @param $agencyId
-     * @return array
+     * @return array|string
      */
-    protected function validateCreate($team,$agencyId){
-       $errors = array();
-       if(!$team){
-           $errors[]         =  array("message" => "Please provide a valid team");
-       }
-       if($agencyId){
-           $agency           =  Agency::find($agencyId);
-           if(!$agency){
-               $message      =  array("message" => "The value you entered not exists.please enter a valid agency id");
-               return $message;
-           }
-       }
-       return $errors;
+    protected function validateCreate($agencyId)
+    {
+        $errors = array();
+            $agency = Agency::find($agencyId);
+            if (!$agency) {
+                $errors = "The value you entered not exists.please enter a valid agency id";
+            }
+        return $errors;
     }
 
     /**
@@ -109,7 +99,7 @@ class TeamsService extends Base{
     protected function validateRetrieveOne($team){
         $errors        =    array();
         if(!$team){
-            $errors[]  =    array("message" => "Please provide a valid team");
+            $errors  =    "Please provide a valid team";
         }
         return $errors;
     }
@@ -123,12 +113,12 @@ class TeamsService extends Base{
     protected function validateUpdate($team,$agencyId){
         $errors            =   array();
         if(!$team){
-            $errors[]      =   array("message" => "Please provide a valid team");
+            $errors      =  "Please provide a valid team";
         }
         if($agencyId) {
             $agency        =   Agency::find($agencyId);
             if(!$agency){
-                $message   =   array("message" => "The value you entered not exists.please enter a valid agency id");
+                $message   =   "The value you entered not exists.please enter a valid agency id";
                 return $message;
             }
         }
@@ -143,7 +133,7 @@ class TeamsService extends Base{
     protected function validateDelete($team){
         $errors       =  array();
         if(!$team){
-            $errors[] =  array("message" => "Please provide a valid team");
+            $errors =   "Please provide a valid team";
         }
         return $errors;
     }

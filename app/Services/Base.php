@@ -45,6 +45,11 @@ abstract class Base
         return $message;
     }
 
+    public function buildRetrieveSuccessMessage($successMessage,$entity){
+        $message = array();
+        $message[] = array('message' => $successMessage, 'code' =>self::HTTP_200, 'results' => $entity);
+        return $message;
+    }
     /**
      * @param $successMessage
      * @param $entity
@@ -58,6 +63,16 @@ abstract class Base
     }
 
     /**
+     * @param $successMessage
+     * @param $entity
+     * @return array
+     */
+    protected function buildEmailVerificationSuccessMessage($successMessage,$entity){
+       $message = array();
+       $message[] = array("message" => $successMessage,'code' =>self::HTTP_200, 'results' =>$entity);
+       return $message;
+    }
+    /**
      * @param $message
      * @param $code
      * @return array
@@ -66,6 +81,22 @@ abstract class Base
     {
         $message = array("message"=>$message,'code'=>$code);
         return $message;
+    }
+
+    /**
+     * @param array $input
+     * @return array
+     */
+
+    public function buildRetrieveResponse(array $input)
+    {
+        return [
+            'total'         => $input['total'],
+            'per_page'      => $input['per_page'],
+            'current_page'  => $input['current_page'],
+            'last_page'     => $input['last_page'],
+            'results'       => $input['data'],
+        ];
     }
 }
 ?>

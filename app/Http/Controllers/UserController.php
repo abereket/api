@@ -38,32 +38,11 @@ class UserController extends Controller
      * retrieves all the users
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function retrieve()
+    public function retrieve(Request $request)
     {
-        $user = array(array(
-            'id' => 1,
-            'uuid' => '12659-adfad-7671',
-            'firstName' => 'kibret',
-            'lastName' => 'bereket',
-            'email' => 'kibret@example.com',
-            'type' => 'agency',
-            'verified' => 'false',
-            'createdAt' => date("Y-m-d H:m:i"),
-            'updatedAt' => date("Y-m-d H:m:i")
-        ), array(
-            'id' => 2,
-            'uuid' => '12659-adfad-7672',
-            'firstName' => 'Amanuel',
-            'lastName' => 'bereket',
-            'email' => 'Amanuel@example.com',
-            'type' => 'agency',
-            'verified' => 'false',
-            'createdAt' => date("Y-m-d H:m:i"),
-            'updatedAt' => date("Y-m-d H:m:i")
-        )
-        );
-        $count = count($user);
-        return response()->json(["status" => "success", "code" => parent::HTTP_200, "count" => $count, "results" => $user]);
+        $userService = new UsersService();
+        $user = $userService->retrieve($request);
+        return response()->json($user);
     }
 
     /**
@@ -92,7 +71,6 @@ class UserController extends Controller
         $rules = [
             'firstName'     => 'max:50',
             'lastName'      => 'max:50',
-            'email'         => 'email|max:60|unique:users',
             'password'      => 'max:60',
             'type'          => 'in:recruiter,candidate,agency,zemployee'
         ];
