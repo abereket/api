@@ -113,13 +113,11 @@ class TeamMembersService extends Base{
         $errors = array();
         $user        =   User::find($userId);
         if(!$user){
-            $message  =   "The value you entered not exists.please enter a valid user id";
-            return $message;
+            $errors  =   "The value you entered not exists.please enter a valid user id";
         }
         $team        =   Team::find($teamId);
         if(!$team){
-            $message  = "The value you entered not exists.please enter a valid team id";
-            return $message;
+            $errors  = "The value you entered not exists.please enter a valid team id";
         }
         return $errors;
     }
@@ -152,15 +150,13 @@ class TeamMembersService extends Base{
         if($userId){
         $user         =   User::find($userId);
         if(!$user){
-          $message    =  "The value you entered not exists.please enter a valid user id";
-          return $message;
+          $errors    =  "The value you entered not exists.please enter a valid user id";
         }
         }
         if($teamId){
         $team         =   Team::find($teamId);
         if(!$team ){
-          $message    =   "The value you entered not exists.please enter a valid team id";
-          return $message;
+          $errors    =   "The value you entered not exists.please enter a valid team id";
         }
         }
         return $errors;

@@ -2,6 +2,7 @@
 namespace App\Services;
 use App\Models\Agency;
 use App\Models\Team;
+use Faker\Provider\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Pagination;
 class TeamsService extends Base{
@@ -10,12 +11,12 @@ class TeamsService extends Base{
      * @return array|static
      */
     public function create($request){
-         $valError          = $this->validateCreate($request->json()->get('agencyId'));
+         $valError        = $this->validateCreate($request->json()->get('agencyId'));
          if($valError){
              $valError    =  $this->failureMessage($valError,parent::HTTP_404);
              return $valError;
          }
-         $team              = Team::create(['name'=>$request->json()->get('name'),'category'=>$request->json()->get('category'),'agency_id'=>$request->json()->get('agencyId')]);
+         $team            = Team::create(['uuid'=>Uuid::uuid(),'name'=>$request->json()->get('name'),'category'=>$request->json()->get('category'),'agency_id'=>$request->json()->get('agencyId')]);
 
          $team=$this->buildCreateSuccessMessage("success",$team);
          return $team;
@@ -136,8 +137,7 @@ class TeamsService extends Base{
         if($agencyId) {
             $agency        =   Agency::find($agencyId);
             if(!$agency){
-                $message   =   "The value you entered not exists.please enter a valid agency id";
-                return $message;
+                $errors  =   "The value you entered not exists.please enter a valid agency id";
             }
         }
         return $errors;
