@@ -30,14 +30,17 @@ class TeamsService extends Base{
         $agencyId    =    $request->input('agencyId');
         $limit       =    ($request->input('per_page'))?$request->input('per_page'):15;
         $order_by    =    ($request->input('order_by'))?$request->input('order_by'):'updated_at';
-        if($agencyId){
-            $team = Team::where('agency_id',$agencyId)->orderby($order_by)->Paginate($limit);
 
-            $team = $this->buildRetrieveResponse($team->toArray());
-            $team = $this->buildRetrieveSuccessMessage("success",$team);
-            return $team;
+        $valError = $this->validateRetrieve($agencyId);
+        if($valError){
+            $valError = $this->failureMessage($valError,parent::HTTP_404);
+            return $valError;
         }
-        return "You are advised to enter agencyId of the values you want to be searched";
+        $team = Team::where('agency_id',$agencyId)->orderby($order_by)->Paginate($limit);
+
+        $team = $this->buildRetrieveResponse($team->toArray());
+        $team = $this->buildRetrieveSuccessMessage("success",$team);
+        return $team;
     }
 
     /**
@@ -107,6 +110,19 @@ class TeamsService extends Base{
             if (!$agency) {
                 $errors = "The value you entered not exists.please enter a valid agency id";
             }
+        return $errors;
+    }
+
+    /**
+     * This method performs business class validation for teams  retrieve method
+     * @param $agencyId
+     * @return array|string
+     */
+    protected function validateRetrieve($agencyId){
+        $errors = array();
+        if(!$agencyId){
+            $errors ="You are advised to enter agencyId of the values you want to be searched";
+        }
         return $errors;
     }
 

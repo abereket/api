@@ -29,22 +29,28 @@ class TeamMembersService extends Base{
         $teamId      =   $request->input('teamId');
         $limit       =   ($request->input('per_page'))?$request->input('per_page'):15;
         $order_by    =   ($request->input('order_by'))?$request->input('order_by'):'updated_at';
-        if($teamId){
-            $teamMember = TeamMember::where('team_id',$teamId)->get();
-            if($teamMember->count()) {
-                foreach ($teamMember as $teamMember) {
-                    $userId[] = $teamMember->user_id;
-                }
-                $user = User::whereIn('id',$userId)->orderby($order_by)->Paginate($limit);
 
-                $user = $this->buildRetrieveResponse($user->toArray());
-                $user = $this->buildRetrieveSuccessMessage("success",$user);
-                return $user;
-            }else{
-                return "There is no corresponding data related to your  teamId ";
-            }
+        $valError = $this->validateRetrieve($teamId);
+        if($valError){
+            $valError =$this->failureMessage($valError,parent::HTTP_404);
+            return $valError;
         }
-        return 'You are advised to enter teamId of the values you want to be searched';
+        $teamMember = TeamMember::where('team_id',$teamId)->get();
+        if(!$teamMember->count()) {
+            $valError = "There is no corresponding data related to your teamId ";
+            $valError = $this->failureMessage($valError,parent::HTTP_404);
+            return $valError;
+        }
+        foreach ($teamMember as $teamMember) {
+            $userId[] = $teamMember->user_id;
+        }
+        $user = User::whereIn('id',$userId)->orderby($order_by)->Paginate($limit);
+
+        $user = $this->buildRetrieveResponse($user->toArray());
+        $user = $this->buildRetrieveSuccessMessage("success",$user);
+        return $user;
+
+
     }
 
     /**
@@ -118,6 +124,19 @@ class TeamMembersService extends Base{
         $team        =   Team::find($teamId);
         if(!$team){
             $errors  = "The value you entered not exists.please enter a valid team id";
+        }
+        return $errors;
+    }
+
+    /**
+     * This method performs business class validation for Team members retrieve method
+     * @param $teamId
+     * @return array|string
+     */
+    protected function validateRetrieve($teamId){
+        $errors = array();
+        if(!$teamId){
+            $errors = 'You are advised to enter teamId of the values you want to be searched';
         }
         return $errors;
     }
