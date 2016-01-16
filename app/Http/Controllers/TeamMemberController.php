@@ -14,7 +14,7 @@ class TeamMemberController extends Controller
      */
     public function create(Request $request)
     {
-        $rules=['emails'=>'required|max:60','teamId'=>'required|max:11|exists:teams,id,deleted_at,Null'];
+        $rules=['emails'=>'required|array','emails.0.email'=>'email','teamId'=>'required|max:11|exists:teams,id,deleted_at,Null'];
         $this->validate($request,$rules);
 
         $teamMemberService = new TeamMembersService();
