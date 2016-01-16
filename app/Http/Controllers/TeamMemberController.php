@@ -16,14 +16,14 @@ class TeamMemberController extends Controller
     {
         $len = count($request->json()->get('emails'));
         $i = 0;
-       do{
-            $rules = ['emails'=>'required|array',"emails.$i.email"=>'required|email','teamId'=>'required|max:11|exists:teams,id,deleted_at,NULL'];
-            $this->validate($request,$rules);
-            $i++;
-        } while($i < $len);
-        $teamMemberService = new TeamMembersService();
-        $teamMember = $teamMemberService->create($request);
-        return response()->json($teamMember);
+           do{
+                $rules = ['emails'=>'required|array',"emails.$i.email"=>'required|email','teamId'=>'required|max:11|exists:teams,id,deleted_at,NULL'];
+                $this->validate($request,$rules);
+                $i++;
+            } while($i < $len);
+            $teamMemberService = new TeamMembersService();
+            $teamMember = $teamMemberService->create($request);
+            return response()->json($teamMember);
     }
 
     /**
