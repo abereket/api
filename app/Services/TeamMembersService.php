@@ -3,7 +3,7 @@ namespace App\Services;
 use App\Models\Team;
 use App\Models\TeamMember;
 use App\Models\User;
-
+use Illuminate\Pagination;
 class TeamMembersService extends Base{
     /**
      * @param $request
@@ -19,6 +19,38 @@ class TeamMembersService extends Base{
 
         $teamMember  =  $this->buildCreateSuccessMessage("success",$teamMember);
         return $teamMember;
+    }
+
+    /**
+     * @param $request
+     * @return array|string
+     */
+    public function retrieve($request){
+        $teamId      =   $request->input('teamId');
+        $limit       =   ($request->input('per_page'))?$request->input('per_page'):15;
+        $order_by    =   ($request->input('order_by'))?$request->input('order_by'):'updated_at';
+
+        $valError = $this->validateRetrieve($teamId);
+        if($valError){
+            $valError =$this->failureMessage($valError,parent::HTTP_404);
+            return $valError;
+        }
+        $teamMember = TeamMember::where('team_id',$teamId)->get();
+        if(!$teamMember->count()) {
+            $valError = "There is no corresponding data related to your teamId ";
+            $valError = $this->failureMessage($valError,parent::HTTP_404);
+            return $valError;
+        }
+        foreach ($teamMember as $teamMember) {
+            $userId[] = $teamMember->user_id;
+        }
+        $user = User::whereIn('id',$userId)->orderby($order_by)->Paginate($limit);
+
+        $user = $this->buildRetrieveResponse($user->toArray());
+        $user = $this->buildRetrieveSuccessMessage("success",$user);
+        return $user;
+
+
     }
 
     /**
@@ -87,13 +119,24 @@ class TeamMembersService extends Base{
         $errors = array();
         $user        =   User::find($userId);
         if(!$user){
-            $message  =   "The value you entered not exists.please enter a valid user id";
-            return $message;
+            $errors  =   "The value you entered not exists.please enter a valid user id";
         }
         $team        =   Team::find($teamId);
         if(!$team){
-            $message  = "The value you entered not exists.please enter a valid team id";
-            return $message;
+            $errors  = "The value you entered not exists.please enter a valid team id";
+        }
+        return $errors;
+    }
+
+    /**
+     * This method performs business class validation for Team members retrieve method
+     * @param $teamId
+     * @return array|string
+     */
+    protected function validateRetrieve($teamId){
+        $errors = array();
+        if(!$teamId){
+            $errors = 'You are advised to enter teamId of the values you want to be searched';
         }
         return $errors;
     }
@@ -126,15 +169,13 @@ class TeamMembersService extends Base{
         if($userId){
         $user         =   User::find($userId);
         if(!$user){
-          $message    =  "The value you entered not exists.please enter a valid user id";
-          return $message;
+          $errors    =  "The value you entered not exists.please enter a valid user id";
         }
         }
         if($teamId){
         $team         =   Team::find($teamId);
         if(!$team ){
-          $message    =   "The value you entered not exists.please enter a valid team id";
-          return $message;
+          $errors    =   "The value you entered not exists.please enter a valid team id";
         }
         }
         return $errors;

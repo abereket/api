@@ -48,7 +48,7 @@ class UsersService extends Base
         $verified   =   $request->input('verified');
         $order_by   =  ($request->input('order_by'))? ($request->input('order_by')):'updated_at';
 
-        $user  =  User::whereNull('deleted_at');
+        $user  = new User();
 
         if($firstName){
            $user = $user->where('first_name', '=',$firstName);
