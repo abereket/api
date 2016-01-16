@@ -51,16 +51,16 @@ class UsersService extends Base
         $user  = new User();
 
         if($firstName){
-           $user = $user->where('first_name', '=',$firstName);
+           $user = $user->where('first_name', 'like','%'.$firstName.'%');
         }
         if($lastName){
-            $user=$user->where('last_name', '=',$lastName);
+            $user=$user->where('last_name', 'like','%'.$lastName.'%');
         }
         if($email){
-           $user = $user->where('email','=',$email);
+           $user = $user->where('email','like','%'.$email.'%');
         }
         if($type){
-           $user = $user->where('type','=',$type);
+           $user = $user->where('type','like','%'.$type.'%');
         }
         if($verified){
            $user = $user->where('verified','=',$verified);
