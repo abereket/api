@@ -10,14 +10,23 @@ class TeamMembersService extends Base{
      * @return static
      */
     public function create($request){
-        $valError     =  $this->validateCreate($request->json()->get('userId'),$request->json()->get('teamId'));
+        $valError     =  $this->validateCreate($request->json()->get('teamId'));
         if($valError){
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
-        $teamMember   =  TeamMember::create(['user_id'=>$request->json()->get('userId'),'team_id'=>$request->json()->get('teamId')]);
-
-        $teamMember  =  $this->buildCreateSuccessMessage("success",$teamMember);
+        $emails=$request->json()->get('emails');
+        for($i=0;$i<count($emails);$i++){
+            $user = User::where('email', $emails[$i]['email'])->first();
+            if (!$user) {
+                $userService = new UsersService();
+                $user = $userService->create($request,$emails[$i]['email'],'recruiter');
+            }
+            $teamMember = TeamMember::create(['user_id' => $user->id, 'team_id' => $request->json()->get('teamId')]);
+            $id[]=$teamMember->id;
+        }
+        $teamMember = TeamMember::whereIn('id',$id)->get();
+        $teamMember = $this->buildCreateSuccessMessage("success", $teamMember);
         return $teamMember;
     }
 
@@ -83,17 +92,11 @@ class TeamMembersService extends Base{
      * @param $teamId
      * @return array|string
      */
-    protected function validateCreate($userId,$teamId){
+    protected function validateCreate($teamId){
         $errors = array();
-        $user        =   User::find($userId);
-        if(!$user){
-            $message  =   "The value you entered not exists.please enter a valid user id";
-            return $message;
-        }
         $team        =   Team::find($teamId);
         if(!$team){
-            $message  = "The value you entered not exists.please enter a valid team id";
-            return $message;
+            $errors  = "The value you entered not exists.please enter a valid team id";
         }
         return $errors;
     }

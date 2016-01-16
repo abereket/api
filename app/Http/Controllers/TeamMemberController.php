@@ -14,7 +14,7 @@ class TeamMemberController extends Controller
      */
     public function create(Request $request)
     {
-        $rules=['userId'=>'required|max:11','teamId'=>'required|max:11'];
+        $rules=['emails'=>'required|max:60','teamId'=>'required|max:11|exists:teams,id,deleted_at,Null'];
         $this->validate($request,$rules);
 
         $teamMemberService = new TeamMembersService();
@@ -59,7 +59,7 @@ class TeamMemberController extends Controller
      */
     public function update(Request $request,$team_member_id){
 
-        $rules=['userId'=>'max:11','teamId'=>'max:11'];
+        $rules=['userId'=>'max:11','teamId'=>'max:11|exists:teams,id,deleted_at,Null'];
         $this->validate($request,$rules);
 
         $teamMemberService = new TeamMembersService();

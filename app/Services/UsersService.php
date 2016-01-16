@@ -20,17 +20,19 @@ class UsersService extends Base
      * @param $request
      * @return mixed
      */
-    public function create($request)
+    public function create($request,$email='',$type='')
     {
         $user = new User();
         $user->uuid         =  Uuid::uuid();
         $user->first_name   =  $request->json()->get('firstName');
         $user->last_name    =  $request->json()->get('lastName');
-        $user->email        =  $request->json()->get('email');
+        $user->email        =  ($request->json()->get('email'))?$request->json()->get('email'):$email;
         $user->password     =  hash('sha512',$request->json()->get('password'));
-        $user->type         =  ($request->json()->get('type'));
+        $user->type         =  ($request->json()->get('type'))?($request->json()->get('type')):$type;
         $user->save();
-
+        if($type and $email){
+            return $user;
+        }
         $user=$this->buildCreateSuccessMessage('success',$user);
         return $user;
     }
@@ -132,12 +134,13 @@ class UsersService extends Base
             ->where('verified', '=', 1)
             ->get()
             ->first();
-
-        if (!$user) {
-            throw new Exception("Please provide valid username and password");
-        }
-
         return $user;
+        //if (!$user) {
+            //echo 'not allowed';
+            //throw new Exception("Please provide valid username and password");
+        //}
+
+        //return $user;
     }
 
     /**
