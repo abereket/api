@@ -14,12 +14,16 @@ class TeamMemberController extends Controller
      */
     public function create(Request $request)
     {
-        $rules=['userId'=>'required|max:11','teamId'=>'required|max:11|exists:teams,id,deleted_at,NULL'];
-        $this->validate($request,$rules);
-
-        $teamMemberService = new TeamMembersService();
-        $teamMember = $teamMemberService->create($request);
-        return response()->json($teamMember);
+        $len = count($request->json()->get('emails'));
+        $i = 0;
+           do{
+                $rules = ['emails'=>'required|array',"emails.$i.email"=>'required|email','teamId'=>'required|max:11|exists:teams,id,deleted_at,NULL'];
+                $this->validate($request,$rules);
+                $i++;
+            } while($i < $len);
+            $teamMemberService = new TeamMembersService();
+            $teamMember = $teamMemberService->create($request);
+            return response()->json($teamMember);
     }
 
     /**
@@ -55,7 +59,7 @@ class TeamMemberController extends Controller
      */
     public function update(Request $request,$team_member_id){
 
-        $rules=['userId'=>'max:11|exists:users,id,deleted_at,NULL','teamId'=>'max:11|exists:teams,id,deleted_at,NULL'];
+        $rules=['userId'=>'max:11','teamId'=>'max:11'];
         $this->validate($request,$rules);
 
         $teamMemberService = new TeamMembersService();

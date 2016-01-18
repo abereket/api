@@ -61,11 +61,12 @@ $app->singleton(
  //     // Illuminate\Session\Middleware\StartSession::class,
  //     // Illuminate\View\Middleware\ShareErrorsFromSession::class,
  //     // Laravel\Lumen\Http\Middleware\VerifyCsrfToken::class,
+ //         //App\Http\Middleware\authenticateMiddleware::class
  //]);
 
-// $app->routeMiddleware([
-
-// ]);
+ //$app->routeMiddleware([
+//'authenticate' => 'App\Http\Middleware\authenticateMiddleware::class',
+ //]);
 
 /*
 |--------------------------------------------------------------------------

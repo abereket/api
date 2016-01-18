@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 
 class AgencyController extends Controller{
 
+    //public function __construct(Request $request){
+        //$this->Middleware('authenticate');
+    //}
     /**
      * creates an agency
      * @return \Symfony\Component\HttpFoundation\Response
