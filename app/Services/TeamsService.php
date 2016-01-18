@@ -2,23 +2,45 @@
 namespace App\Services;
 use App\Models\Agency;
 use App\Models\Team;
+use Faker\Provider\Uuid;
 use Illuminate\Http\Request;
-
+use Illuminate\Pagination;
 class TeamsService extends Base{
     /**
      * @param $request
      * @return array|static
      */
     public function create($request){
-         $valError          = $this->validateCreate($request->json()->get('agencyId'));
+         $valError        = $this->validateCreate($request->json()->get('agencyId'));
          if($valError){
              $valError    =  $this->failureMessage($valError,parent::HTTP_404);
              return $valError;
          }
-         $team              = Team::create(['name'=>$request->json()->get('name'),'category'=>$request->json()->get('category'),'agency_id'=>$request->json()->get('agencyId')]);
+         $team            = Team::create(['uuid'=>Uuid::uuid(),'name'=>$request->json()->get('name'),'category'=>$request->json()->get('category'),'agency_id'=>$request->json()->get('agencyId')]);
 
          $team=$this->buildCreateSuccessMessage("success",$team);
          return $team;
+    }
+
+    /**
+     * @param $request
+     * @return array|string
+     */
+    public function retrieve($request){
+        $agencyId    =    $request->input('agencyId');
+        $limit       =    ($request->input('per_page'))?$request->input('per_page'):15;
+        $order_by    =    ($request->input('order_by'))?$request->input('order_by'):'updated_at';
+
+        $valError = $this->validateRetrieve($agencyId);
+        if($valError){
+            $valError = $this->failureMessage($valError,parent::HTTP_404);
+            return $valError;
+        }
+        $team = Team::where('agency_id',$agencyId)->orderby($order_by)->Paginate($limit);
+
+        $team = $this->buildRetrieveResponse($team->toArray());
+        $team = $this->buildRetrieveSuccessMessage("success",$team);
+        return $team;
     }
 
     /**
@@ -92,6 +114,19 @@ class TeamsService extends Base{
     }
 
     /**
+     * This method performs business class validation for teams  retrieve method
+     * @param $agencyId
+     * @return array|string
+     */
+    protected function validateRetrieve($agencyId){
+        $errors = array();
+        if(!$agencyId){
+            $errors ="You are advised to enter agencyId of the values you want to be searched";
+        }
+        return $errors;
+    }
+
+    /**
      * This method performs business class validation for teams retrieveOne method
      * @param $team
      * @return array
@@ -118,8 +153,7 @@ class TeamsService extends Base{
         if($agencyId) {
             $agency        =   Agency::find($agencyId);
             if(!$agency){
-                $message   =   "The value you entered not exists.please enter a valid agency id";
-                return $message;
+                $errors  =   "The value you entered not exists.please enter a valid agency id";
             }
         }
         return $errors;

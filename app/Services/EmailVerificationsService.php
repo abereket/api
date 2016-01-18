@@ -31,9 +31,9 @@ class EmailVerificationsService extends Base{
 
         list($token,$expired_at,$verification_type) = $this->decomposeCode($code);
         if (time() > $expired_at) {
-            $message = "Your token has no longer valid";
-            $message = $this->failureMessage($message,parent::HTTP_404);
-            return $message;
+            $valError = "Your token has no longer valid";
+            $valError = $this->failureMessage($valError,parent::HTTP_404);
+            return $valError;
         }
 
         $expiredAt = date("Y-m-d H:i:s",(int)$expired_at);
@@ -44,7 +44,7 @@ class EmailVerificationsService extends Base{
                                                ->first();
 
         $valError = $this->validateUpdate($emailVerification);
-        if ($valError) {
+        if($valError){
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
@@ -69,7 +69,6 @@ class EmailVerificationsService extends Base{
         }
         return $errors;
     }
-
 
     /**
      * @param $code

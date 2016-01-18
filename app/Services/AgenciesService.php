@@ -17,7 +17,6 @@ class AgenciesService extends Base
      */
     public function create($request)
     {
-        //Perform business specific validations
         $user        =    User::find($request->json()->get('userId'));
         $valError    =   $this->validateCreate($user);
         if ($valError) {
@@ -53,7 +52,6 @@ class AgenciesService extends Base
         $limit          =   ($request->input('per_page'))?($request->input('per_page')) : 15;
         $name           =   $request->input('name');
         $description    =   $request->input('description');
-        $page           =   ($request->input('page'))?($request->input('page')):1;
         $order_by       =   ($request->input('order_by'))? ($request->input('order_by')) : 'updated_at';
 
         $agency =  new Agency();
@@ -136,7 +134,7 @@ class AgenciesService extends Base
             $errors = "Please provide a valid user id.The value you entered not exists";
             return $errors;
         }
-        $agency = Agency::where('user_id','=',$user->id)->get()->first();
+        $agency = Agency::where('user_id','=',$user->id)->first();
         if($agency and $user->verified ==1 ){
             $errors = "There is already an active agency for the user";
         }
@@ -170,13 +168,12 @@ class AgenciesService extends Base
         if($userId) {
             $user         =   User::find($userId);
             if(!$user){
-                $message  =  "The value you entered not exists.please enter a valid user id";
-                return $message;
+                $errors  =  "The value you entered not exists.please enter a valid user id";
+                return $errors;
             }
-            $agency = Agency::where('user_id','=',$user->id)->get()->first();
+            $agency = Agency::where('user_id','=',$user->id)->first();
             if($agency and $user->verified ==1){
                 $errors = "There is already an active agency for the user";
-                return $errors;
             }
         }
         return $errors;
@@ -189,10 +186,9 @@ class AgenciesService extends Base
      */
     protected function validateDelete($agency) {
         $errors        =   array();
-        if (!$agency){
+        if(!$agency){
             $errors    = "Please provide valid agency id";
         }
-
         return $errors;
     }
 }

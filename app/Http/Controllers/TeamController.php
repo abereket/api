@@ -12,7 +12,7 @@ class teamController extends Controller{
      */
     public function create(Request $request)
     {
-        $rules=['name'=>'required|max:50','category'=>'max:75','agencyId'=>'required|integer|exists:agencies,id,deleted_at,NULL'];
+        $rules=['name'=>'required|max:50','category'=>'max:75','agencyId'=>'required|integer'];
         $this->validate($request,$rules);
         $teamService = new TeamsService();
         $team=$teamService->create($request);
@@ -20,13 +20,11 @@ class teamController extends Controller{
         return response()->json($team);
     }
 
-    public function retrieve()
+    public function retrieve(Request $request)
     {
-        $team=array(array('id'=>1,'uuid'=>'12659-adfad-767','name'=>'Team one','agency_id'=>1,'category'=>'Financing','createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s')),
-                   array('id'=>2,'uuid'=>'12659-adfad-768','name'=>'Team two','agency_id'=>1,'category'=>'Financing','createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s')));
-
-        $count = count($team);
-        return response()->json(["status"=>"success","code" => parent::HTTP_200,"count"=>$count,"results" => $team]);
+        $teamService = new TeamsService();
+        $team = $teamService->retrieve($request);
+        return response()->json($team);
     }
 
     /**
@@ -49,7 +47,7 @@ class teamController extends Controller{
      */
     public function update(Request $request,$team_id)
     {
-        $rules=['name'=>'max:50', 'category'=>'max:75', 'agencyId'=>'max:11|exists:agencies,id,deleted_at,NULL'];
+        $rules=['name'=>'max:50', 'category'=>'max:75', 'agencyId'=>'max:11'];
         $this->validate($request,$rules);
 
         $teamService =   new TeamsService();
