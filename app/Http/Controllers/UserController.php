@@ -35,6 +35,7 @@ class UserController extends Controller
     }
 
     /**
+     * calls the retrieve method in services.UsersService
      * retrieves all the users
      * @return \Symfony\Component\HttpFoundation\Response
      */
