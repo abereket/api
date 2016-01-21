@@ -23,8 +23,8 @@ class UserController extends Controller
 
     public function create(Request $request)
     {
-        $rules = ['firstName' => 'required|max:50', 'lastName' => 'required|max:50', 'email' => 'required|email|max:60|unique:users',
-            'password' => 'max:60', 'type' => 'required|in:recruiter,candidate,agency,zemployee'];
+        $rules = ['firstName' => 'required|string|max:50', 'lastName' => 'required|string|max:50', 'email' => 'required|email|max:60|unique:users',
+            'password' => 'string|max:60', 'type' => 'required|in:recruiter,candidate,agency,zemployee'];
 
         $this->validate($request, $rules);
 
@@ -35,6 +35,7 @@ class UserController extends Controller
     }
 
     /**
+     * calls the retrieve method in services.UsersService
      * retrieves all the users
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -69,9 +70,9 @@ class UserController extends Controller
     {
 
         $rules = [
-            'firstName'     => 'max:50',
-            'lastName'      => 'max:50',
-            'password'      => 'max:60',
+            'firstName'     => 'string|max:50',
+            'lastName'      => 'string|max:50',
+            'password'      => 'string|max:60',
             'type'          => 'in:recruiter,candidate,agency,zemployee'
         ];
 

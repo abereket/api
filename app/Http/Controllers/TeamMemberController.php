@@ -17,7 +17,7 @@ class TeamMemberController extends Controller
         $len = count($request->json()->get('emails'));
         $i = 0;
            do{
-                $rules = ['emails'=>'required|array',"emails.$i.email"=>'required|email','teamId'=>'required|max:11|exists:teams,id,deleted_at,NULL'];
+                $rules = ['emails'=>'required|array',"emails.$i.email"=>'required|email','teamId'=>'required|max:11|integer'];
                 $this->validate($request,$rules);
                 $i++;
             } while($i < $len);
@@ -27,13 +27,12 @@ class TeamMemberController extends Controller
     }
 
     /**
+     * calls the retrieve method in Services.TeamMembersService
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function retrieve(Request $request){
 
-        //You should always get team_id
-        //Use the team_id to get all users in the team sorted by udpated_at.
-        //Return array of users;
         $teamMemberService = new TeamMembersService();
         $teamMember=$teamMemberService->retrieve($request);
         return response()->json($teamMember);
@@ -59,7 +58,7 @@ class TeamMemberController extends Controller
      */
     public function update(Request $request,$team_member_id){
 
-        $rules=['userId'=>'max:11','teamId'=>'max:11'];
+        $rules=['userId'=>'max:11|integer','teamId'=>'max:11|integer'];
         $this->validate($request,$rules);
 
         $teamMemberService = new TeamMembersService();
