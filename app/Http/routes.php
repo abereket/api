@@ -45,5 +45,10 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
     $app->put('users/{id}','UserController@update');                              //updates a user
     $app->delete('users/{id}','UserController@delete');                           //soft deletes a user
 
-    $app->put('email-verification/{code}','EmailVerificationController@update');    //updates email verification
+    $app->put('email-verification/{code}','EmailVerificationController@update');  //updates email verification
+
+    $app->post('jobs','JobController@create');                                    //creates jobs
+    $app->put('jobs/{id}','JobController@update');                                //updates jobs
+    $app->delete('jobs/{id}','JobController@delete');                             //deletes jobs
+    $app->get('jobs/{id}','JobController@retrieveOne');                           //retrieve one job
 });
