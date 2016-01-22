@@ -17,7 +17,7 @@ class TeamMemberController extends Controller
         $len = count($request->json()->get('emails'));
         $i = 0;
            do{
-                $rules = ['emails'=>'required|array',"emails.$i.email"=>'required|email','teamId'=>'required|max:11|integer'];
+                $rules = ['emails'=>'required|array',"emails.$i.email"=>'required|email','teamId'=>'required|max:11'];
                 $this->validate($request,$rules);
                 $i++;
             } while($i < $len);

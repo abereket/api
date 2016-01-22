@@ -30,6 +30,18 @@ class UsersService extends Base
         $user->password     =  hash('sha512',$request->json()->get('password'));
         $user->type         =  ($request->json()->get('type'))?($request->json()->get('type')):$type;
         $user->save();
+
+        $emailVerification = new EmailVerificationsService();
+        $code = $emailVerification->create($user->type,$user->id);
+
+        //Send user activation email
+        $emailService = new EmailsService();
+        $from         = "info@zemployee.com";
+        $subject      = "Agency, please active your email";
+        $body         = "Please click the link below to active your account " . $code;
+
+        $emailService->send($user->email, $from, $subject, $body);
+
         if($type and $email){
             return $user;
         }
