@@ -70,7 +70,66 @@ class JobsServices extends Base{
         return $job;
     }
 
+    /**
+     * @param $id
+     * @return array|string
+     */
     public function retrieveOne($id){
+        $job = Job::find($id);
+        $valError = $this->validateRetrieveOne($job);
+        if($valError){
+            $valError = $this->failureMessage($valError,parent::HTTP_404);
+            return $valError;
+        }
+        $job = $this->buildRetrieveOneSuccessMessage("success",$job);
+        return $job;
+    }
+
+    /**
+     * @param $request
+     * @return Job
+     */
+    public function retrieve($request){
+        $limit            =   ($request->input('per_page'))?($request->input('per_page')) : 15;
+        $userId           =   $request->input('userId');
+        $tittle           =   $request->input('tittle');
+        $companyName      =   $request->input('companyName');
+        $type             =   $request->input('type');
+        $city             =   $request->input('city');
+        $state            =   $request->input('state');
+        $zipCode          =   $request->input('zipCode');
+        $order_by         =   ($request->input('order_by'))? ($request->input('order_by')) : 'updated_at';
+
+        $job = new Job();
+
+        if($userId){
+           $job = $job->where('user_id' , 'like', '%'.$userId.'%');
+        }
+        if($tittle){
+            $job = $job->where('tittle' , 'like', '%'.$tittle.'%');
+        }
+        if($companyName){
+            $job = $job->where('company_name' , 'like', '%'.$companyName.'%');
+        }
+        if($type){
+            $job = $job->where('type' , 'like', '%'.$type.'%');
+        }
+
+        if($city){
+            $job = $job->where('city' , 'like', '%'.$city.'%');
+        }
+        if($state){
+            $job = $job->where('state' , 'like', '%'.$state.'%');
+        }
+        if($zipCode){
+            $job = $job->where('zip_code' , 'like', '%'.$zipCode.'%');
+        }
+        $job = $job->orderby($order_by)->Paginate($limit);
+
+        $job = $this->buildRetrieveResponse($job->toArray());
+        $job = $this->buildRetrieveSuccessMessage('success',$job);
+
+        return $job;
 
     }
     /**
@@ -111,6 +170,13 @@ class JobsServices extends Base{
        $errors = array();
         if(!$job){
             $errors = "The job you are looking for not exists.Please use a valid job id";
+        }
+        return $errors;
+    }
+    protected function validateRetrieveOne($job){
+        $errors = array();
+        if(!$job){
+           $errors ="The job you are looking for not exists.Please use a valid job id";
         }
         return $errors;
     }

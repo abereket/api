@@ -51,4 +51,5 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
     $app->put('jobs/{id}','JobController@update');                                //updates jobs
     $app->delete('jobs/{id}','JobController@delete');                             //deletes jobs
     $app->get('jobs/{id}','JobController@retrieveOne');                           //retrieve one job
+    $app->get('jobs','JobController@retrieve');                                   //retrieve job
 });
