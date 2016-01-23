@@ -47,10 +47,26 @@ class JobController extends Controller{
 
         return response()->json($job);
     }
+
+    /**
+     * @param $jobId
+     * @return array|string
+     */
     public function retrieveOne($jobId){
         $jobService = new JobsServices();
-        $job=$jobService->rerieveOne($jobId);
+        $job=$jobService->retrieveOne($jobId);
 
-        return $job;
+        return response()->json($job);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function retrieve(Request $request){
+        $jobService = new JobsServices();
+        $job = $jobService->retrieve($request);
+
+        return response()->json($job);
     }
 }
