@@ -17,7 +17,7 @@ class TeamMemberController extends Controller
         $len = count($request->json()->get('emails'));
         $i = 0;
            do{
-                $rules = ['emails'=>'required|array',"emails.$i.email"=>'required|email','teamId'=>'required|max:11|integer'];
+                $rules = ['emails'=>'required|array',"emails.$i.email"=>'required|email','teamId'=>'required|integer'];
                 $this->validate($request,$rules);
                 $i++;
             } while($i < $len);
@@ -58,7 +58,7 @@ class TeamMemberController extends Controller
      */
     public function update(Request $request,$team_member_id){
 
-        $rules=['userId'=>'max:11|integer','teamId'=>'max:11|integer'];
+        $rules=['userId'=>'integer','teamId'=>'integer'];
         $this->validate($request,$rules);
 
         $teamMemberService = new TeamMembersService();

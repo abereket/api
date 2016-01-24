@@ -13,7 +13,7 @@ class AgenciesService extends Base
     /**
      * creates an agency
      * @param $request
-     * @return static
+     * @return array|static
      */
     public function create($request)
     {
@@ -26,18 +26,6 @@ class AgenciesService extends Base
 
         //create the agency
         $agency   =   Agency::create(['uuid' =>  Uuid::uuid(),'name'=>$request->json()->get('name'),'user_id'=>$request->json()->get('userId'),'description'=>$request->json()->get('description')]);
-
-        //Create email verification entry
-        $emailVerification     =  new EmailVerificationsService();
-        $code                  =  $emailVerification->create('agency',$agency->user_id);
-        //Send agency-user activation email
-        $emailService = new EmailsService();
-        $from         = "info@zemployee.com";
-        $subject      = "Agency, please active your email";
-        $body         = "Please click the link below to active your account " . $code;
-
-        $emailService->send($user->email, $from, $subject, $body);
-
 
         $agency=$this->buildCreateSuccessMessage("success",$agency);
         return $agency;
