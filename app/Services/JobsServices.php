@@ -18,9 +18,9 @@ class JobsServices extends Base{
         return $valError;
     }
     $job = Job::create(['user_id'=>$request->json()->get('userId'),'tittle'=>$request->json()->get('tittle'),
-               'company_name'=>$request->json()->get('companyName'),'type'=>$request->json()->get('type'),
-               'link'=>$request->json()->get('link'),'city'=>$request->json()->get('city'),
-               'state'=>$request->json()->get('state'),'zip_code'=>$request->json()->get('zipCode')]);
+                        'company_name'=>$request->json()->get('companyName'),'type'=>$request->json()->get('type'),
+                        'link'=>$request->json()->get('link'),'city'=>$request->json()->get('city'),
+                        'state'=>$request->json()->get('state'),'zip_code'=>$request->json()->get('zipCode')]);
 
     $job = $this->buildCreateSuccessMessage('success',$job);
     return $job;
@@ -173,6 +173,11 @@ class JobsServices extends Base{
         }
         return $errors;
     }
+
+    /**
+     * @param $job
+     * @return array|string
+     */
     protected function validateRetrieveOne($job){
         $errors = array();
         if(!$job){

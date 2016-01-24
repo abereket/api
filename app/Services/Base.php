@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Services;
-use laravel\lumen\Application;
 
 abstract class Base
 {
@@ -9,11 +8,11 @@ abstract class Base
     const HTTP_404 = 404;
     const HTTP_200 = 200;
     const HTTP_201 = 201;
+
     /**
      * @param $successMessage
      * @return array
      */
-
     protected function buildDeleteSuccessMessage($successMessage)
     {
         $message = array();
@@ -45,7 +44,12 @@ abstract class Base
         return $message;
     }
 
-    public function buildRetrieveSuccessMessage($successMessage,$entity){
+    /**
+     * @param $successMessage
+     * @param $entity
+     * @return array
+     */
+    protected function buildRetrieveSuccessMessage($successMessage,$entity){
         $message = array();
         $message[] = array('message' => $successMessage, 'code' =>self::HTTP_200, 'results' => $entity);
         return $message;
@@ -72,6 +76,7 @@ abstract class Base
        $message[] = array("message" => $successMessage,'code' =>self::HTTP_200, 'results' =>$entity);
        return $message;
     }
+
     /**
      * @param $message
      * @param $code
@@ -87,7 +92,6 @@ abstract class Base
      * @param array $input
      * @return array
      */
-
     public function buildRetrieveResponse(array $input)
     {
         return [
