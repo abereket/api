@@ -47,7 +47,7 @@ class teamController extends Controller{
      */
     public function update(Request $request,$team_id)
     {
-        $rules=['name'=>'string|max:50', 'category'=>'max:75', 'agencyId'=>'max:11|integer'];
+        $rules=['name'=>'string|max:50', 'category'=>'max:75', 'agencyId'=>'integer'];
         $this->validate($request,$rules);
 
         $teamService =   new TeamsService();
