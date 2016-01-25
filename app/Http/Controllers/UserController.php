@@ -23,7 +23,7 @@ class UserController extends Controller
 
     public function create(Request $request)
     {
-        $rules = ['firstName' => 'required|string|max:50', 'lastName' => 'required|string|max:50', 'email' => 'required|email|max:60|unique:users',
+        $rules = ['first_name' => 'required|string|max:50', 'last_name' => 'required|string|max:50', 'email' => 'required|email|max:60|unique:users',
             'password' => 'string|max:60', 'type' => 'required|in:recruiter,candidate,agency,zemployee'];
 
         $this->validate($request, $rules);
@@ -70,8 +70,8 @@ class UserController extends Controller
     {
 
         $rules = [
-            'firstName'     => 'string|max:50',
-            'lastName'      => 'string|max:50',
+            'first_name'     => 'string|max:50',
+            'last_name'      => 'string|max:50',
             'password'      => 'string|max:60',
             'type'          => 'in:recruiter,candidate,agency,zemployee'
         ];

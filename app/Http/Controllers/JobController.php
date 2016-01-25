@@ -11,7 +11,7 @@ class JobController extends Controller{
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function create(Request $request){
-        $rules = ['userId'=>'required|integer','title'=>'required|string|max:50','companyName'=>'string|max:50','type'=>'string|max:50',
+        $rules = ['user_id'=>'required|integer','tittle'=>'required|string|max:50','company_name'=>'string|max:50','type'=>'string|max:50',
                   'link'=>'string|max:256','city'=>'string|max:50','state'=>'string|max:2','zipCode'=>'max:10'];
         $this->validate($request,$rules);
 
@@ -27,8 +27,8 @@ class JobController extends Controller{
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function update(Request $request,$jobId){
-        $rules = ['userId'=>'required|integer','tittle'=>'string|max:50','companyName'=>'string|max:50','type'=>'string|max:50',
-                  'link'=>'string|max:256','city'=>'string|max:50','state'=>'string|max:2','zipCode'=>'max:10'];
+        $rules = ['user_id'=>'required|integer','tittle'=>'string|max:50','company_name'=>'string|max:50','type'=>'string|max:50',
+                  'link'=>'string|max:256','city'=>'string|max:50','state'=>'string|max:2','zip_code'=>'max:10'];
         $this->validate($request,$rules);
 
         $jobService = new JobsServices();

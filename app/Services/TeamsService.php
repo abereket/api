@@ -11,12 +11,12 @@ class TeamsService extends Base{
      * @return array|static
      */
     public function create($request){
-         $valError        = $this->validateCreate($request->json()->get('agencyId'));
+         $valError        = $this->validateCreate($request->json()->get('agency_id'));
          if($valError){
              $valError    =  $this->failureMessage($valError,parent::HTTP_404);
              return $valError;
          }
-         $team            = Team::create(['uuid'=>Uuid::uuid(),'name'=>$request->json()->get('name'),'category'=>$request->json()->get('category'),'agency_id'=>$request->json()->get('agencyId')]);
+         $team            = Team::create(['uuid'=>Uuid::uuid(),'name'=>$request->json()->get('name'),'category'=>$request->json()->get('category'),'agency_id'=>$request->json()->get('agency_id')]);
 
          $team=$this->buildCreateSuccessMessage("success",$team);
          return $team;
@@ -27,7 +27,7 @@ class TeamsService extends Base{
      * @return array|string
      */
     public function retrieve($request){
-        $agencyId    =    $request->input('agencyId');
+        $agencyId    =    $request->input('agency_id');
         $limit       =    ($request->input('per_page'))?$request->input('per_page'):15;
         $order_by    =    ($request->input('order_by'))?$request->input('order_by'):'updated_at';
 
@@ -67,14 +67,14 @@ class TeamsService extends Base{
      */
     public function update($request,$team_id){
         $team             =    Team::find($team_id);
-        $valError         =    $this->validateUpdate($team,$request->json()->get('agencyId'));
+        $valError         =    $this->validateUpdate($team,$request->json()->get('agency_id'));
         if($valError){
             $valError     =    $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
         $team->name       =   ($request->json()->get('name'))?($request->json()->get('name')):$team->name;
         $team->category   =   ($request->json()->get('category'))?($request->json()->get('category')):$team->category;
-        $team->agency_id  =   ($request->json()->get('agencyId'))?($request->json()->get('agencyId')):$team->agency_id;
+        $team->agency_id  =   ($request->json()->get('agency_id'))?($request->json()->get('agency_id')):$team->agency_id;
         $team->save();
 
         $team             =   $this->buildUpdateSuccessMessage("success",$team);
