@@ -23,50 +23,27 @@ class UserController extends Controller
 
     public function create(Request $request)
     {
-        $rules = ['firstName' => 'required|max:50', 'lastName' => 'required|max:50', 'email' => 'required|email|max:60',
-            'password' => 'max:60', 'type' => 'required|in:recruiter,candidate,agency,zemployee'];
+        $rules = ['firstName' => 'required|string|max:50', 'lastName' => 'required|string|max:50', 'email' => 'required|email|max:60|unique:users',
+            'password' => 'string|max:60', 'type' => 'required|in:recruiter,candidate,agency,zemployee'];
 
         $this->validate($request, $rules);
 
         $userService = new UsersService();
-        $result = $userService->create($request);
+        $user = $userService->create($request);
 
-
-        return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $result]);
-
-
+        return response()->json($user);
     }
 
     /**
+     * calls the retrieve method in services.UsersService
      * retrieves all the users
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function retrieve()
+    public function retrieve(Request $request)
     {
-        $user = array(array(
-            'id' => 1,
-            'uuid' => '12659-adfad-7671',
-            'firstName' => 'kibret',
-            'lastName' => 'bereket',
-            'email' => 'kibret@example.com',
-            'type' => 'agency',
-            'verified' => 'false',
-            'createdAt' => date("Y-m-d H:m:i"),
-            'updatedAt' => date("Y-m-d H:m:i")
-        ), array(
-            'id' => 2,
-            'uuid' => '12659-adfad-7672',
-            'firstName' => 'Amanuel',
-            'lastName' => 'bereket',
-            'email' => 'Amanuel@example.com',
-            'type' => 'agency',
-            'verified' => 'false',
-            'createdAt' => date("Y-m-d H:m:i"),
-            'updatedAt' => date("Y-m-d H:m:i")
-        )
-        );
-        $count = count($user);
-        return response()->json(["status" => "success", "code" => parent::HTTP_200, "count" => $count, "results" => $user]);
+        $userService = new UsersService();
+        $user = $userService->retrieve($request);
+        return response()->json($user);
     }
 
     /**
@@ -77,9 +54,9 @@ class UserController extends Controller
     public function retrieveOne($user_id)
     {
         $userService = new UsersService();
-        $result = $userService->retrieveOne($user_id);
+        $user = $userService->retrieveOne($user_id);
 
-        return response()->json(["success" => "success", "code" => parent::HTTP_200, "results" => $result]);
+        return response()->json($user);
 
     }
 
@@ -93,18 +70,17 @@ class UserController extends Controller
     {
 
         $rules = [
-            'firstName'     => 'max:50',
-            'lastName'      => 'max:50',
-            'email'         => 'email|max:60',
-            'password'      => 'max:60',
+            'firstName'     => 'string|max:50',
+            'lastName'      => 'string|max:50',
+            'password'      => 'string|max:60',
             'type'          => 'in:recruiter,candidate,agency,zemployee'
         ];
 
         $this->validate($request, $rules);
         $userService = new UsersService();
-        $result = $userService->update($request, $user_id);
+        $user = $userService->update($request, $user_id);
 
-        return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $result]);
+        return response()->json($user);
 
     }
 
@@ -117,10 +93,7 @@ class UserController extends Controller
     {
         $userService = new UsersService();
         $user= $userService->delete($user_id);
-        if(!$user) {
-            return response()->json(["message"=>"the entry you want to be deleted is not found"]);
-        }
-        return response()->json(["status" => "success", "code" => parent::HTTP_204]);
+        return response()->json($user);
 
     }
 }

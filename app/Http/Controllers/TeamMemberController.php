@@ -14,22 +14,28 @@ class TeamMemberController extends Controller
      */
     public function create(Request $request)
     {
-        $rules=['userId'=>'required|max:11','teamId'=>'required|max:11'];
-        $this->validate($request,$rules);
-
-        $teamMemberService = new TeamMembersService();
-        $teamMember = $teamMemberService->create($request);
-        return response()->json(["status"=>"success","code"=>parent::HTTP_200,"results"=>$teamMember]);
+        $len = count($request->json()->get('emails'));
+        $i = 0;
+           do{
+                $rules = ['emails'=>'required|array',"emails.$i.email"=>'required|email','teamId'=>'required|integer'];
+                $this->validate($request,$rules);
+                $i++;
+            } while($i < $len);
+            $teamMemberService = new TeamMembersService();
+            $teamMember = $teamMemberService->create($request);
+            return response()->json($teamMember);
     }
 
-    public function retrieve(){
+    /**
+     * calls the retrieve method in Services.TeamMembersService
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function retrieve(Request $request){
 
-        $team_member=array(array('id'=>1,'uuid'=>'12659-adfad-7671','teamId'=>1,'userId'=>2, 'createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s')),
-                           array('id'=>2,'uuid'=>'12659-adfad-7672','teamId'=>2,'userId'=>2, 'createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s')));
-
-        $count=count($team_member);
-
-        return response()->json(["status"=>"success","code"=>parent::HTTP_200,"count"=>$count,"results"=>$team_member]);
+        $teamMemberService = new TeamMembersService();
+        $teamMember=$teamMemberService->retrieve($request);
+        return response()->json($teamMember);
     }
 
     /**
@@ -40,14 +46,8 @@ class TeamMemberController extends Controller
     public function retrieveOne($team_member_id){
 
         $teamMemberService = new TeamMembersService();
-
         $teamMember=$teamMemberService->retrieveOne($team_member_id);
-
-        if($teamMember==null){
-            return response()->json(["message"=>"The entry you want not found"]);
-        }
-        return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $teamMember]);
-
+        return response()->json($teamMember);
     }
 
     /**
@@ -58,16 +58,13 @@ class TeamMemberController extends Controller
      */
     public function update(Request $request,$team_member_id){
 
-        $rules=['userId'=>'max:11','teamId'=>'max:11'];
+        $rules=['userId'=>'integer','teamId'=>'integer'];
         $this->validate($request,$rules);
 
         $teamMemberService = new TeamMembersService();
         $teamMember = $teamMemberService->update($request,$team_member_id);
-        if($teamMember==null){
-            return response()->json(["message"=>"The entry you want to be updated not found"]);
-        }
-        return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $teamMember]);
 
+        return response()->json($teamMember);
     }
 
     /**
@@ -79,11 +76,7 @@ class TeamMemberController extends Controller
 
         $teamMemberService = new TeamMembersService();
         $teamMember = $teamMemberService->delete($team_member_id);
-        if(!$teamMember) {
-            return response()->json(["message"=>"The entry you want to be deleted not found"]);
-        }
-        return response()->json(["status" => "success", "code" => parent::HTTP_204]);
-
+        return response()->json($teamMember);
     }
 
 }

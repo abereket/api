@@ -12,21 +12,19 @@ class teamController extends Controller{
      */
     public function create(Request $request)
     {
-        $rules=['name'=>'required|max:50','category'=>'max:75','agencyId'=>'required|integer'];
+        $rules=['name'=>'required|string|max:50','category'=>'max:75','agencyId'=>'required|integer'];
         $this->validate($request,$rules);
         $teamService = new TeamsService();
         $team=$teamService->create($request);
 
-        return response()->json(["status"=>"success","code"=>parent::HTTP_200,"results"=>$team]);
+        return response()->json($team);
     }
 
-    public function retrieve()
+    public function retrieve(Request $request)
     {
-        $team=array(array('id'=>1,'uuid'=>'12659-adfad-767','name'=>'Team one','agency_id'=>1,'category'=>'Financing','createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s')),
-                   array('id'=>2,'uuid'=>'12659-adfad-768','name'=>'Team two','agency_id'=>1,'category'=>'Financing','createdAt'=>date('Y-m-d H:i:s'),'updatedAt'=>date('Y-m-d H:i:s')));
-
-        $count = count($team);
-        return response()->json(["status"=>"success","code" => parent::HTTP_200,"count"=>$count,"results" => $team]);
+        $teamService = new TeamsService();
+        $team = $teamService->retrieve($request);
+        return response()->json($team);
     }
 
     /**
@@ -38,10 +36,7 @@ class teamController extends Controller{
     {
         $temService = new TeamsService();
         $team=$temService->retrieveOne($team_id);
-          if($team == null) {
-              return response()->json(["message"=>"The team you want to be returned not exists"]);
-          }
-           return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $team]);
+        return response()->json($team);
     }
 
     /**
@@ -52,19 +47,12 @@ class teamController extends Controller{
      */
     public function update(Request $request,$team_id)
     {
-        $rules=['name'=>'max:50', 'category'=>'max:75', 'agencyId'=>'max:11'];
+        $rules=['name'=>'string|max:50', 'category'=>'max:75', 'agencyId'=>'integer'];
         $this->validate($request,$rules);
 
         $teamService =   new TeamsService();
         $team        =   $teamService->update($request,$team_id);
-
-        if($team == null)
-        {
-            return response()->json(["message"=>"The entry you want to be updated is not found"]);
-        }
-        return response()->json(["status" => "success", "code" => parent::HTTP_200, "results" => $team]);
-
-
+        return response()->json($team);
     }
 
     /**
@@ -76,9 +64,6 @@ class teamController extends Controller{
     {
         $teamService=new TeamsService();
         $team=$teamService->delete($team_id);
-        if(!$team){
-            return response()->json(["message"=>"The entry you want to be deleted is not found"]);
-        }
-        return response()->json(["status" => "success", "code" => parent::HTTP_204]);
+        return response()->json($team);
     }
 }
