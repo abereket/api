@@ -12,7 +12,7 @@ class teamController extends Controller{
      */
     public function create(Request $request)
     {
-        $rules=['name'=>'required|string|max:50','category'=>'max:75','agencyId'=>'required|integer'];
+        $rules=['name'=>'required|string|max:50','category'=>'max:75','agency_id'=>'required|integer'];
         $this->validate($request,$rules);
         $teamService = new TeamsService();
         $team=$teamService->create($request);
@@ -47,7 +47,7 @@ class teamController extends Controller{
      */
     public function update(Request $request,$team_id)
     {
-        $rules=['name'=>'string|max:50', 'category'=>'max:75', 'agencyId'=>'integer'];
+        $rules=['name'=>'string|max:50', 'category'=>'max:75', 'agency_id'=>'integer'];
         $this->validate($request,$rules);
 
         $teamService =   new TeamsService();

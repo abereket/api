@@ -21,7 +21,7 @@ class AgencyController extends Controller{
     public function create(Request $request)
     {
         $rules=['name'     =>     'required|string|max:50',
-                'userId'   =>     'required|integer'];
+                'user_id'   =>     'required|integer'];
         $this->validate($request,$rules);
         $agencyService = new AgenciesService();
         $agency = $agencyService->create($request);
@@ -61,7 +61,7 @@ class AgencyController extends Controller{
      */
     public function update(Request $request,$agency_id){
 
-          $rules=['name'        =>     'string|max:50',  'userId'   => 'integer'];
+          $rules=['name'        =>     'string|max:50',  'user_id'   => 'integer'];
 
           $this->validate($request,$rules);
           $agencyService=new AgenciesService();

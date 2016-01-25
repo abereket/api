@@ -24,8 +24,8 @@ class UsersService extends Base
     {
         $user = new User();
         $user->uuid         =  Uuid::uuid();
-        $user->first_name   =  $request->json()->get('firstName');
-        $user->last_name    =  $request->json()->get('lastName');
+        $user->first_name   =  $request->json()->get('first_name');
+        $user->last_name    =  $request->json()->get('last_name');
         $user->email        =  ($request->json()->get('email'))?$request->json()->get('email'):$email;
         $user->password     =  hash('sha512',$request->json()->get('password'));
         $user->type         =  ($request->json()->get('type'))?($request->json()->get('type')):$type;
@@ -55,8 +55,8 @@ class UsersService extends Base
      */
     public function retrieve($request){
         $limit      =   ($request->input('per_page'))?($request->input('per_page')):15;
-        $firstName  =   $request->input('firstName');
-        $lastName   =   $request->input('lastName');
+        $firstName  =   $request->input('first_name');
+        $lastName   =   $request->input('last_name');
         $email      =   $request->input('email');
         $type       =   $request->input('type');
         $verified   =   $request->input('verified');
@@ -117,8 +117,8 @@ class UsersService extends Base
             return $valError;
         }
 
-        $user->first_name  =   ($request->json()->get('firstName'))?($request->json()->get('firstName')):$user->first_name;
-        $user->last_name   =   ($request->json()->get('lastName'))?($request->json()->get('lastName')):$user->last_name;
+        $user->first_name  =   ($request->json()->get('first_name'))?($request->json()->get('first_name')):$user->first_name;
+        $user->last_name   =   ($request->json()->get('last_name'))?($request->json()->get('last_name')):$user->last_name;
         $user->password    =   ($request->json()->get('password'))?hash('sha512',($request->json()->get('password'))):$user->password;
         $user->type        =   ($request->json()->get('type'))?($request->json()->get('type')):$user->type;
         $user->verified    =   ($request->json()->get('verified'))?($request->json()->get('verified')):$user->verified;

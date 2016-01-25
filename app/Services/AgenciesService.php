@@ -17,7 +17,7 @@ class AgenciesService extends Base
      */
     public function create($request)
     {
-        $user        =    User::find($request->json()->get('userId'));
+        $user        =    User::find($request->json()->get('user_id'));
         $valError    =   $this->validateCreate($user);
         if ($valError) {
             $valError = $this->failureMessage($valError,Parent::HTTP_404);
@@ -25,7 +25,7 @@ class AgenciesService extends Base
         }
 
         //create the agency
-        $agency   =   Agency::create(['uuid' =>  Uuid::uuid(),'name'=>$request->json()->get('name'),'user_id'=>$request->json()->get('userId'),'description'=>$request->json()->get('description')]);
+        $agency   =   Agency::create(['uuid' =>  Uuid::uuid(),'name'=>$request->json()->get('name'),'user_id'=>$request->json()->get('user_id'),'description'=>$request->json()->get('description')]);
 
         $agency=$this->buildCreateSuccessMessage("success",$agency);
         return $agency;
@@ -81,14 +81,14 @@ class AgenciesService extends Base
     public function update($request,$agency_id)
     {
         $agency        =     Agency::find($agency_id);
-        $valError      =     $this->validateUpdate($agency, $request->json()->get('userId'));
+        $valError      =     $this->validateUpdate($agency, $request->json()->get('user_id'));
         if($valError){
             $valError  =     $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
         $agency->name         =   ($request->json()->get('name'))?($request->json()->get('name')):$agency->name;
         $agency->description  =   ($request->json()->get('description'))?($request->json()->get('description')):$agency->description;
-        $agency->user_id      =   ($request->json()->get('userId'))?($request->json()->get('userId')):$agency->user_id;
+        $agency->user_id      =   ($request->json()->get('user_id'))?($request->json()->get('user_id')):$agency->user_id;
         $agency->save();
 
         $agency               =    $this->buildUpdateSuccessMessage("success",$agency);

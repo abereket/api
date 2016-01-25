@@ -7,10 +7,9 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'CreateEmailVerificationTable' => $baseDir . '/database/migrations/2015_12_28_201830_create_email_verification_table.php',
-    'CreateEmailVerificationsTable' => $baseDir . '/database/migrations/2016_01_05_194316_create_email_verifications_table.php',
-    'CreateTableAgencies' => $baseDir . '/database/migrations/2015_12_14_210940_create_table_agencies.php',
+    'CreateTableAgencies' => $baseDir . '/database/migrations/2015_12_27_210940_create_table_agencies.php',
     'CreateTableTeams' => $baseDir . '/database/migrations/2015_12_15_212639_create_table_teams.php',
-    'CreateTableUsers' => $baseDir . '/database/migrations/2015_12_13_210647_create_table_users.php',
+    'CreateTableUsers' => $baseDir . '/database/migrations/2015_12_27_210647_create_table_users.php',
     'CreateTeamMembersTable' => $baseDir . '/database/migrations/2015_12_16_190620_create_team_members_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'ExampleTest' => $baseDir . '/tests/ExampleTest.php',

@@ -10,7 +10,7 @@ class TeamMembersService extends Base{
      * @return static
      */
     public function create($request){
-        $valError     =  $this->validateCreate($request->json()->get('teamId'));
+        $valError     =  $this->validateCreate($request->json()->get('team_id'));
         if($valError){
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
@@ -22,7 +22,7 @@ class TeamMembersService extends Base{
                 $userService = new UsersService();
                 $user = $userService->create($request,$emails[$i]['email'],'recruiter');
             }
-            $teamMember = TeamMember::create(['user_id' => $user->id, 'team_id' => $request->json()->get('teamId')]);
+            $teamMember = TeamMember::create(['user_id' => $user->id, 'team_id' => $request->json()->get('team_id')]);
             $id[]=$teamMember->id;
         }
         $teamMember = TeamMember::whereIn('id',$id)->get();
@@ -35,7 +35,7 @@ class TeamMembersService extends Base{
      * @return array|string
      */
     public function retrieve($request){
-        $teamId      =   $request->input('teamId');
+        $teamId      =   $request->input('team_id');
         $limit       =   ($request->input('per_page'))?$request->input('per_page'):15;
         $order_by    =   ($request->input('order_by'))?$request->input('order_by'):'updated_at';
 
@@ -88,13 +88,13 @@ class TeamMembersService extends Base{
     public function update($request,$team_member_id){
 
       $teamMember    =  TeamMember::find($team_member_id);
-      $valError      =  $this->validateUpdate($teamMember,$request->json()->get('userId'),$request->json()->get('teamId'));
+      $valError      =  $this->validateUpdate($teamMember,$request->json()->get('user_id'),$request->json()->get('team_id'));
       if($valError) {
           $valError = $this->failureMessage($valError,parent::HTTP_404);
           return $valError;
       }
-      $teamMember->user_id  =  ($request->json()->get('userId'))?($request->json()->get('userId')):$teamMember->user_id;
-      $teamMember->team_id  =  ($request->json()->get('teamId'))?($request->json()->get('teamId')):$teamMember->team_id;
+      $teamMember->user_id  =  ($request->json()->get('user_id'))?($request->json()->get('user_id')):$teamMember->user_id;
+      $teamMember->team_id  =  ($request->json()->get('team_id'))?($request->json()->get('team_d')):$teamMember->team_id;
       $teamMember->save();
 
       $teamMember           =   $this->buildUpdateSuccessMessage("success",$teamMember);

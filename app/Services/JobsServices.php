@@ -17,10 +17,10 @@ class JobsServices extends Base{
         $valError = $this->failureMessage($valError,parent::HTTP_404);
         return $valError;
     }
-    $job = Job::create(['user_id'=>$request->json()->get('userId'),'tittle'=>$request->json()->get('tittle'),
-                        'company_name'=>$request->json()->get('companyName'),'type'=>$request->json()->get('type'),
+    $job = Job::create(['user_id'=>$request->json()->get('user_id'),'tittle'=>$request->json()->get('tittle'),
+                        'company_name'=>$request->json()->get('company_name'),'type'=>$request->json()->get('type'),
                         'link'=>$request->json()->get('link'),'city'=>$request->json()->get('city'),
-                        'state'=>$request->json()->get('state'),'zip_code'=>$request->json()->get('zipCode')]);
+                        'state'=>$request->json()->get('state'),'zip_code'=>$request->json()->get('zip_code')]);
 
     $job = $this->buildCreateSuccessMessage('success',$job);
     return $job;
@@ -34,19 +34,19 @@ class JobsServices extends Base{
      */
     public function update($request,$id){
         $job = Job::find($id);
-        $valError = $this->validateUpdate($job,$request->json()->get('userId'));
+        $valError = $this->validateUpdate($job,$request->json()->get('user_id'));
         if($valError){
             $valError=$this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
-        $job->user_id      = ($request->json()->get('useId'))?$request->json()->get('useId'):$job->user_id;
+        $job->user_id      = ($request->json()->get('use_id'))?$request->json()->get('use_id'):$job->user_id;
         $job->tittle       = ($request->json()->get('tittle'))?$request->json()->get('tittle'):$job->tittle;
-        $job->company_name = ($request->json()->get('companyName'))?$request->json()->get('companyName'):$job->company_name;
+        $job->company_name = ($request->json()->get('company_name'))?$request->json()->get('company_name'):$job->company_name;
         $job->type         = ($request->json()->get('type'))?$request->json()->get('type'):$job->type;
         $job->link         = ($request->json()->get('link'))?$request->json()->get('link'):$job->link;
         $job->city         = ($request->json()->get('city'))?$request->json()->get('city'):$job->city;
         $job->state        = ($request->json()->get('state'))?$request->json()->get('state'):$job->state;
-        $job->zip_code     = ($request->json()->get('zipCode'))?$request->json()->get('zipCode'):$job->zip_code;
+        $job->zip_code     = ($request->json()->get('zip_code'))?$request->json()->get('zip_code'):$job->zip_code;
         $job->save();
 
         $job = $this->buildUpdateSuccessMessage('success',$job);
@@ -91,13 +91,13 @@ class JobsServices extends Base{
      */
     public function retrieve($request){
         $limit            =   ($request->input('per_page'))?($request->input('per_page')) : 15;
-        $userId           =   $request->input('userId');
+        $userId           =   $request->input('user_id');
         $tittle           =   $request->input('tittle');
-        $companyName      =   $request->input('companyName');
+        $companyName      =   $request->input('company_name');
         $type             =   $request->input('type');
         $city             =   $request->input('city');
         $state            =   $request->input('state');
-        $zipCode          =   $request->input('zipCode');
+        $zipCode          =   $request->input('zip_code');
         $order_by         =   ($request->input('order_by'))? ($request->input('order_by')) : 'updated_at';
 
         $job = new Job();
