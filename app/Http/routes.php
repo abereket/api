@@ -52,4 +52,9 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
     $app->delete('jobs/{id}','JobController@delete');                             //deletes jobs
     $app->get('jobs/{id}','JobController@retrieveOne');                           //retrieve one job
     $app->get('jobs','JobController@retrieve');                                   //retrieve job
+
+    $app->post('job_skills','JobSkillsController@create');                        //creates job skills
+    $app->delete('job_skills/{id}','JobSkillsController@delete');                 //deletes job skills
+    $app->get('job_skills/{id}','JobSkillsController@retrieveOne');               //retrieves one job skill
+    $app->get('job_skills','JobSkillsController@retrieve');                       //retrieves job skills
 });
