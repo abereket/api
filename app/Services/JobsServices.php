@@ -12,7 +12,7 @@ class JobsServices extends Base{
      */
     public function create($request){
 
-    $valError = $this->validateCreate($request->json()->get('userId'));
+    $valError = $this->validateCreate($request->json()->get('user_id'));
     if($valError){
         $valError = $this->failureMessage($valError,parent::HTTP_404);
         return $valError;

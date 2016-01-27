@@ -84,6 +84,30 @@ class JobSkillsService extends Base{
     }
 
     /**
+     * updates job skills
+     * @param $request
+     * @param $id
+     * @return array
+     */
+    public function update($request,$id){
+        $jobSkill = JobSkills::find($id);
+        $valError = $this->validateUpdate($jobSkill,$request->json()->get('job_id'));
+        if($valError){
+            $valError = $this->failureMessage($valError,parent::HTTP_404);
+            return $valError;
+        }
+        $search= $this->deleteSkillByJobId($request->json()->get('job_id'));
+        $len = count($search);
+        for($i = 0;$i < $len;$i++){
+            $jobSkill = JobSkills::find($search[$i]['id']);
+            $jobSkill->delete();
+        }
+        $jobSkill = $this->create($request);
+        return $jobSkill;
+
+    }
+
+    /**
      * business validation for create method
      * @param $jobId
      * @return array|string
@@ -121,5 +145,33 @@ class JobSkillsService extends Base{
             $errors = "The job skill you are looking for not exists.Please enter a valid job skill id";
         }
         return $errors;
+    }
+
+    /**
+     * business validation for update method
+     * @param $jobSkill
+     * @param $jobId
+     * @return array|string
+     */
+    protected function validateUpdate($jobSkill,$jobId){
+        $errors = array();
+        if(!$jobSkill){
+            $errors = "The job skill you are looking for not exists.Please enter a valid job skill id";
+        }
+        $job = Job::find($jobId);
+        if(!$job){
+            $errors = "The job-id  you are entering is not valid.Please enter a valid job id";
+        }
+        return $errors;
+    }
+
+    /**
+     * @param $jobId
+     * @return mixed
+     */
+    protected function deleteSkillByJobId($jobId){
+        $jobSkill = JobSkills::where('job_id',$jobId)->get();
+        return $jobSkill;
+
     }
 }

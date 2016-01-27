@@ -57,4 +57,23 @@ class JobSkillsController extends Controller{
 
         return response()->json($jobSkill);
     }
+
+    /**
+     * @param Request $request
+     * @param $jobSkillId
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function update(Request $request,$jobSkillId){
+        $len = count($request->json()->get('names'));
+        $i=0;
+        do{
+            $rules = ['job_id'=>'required|integer','names'=>'required|array',"names.$i.name"=>'required|string|max:50'];
+            $this->validate($request,$rules);
+            $i++;
+        }while($i < $len);
+        $jobSkillService = new JobSkillsService();
+        $jobSkill = $jobSkillService->update($request,$jobSkillId);
+
+        return response()->json($jobSkill);
+    }
 }
