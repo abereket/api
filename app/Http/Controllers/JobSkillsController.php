@@ -60,10 +60,9 @@ class JobSkillsController extends Controller{
 
     /**
      * @param Request $request
-     * @param $jobSkillId
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function update(Request $request,$jobSkillId){
+    public function update(Request $request){
         $len = count($request->json()->get('names'));
         $i=0;
         do{
@@ -72,7 +71,7 @@ class JobSkillsController extends Controller{
             $i++;
         }while($i < $len);
         $jobSkillService = new JobSkillsService();
-        $jobSkill = $jobSkillService->update($request,$jobSkillId);
+        $jobSkill = $jobSkillService->update($request);
 
         return response()->json($jobSkill);
     }

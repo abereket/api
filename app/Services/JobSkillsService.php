@@ -84,14 +84,13 @@ class JobSkillsService extends Base{
     }
 
     /**
-     * updates job skills
+     *  updates job skills
      * @param $request
-     * @param $id
      * @return array
      */
-    public function update($request,$id){
-        $jobSkill = JobSkills::find($id);
-        $valError = $this->validateUpdate($jobSkill,$request->json()->get('job_id'));
+    public function update($request){
+
+        $valError = $this->validateUpdate($request->json()->get('job_id'));
         if($valError){
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
@@ -148,16 +147,12 @@ class JobSkillsService extends Base{
     }
 
     /**
-     * business validation for update method
-     * @param $jobSkill
+     *  business validation for update method
      * @param $jobId
      * @return array|string
      */
-    protected function validateUpdate($jobSkill,$jobId){
+    protected function validateUpdate($jobId){
         $errors = array();
-        if(!$jobSkill){
-            $errors = "The job skill you are looking for not exists.Please enter a valid job skill id";
-        }
         $job = Job::find($jobId);
         if(!$job){
             $errors = "The job-id  you are entering is not valid.Please enter a valid job id";
