@@ -11,7 +11,6 @@ class JobsServices extends Base{
      * @return array|static
      */
     public function create($request){
-
     $valError = $this->validateCreate($request->json()->get('user_id'));
     if($valError){
         $valError = $this->failureMessage($valError,parent::HTTP_404);
@@ -19,7 +18,8 @@ class JobsServices extends Base{
     }
     $job = Job::create(['user_id'=>$request->json()->get('user_id'),'tittle'=>$request->json()->get('tittle'),
                         'company_name'=>$request->json()->get('company_name'),'type'=>$request->json()->get('type'),
-                        'link'=>$request->json()->get('link'),'city'=>$request->json()->get('city'),
+                        'link'=>$request->json()->get('link'),'is_fulfilled'=>$request->json()->get('is_fulfilled',0),
+                        'is_closed'=>$request->json()->get('is_closed',0),'city'=>$request->json()->get('city'),
                         'state'=>$request->json()->get('state'),'zip_code'=>$request->json()->get('zip_code')]);
 
     $job = $this->buildCreateSuccessMessage('success',$job);
@@ -39,14 +39,16 @@ class JobsServices extends Base{
             $valError=$this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
-        $job->user_id      = ($request->json()->get('use_id'))?$request->json()->get('use_id'):$job->user_id;
-        $job->tittle       = ($request->json()->get('tittle'))?$request->json()->get('tittle'):$job->tittle;
-        $job->company_name = ($request->json()->get('company_name'))?$request->json()->get('company_name'):$job->company_name;
-        $job->type         = ($request->json()->get('type'))?$request->json()->get('type'):$job->type;
-        $job->link         = ($request->json()->get('link'))?$request->json()->get('link'):$job->link;
-        $job->city         = ($request->json()->get('city'))?$request->json()->get('city'):$job->city;
-        $job->state        = ($request->json()->get('state'))?$request->json()->get('state'):$job->state;
-        $job->zip_code     = ($request->json()->get('zip_code'))?$request->json()->get('zip_code'):$job->zip_code;
+        $job->user_id      =  $request->json()->get('user_id');
+        $job->tittle       =  $request->json()->get('tittle',$job->tittle);
+        $job->company_name =  $request->json()->get('company_name',$job->company_name);
+        $job->type         =  $request->json()->get('type',$job->type);
+        $job->link         =  $request->json()->get('link',$job->link);
+        $job->is_fulfilled =  $request->json()->get('is_fulfilled',$job->is_fulfilled);
+        $job->is_closed    =  $request->json()->get('is_closed',$job->is_closed);
+        $job->city         =  $request->json()->get('city',$job->city);
+        $job->state        =  $request->json()->get('state',$job->state);
+        $job->zip_code     =  $request->json()->get('zip_code',$job->zip_code);
         $job->save();
 
         $job = $this->buildUpdateSuccessMessage('success',$job);
@@ -95,10 +97,14 @@ class JobsServices extends Base{
         $tittle           =   $request->input('tittle');
         $companyName      =   $request->input('company_name');
         $type             =   $request->input('type');
+        $is_closed        =   $request->input('is_closed');
         $city             =   $request->input('city');
         $state            =   $request->input('state');
         $zipCode          =   $request->input('zip_code');
-        $order_by         =   ($request->input('order_by'))? ($request->input('order_by')) : 'updated_at';
+        $order_by         =   ($request->input('order_by'))? ($request->input('order_by')) : 'created_at';
+        $sort_by          =   ($request->input('sort_by'))?$request->input('sort_by'):'ASC';
+
+
 
         $job = new Job();
 
@@ -124,7 +130,10 @@ class JobsServices extends Base{
         if($zipCode){
             $job = $job->where('zip_code' , 'like', '%'.$zipCode.'%');
         }
-        $job = $job->orderby($order_by)->Paginate($limit);
+        if($is_closed){
+            $job = $job->where('is_closed', '=' , $is_closed);
+        }
+        $job = $job->orderby($order_by,$sort_by)->Paginate($limit);
 
         $job = $this->buildRetrieveResponse($job->toArray());
         $job = $this->buildRetrieveSuccessMessage('success',$job);
