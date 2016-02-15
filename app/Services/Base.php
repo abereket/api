@@ -27,7 +27,6 @@ abstract class Base
      */
     protected function buildCreateSuccessMessage($successMessage, $entity)
     {
-        unset($entity['password']);
         $message = array();
         $message[] = array('message' => $successMessage, 'code' => self::HTTP_201, 'results' => $entity);
         return $message;
@@ -40,7 +39,6 @@ abstract class Base
      */
     protected function buildUpdateSuccessMessage($successMessage, $entity)
     {
-        unset($entity['password']);
         $message = array();
         $message[] = array('message' => $successMessage, 'code' =>self::HTTP_200, 'results' => $entity);
         return $message;
@@ -52,11 +50,6 @@ abstract class Base
      * @return array
      */
     protected function buildRetrieveSuccessMessage($successMessage,$entity){
-        foreach($entity['results'] as $results){
-            unset($results['password']);
-            $result[] = $results;
-        }
-        $entity['results'] = $result;
         $message = array();
         $message[] = array('message' => $successMessage, 'code' =>self::HTTP_200, 'results' => $entity);
         return $message;
@@ -68,7 +61,6 @@ abstract class Base
      */
     protected function buildRetrieveOneSuccessMessage($successMessage, $entity)
     {
-        unset($entity['password']);
         $message = array();
         $message[] = array('message' => $successMessage, 'code' => self::HTTP_200, 'results' => $entity);
         return $message;
