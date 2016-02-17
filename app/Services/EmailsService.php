@@ -35,7 +35,8 @@ class EmailsService{
         $email->addTo($to)
             ->setFrom($from)
             ->setSubject($subject)
-            ->setHtml($html);
+            ->setHtml(' ')
+            ->setTemplateId('45bd4441-12f8-4b18-82dd-03256f261876');
 
         $sendGrid->send($email);
 

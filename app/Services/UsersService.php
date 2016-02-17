@@ -37,7 +37,7 @@ class UsersService extends Base
         //Send user activation email
         $emailService = new EmailsService();
         $from         = "info@zemployee.com";
-        $subject      = "Agency, please active your email";
+        $subject      = " ";
         $body         = "Please click the link below to active your account " . $code;
 
         $emailService->send($user->email, $from, $subject, $body);
