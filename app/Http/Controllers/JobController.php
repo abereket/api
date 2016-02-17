@@ -12,7 +12,7 @@ class JobController extends Controller{
      */
     public function create(Request $request){
         $rules = ['user_id'=>'required|integer','tittle'=>'required|string|max:50','company_name'=>'string|max:50','type'=>'string|max:50',
-                  'link'=>'string|max:256','city'=>'string|max:50','state'=>'string|max:2','zipCode'=>'max:10'];
+                  'link'=>'string|max:256','is_fulfilled'=>'boolean','is_closed'=>'boolean','city'=>'string|max:50','state'=>'string|max:2','zipCode'=>'max:10'];
         $this->validate($request,$rules);
 
         $jobService = new JobsServices();
@@ -28,7 +28,7 @@ class JobController extends Controller{
      */
     public function update(Request $request,$jobId){
         $rules = ['user_id'=>'required|integer','tittle'=>'string|max:50','company_name'=>'string|max:50','type'=>'string|max:50',
-                  'link'=>'string|max:256','city'=>'string|max:50','state'=>'string|max:2','zip_code'=>'max:10'];
+                  'link'=>'string|max:256','is_fulfilled'=>'boolean','is_closed'=>'boolean','city'=>'string|max:50','state'=>'string|max:2','zip_code'=>'max:10'];
         $this->validate($request,$rules);
 
         $jobService = new JobsServices();
