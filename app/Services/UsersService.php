@@ -29,6 +29,7 @@ class UsersService extends Base
         $user->email        =  ($request->json()->get('email'))?$request->json()->get('email'):$email;
         $user->password     =  hash('sha512',$request->json()->get('password'));
         $user->type         =  ($request->json()->get('type'))?($request->json()->get('type')):$type;
+        $user->invited_by   =  $request->json()->get('invited_by');
         $user->save();
 
         $emailVerification = new EmailVerificationsService();
@@ -40,7 +41,7 @@ class UsersService extends Base
         $subject      = " ";
         $body         = "Please click the link below to active your account " . $code;
 
-        $emailService->send($user->email, $from, $subject, $body);
+        $emailService->send($user->email, $from, $subject, $body,$user->invited_by);
 
         if($type and $email){
             return $user;
@@ -60,6 +61,7 @@ class UsersService extends Base
         $lastName   =   $request->input('last_name');
         $email      =   $request->input('email');
         $type       =   $request->input('type');
+        $invitedBy  =   $request->input('invited_by');
         $verified   =   $request->input('verified');
         $order_by   =  ($request->input('order_by'))? ($request->input('order_by')):'updated_at';
 
@@ -76,6 +78,9 @@ class UsersService extends Base
         }
         if($type){
            $user = $user->where('type','like','%'.$type.'%');
+        }
+        if($invitedBy){
+            $user = $user->where('invited_by','like','%'.$invitedBy.'%');
         }
         if($verified){
            $user = $user->where('verified','=',$verified);
