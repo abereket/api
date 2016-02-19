@@ -21,7 +21,7 @@ class EmailsService{
      * @param $html
      * @return bool
      */
-    public function send($to, $from, $subject, $html)
+    public function send($to, $from, $subject, $html,$invitedBy)
     {
         $sendGridApiKey = "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";
 
@@ -35,7 +35,9 @@ class EmailsService{
         $email->addTo($to)
             ->setFrom($from)
             ->setSubject($subject)
-            ->setHtml($html);
+            ->addSubstitution("%AdminName%",array($invitedBy))
+            ->setHtml(' ')
+            ->setTemplateId('45bd4441-12f8-4b18-82dd-03256f261876');
 
         $sendGrid->send($email);
 

@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AddColumnsToJobs' => $baseDir . '/database/migrations/2016_02_12_192525_add_columns_to_jobs.php',
+    'AddVerifiedByColumn' => $baseDir . '/database/migrations/2016_02_18_200308_add_verified_by_column.php',
     'CreateEmailVerificationTable' => $baseDir . '/database/seeds/2015_12_28_201830_create_email_verification_table.php',
     'CreateEmailVerificationsTable' => $baseDir . '/database/seeds/2016_01_05_194316_create_email_verifications_table.php',
     'CreateJobSkillsTable' => $baseDir . '/database/seeds/2016_01_26_182950_create_job_skills_table.php',
