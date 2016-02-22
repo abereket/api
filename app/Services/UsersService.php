@@ -41,7 +41,7 @@ class UsersService extends Base
         $subject      = " ";
         $body         = "Please click the link below to active your account " . $code;
 
-        $emailService->send($user->email, $from, $subject, $body,$user->invited_by);
+        $emailService->send($user->email, $from, $subject, $body,$user->invited_by,$code);
 
         if($type and $email){
             return $user;

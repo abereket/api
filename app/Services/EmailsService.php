@@ -21,8 +21,13 @@ class EmailsService{
      * @param $html
      * @return bool
      */
-    public function send($to, $from, $subject, $html,$invitedBy)
+    public function send($to, $from, $subject, $html,$invitedBy,$code)
     {
+        $environment =    new EnvironmentInformationService();
+        $env         =    $environment->getUrl();
+        $env= ($env == "local")?$env.".":" ";
+
+
         $sendGridApiKey = "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";
 
         //Solution to instantiate a class which have d/t namespace from namespaced class
@@ -36,6 +41,8 @@ class EmailsService{
             ->setFrom($from)
             ->setSubject($subject)
             ->addSubstitution("%AdminName%",array($invitedBy))
+            ->addSubstitution("%AppEnv.%",array($env))
+            ->addSubstitution("%code%",array($code))
             ->setHtml(' ')
             ->setTemplateId('45bd4441-12f8-4b18-82dd-03256f261876');
 
