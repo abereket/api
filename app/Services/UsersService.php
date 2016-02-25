@@ -40,8 +40,8 @@ class UsersService extends Base
         $from         = "info@zemployee.com";
         $subject      = " ";
         $body         = "Please click the link below to active your account " . $code;
-
-        $emailService->send($user->email, $from, $subject, $body,$user->invited_by,$code);
+        $templateId   = "45bd4441-12f8-4b18-82dd-03256f261876";
+        $emailService->send($user->email, $from, $subject, $body,$user->invited_by,$code,$templateId);
 
         if($type and $email){
             return $user;
