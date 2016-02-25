@@ -33,19 +33,20 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
     $app->put('team-members/{id}','TeamMemberController@update');                 //updates team member
     $app->delete('team-members/{id}','TeamMemberController@delete');              //soft deletes a team member
 
-    $app->post('agencies','AgencyController@create');                             //creates agencies
-    $app->get('agencies','AgencyController@retrieve');                            //retrieves agencies
-    $app->get('agencies/{id}','AgencyController@retrieveOne');                    //retrieves one agency
-    $app->put('agencies/{id}','AgencyController@update');                         //updates an agency
-    $app->delete('agencies/{id}','AgencyController@delete');                      //soft deletes an agency
+    $app->post('agencies','AgencyController@create');                               //creates agencies
+    $app->get('agencies','AgencyController@retrieve');                              //retrieves agencies
+    $app->get('agencies/{id}','AgencyController@retrieveOne');                      //retrieves one agency
+    $app->put('agencies/{id}','AgencyController@update');                           //updates an agency
+    $app->delete('agencies/{id}','AgencyController@delete');                        //soft deletes an agency
 
-    $app->post('users','UserController@create');                                  //creates users
-    $app->get('users','UserController@retrieve');                                 //retrieves users
-    $app->get('users/{id}','UserController@retrieveOne');                         //retrieves one user
-    $app->put('users/{id}','UserController@update');                              //updates a user
-    $app->delete('users/{id}','UserController@delete');                           //soft deletes a user
+    $app->post('users','UserController@create');                                    //creates users
+    $app->get('users','UserController@retrieve');                                   //retrieves users
+    $app->get('users/{id}','UserController@retrieveOne');                           //retrieves one user
+    $app->put('users/{id}','UserController@update');                                //updates a user
+    $app->delete('users/{id}','UserController@delete');                             //soft deletes a user
 
-    $app->put('email-verification/{code}','EmailVerificationController@update');  //updates email verification
+    $app->put('email-verification/{code}','EmailVerificationController@update');       //updates email verification
+    $app->get('email-verification/{code}','EmailVerificationController@retrieveOne');  //retrieveOne email verification
 
     $app->post('jobs','JobController@create');                                    //creates jobs
     $app->put('jobs/{id}','JobController@update');                                //updates jobs
