@@ -68,7 +68,6 @@ class EmailVerificationsService extends Base{
             return $valError;
         }
         $expiredAt = date("Y-m-d H:i:s",(int)$expired_at);
-        //return $token;
         $emailVerification = EmailVerification::where('token','=',$token)
                                                 ->where('expired_at','=',$expiredAt)
                                                 ->where('verification_type','=',$verification_type)
