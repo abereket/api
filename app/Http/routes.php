@@ -57,5 +57,11 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
     $app->delete('job-skills/{id}','JobSkillsController@delete');                 //deletes job skills
     $app->get('job-skills/{id}','JobSkillsController@retrieveOne');               //retrieves one job skill
     $app->get('job-skills','JobSkillsController@retrieve');                       //retrieves job skills
-    $app->put('job-skills','JobSkillsController@update');                    //updates job skills
+    $app->put('job-skills','JobSkillsController@update');                         //updates job skills
+
+    $app->post('surveys','SurveysController@create');                             //creates surveys
+    $app->put('surveys/{id}','SurveysController@update');                         //updates surveys
+    $app->get('surveys','SurveysController@retrieve');                            //searches surveys
+    $app->get('surveys/{id}','SurveysController@retrieveOne');                    //retrieves one survey
+    $app->delete('surveys/{id}','SurveysController@delete');                      //deletes a survey
 });
