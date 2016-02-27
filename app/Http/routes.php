@@ -65,4 +65,10 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
     $app->get('surveys','SurveysController@retrieve');                            //searches surveys
     $app->get('surveys/{id}','SurveysController@retrieveOne');                    //retrieves one survey
     $app->delete('surveys/{id}','SurveysController@delete');                      //deletes a survey
+
+    $app->post('survey-results','SurveyResultsController@create');                  //creates surveys
+    $app->put('survey-results/{id}','SurveyResultsController@update');              //updates surveys
+    $app->get('survey-results','SurveyResultsController@retrieve');                 //searches surveys
+    $app->get('survey-results/{id}','SurveyResultsController@retrieveOne');         //retrieves one survey
+    $app->delete('survey-results/{id}','SurveyResultsController@delete');           //deletes a survey
 });
