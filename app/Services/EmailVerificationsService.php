@@ -28,7 +28,6 @@ class EmailVerificationsService extends Base{
      */
     public function update($code)
     {
-
         list($token,$expired_at,$verification_type) = $this->decomposeCode($code);
         if (time() > $expired_at) {
             $valError = "Your token has no longer valid";
@@ -58,6 +57,37 @@ class EmailVerificationsService extends Base{
     }
 
     /**
+     * @param $code
+     * @return array
+     */
+    public function retrieveOne($code){
+        list($token,$expired_at,$verification_type) = $this->decomposeCode($code);
+        if(time() > $expired_at){
+            $valError = "Your token has no longer valid";
+            $valError = $this->failureMessage($valError,parent::HTTP_404);
+            return $valError;
+        }
+        $expiredAt = date("Y-m-d H:i:s",(int)$expired_at);
+        $emailVerification = EmailVerification::where('token','=',$token)
+                                                ->where('expired_at','=',$expiredAt)
+                                                ->where('verification_type','=',$verification_type)
+                                                ->get()
+                                                ->first();
+        $valError = $this->validateRetrieveOne($emailVerification);
+        if($valError){
+            $valError = $this->failureMessage($valError,parent::HTTP_404);
+            return $valError;
+        }
+        $user = User::find($emailVerification->user_id);
+        unset($user->uuid,$user->password,$user->type,$user->invited_by,$user->verified,$user->created_at,$user->updated_at,$user->deleted_at);
+        unset($emailVerification->token,$emailVerification->user_id,$emailVerification->is_verified,
+              $emailVerification->created_at,$emailVerification->updated_at,$emailVerification->deleted_at);
+        $emailVerification->user = $user;
+        $emailVerification = $this->buildRetrieveOneSuccessMessage("success",$emailVerification);
+        return $emailVerification;
+    }
+
+    /**
      * This method performs business class validation for Email verifications update method
      * @param $emailVerification
      * @return array|string
@@ -66,6 +96,23 @@ class EmailVerificationsService extends Base{
         $errors = array();
         if(!$emailVerification){
             $errors = "You can not activate your account";
+        }
+        return $errors;
+    }
+
+    /**
+     * This method performs business class validation for Email verifications retrieveOne method
+     * @param $emailVerification
+     * @return array|string
+     */
+    protected function validateRetrieveOne($emailVerification){
+        $errors = array();
+        if(!$emailVerification){
+            $errors = "The email verification and user information you are looking is not found.Please enter a valid code";
+            return $errors;
+        }
+        if($emailVerification->is_verified == 1){
+            $errors= "the email is already verified";
         }
         return $errors;
     }
