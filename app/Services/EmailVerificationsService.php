@@ -58,7 +58,7 @@ class EmailVerificationsService extends Base{
 
     /**
      * @param $code
-     * @return array|string
+     * @return array
      */
     public function retrieveOne($code){
         list($token,$expired_at,$verification_type) = $this->decomposeCode($code);
