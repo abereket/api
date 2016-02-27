@@ -1,7 +1,6 @@
 <?php
 namespace App\Services;
 
-
 use App\Models\Job;
 use App\Models\Surveys;
 use App\Models\User;
