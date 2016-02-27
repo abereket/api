@@ -79,6 +79,9 @@ class EmailVerificationsService extends Base{
             return $valError;
         }
         $user = User::find($emailVerification->user_id);
+        unset($user->uuid,$user->password,$user->type,$user->invited_by,$user->verified,$user->created_at,$user->updated_at,$user->deleted_at);
+        unset($emailVerification->token,$emailVerification->user_id,$emailVerification->is_verified,
+              $emailVerification->created_at,$emailVerification->updated_at,$emailVerification->deleted_at);
         $emailVerification->user = $user;
         $emailVerification = $this->buildRetrieveOneSuccessMessage("success",$emailVerification);
         return $emailVerification;
