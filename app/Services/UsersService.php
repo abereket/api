@@ -32,17 +32,18 @@ class UsersService extends Base
         $user->invited_by   =  $request->json()->get('invited_by');
         $user->save();
 
-        $emailVerification = new EmailVerificationsService();
-        $code = $emailVerification->create($user->type,$user->id);
+        if($user->type != 'agency'){
+            $emailVerification = new EmailVerificationsService();
+            $code = $emailVerification->create($user->type,$user->id);
 
-        //Send user activation email
-        $emailService = new EmailsService();
-        $from         = "info@zemployee.com";
-        $subject      = " ";
-        $body         = "Please click the link below to active your account " . $code;
-        $templateId   = "45bd4441-12f8-4b18-82dd-03256f261876";
-        $emailService->send($user->email, $from, $subject, $body,$user->invited_by,$code,$templateId);
+            //Send user activation email
+            $emailService = new EmailsService();
+            $from         = "info@zemployee.com";
+            $subject      = " ";
+            $body         = "Please click the link below to active your account " . $code;
 
+            $emailService->send($user->email, $from, $subject, $body,$user->invited_by,$code);
+        }
         if($type and $email){
             return $user;
         }
