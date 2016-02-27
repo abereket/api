@@ -15,9 +15,7 @@ abstract class Base
      */
     protected function buildDeleteSuccessMessage($successMessage)
     {
-        $message = array();
-        $message[] = array('message' => $successMessage, 'code' => self::HTTP_200);
-        return $message;
+        return ['message' => $successMessage, 'code' => self::HTTP_200];
     }
 
     /**
@@ -27,9 +25,7 @@ abstract class Base
      */
     protected function buildCreateSuccessMessage($successMessage, $entity)
     {
-        $message = array();
-        $message[] = array('message' => $successMessage, 'code' => self::HTTP_201, 'results' => $entity);
-        return $message;
+        return ['message' => $successMessage, 'code' => self::HTTP_201, 'results' => $entity];
     }
 
     /**
@@ -39,9 +35,7 @@ abstract class Base
      */
     protected function buildUpdateSuccessMessage($successMessage, $entity)
     {
-        $message = array();
-        $message[] = array('message' => $successMessage, 'code' =>self::HTTP_200, 'results' => $entity);
-        return $message;
+        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'results' => $entity];
     }
 
     /**
@@ -50,9 +44,8 @@ abstract class Base
      * @return array
      */
     protected function buildRetrieveSuccessMessage($successMessage,$entity){
-        $message = array();
-        $message[] = array('message' => $successMessage, 'code' =>self::HTTP_200, 'results' => $entity);
-        return $message;
+
+        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'results' => $entity];
     }
     /**
      * @param $successMessage
@@ -61,9 +54,7 @@ abstract class Base
      */
     protected function buildRetrieveOneSuccessMessage($successMessage, $entity)
     {
-        $message = array();
-        $message[] = array('message' => $successMessage, 'code' => self::HTTP_200, 'results' => $entity);
-        return $message;
+        return ['message' => $successMessage, 'code' => self::HTTP_200, 'results' => $entity];
     }
 
     /**
@@ -72,9 +63,7 @@ abstract class Base
      * @return array
      */
     protected function buildEmailVerificationSuccessMessage($successMessage,$entity){
-       $message = array();
-       $message[] = array("message" => $successMessage,'code' =>self::HTTP_200, 'results' =>$entity);
-       return $message;
+       return ['message' => $successMessage,'code' =>self::HTTP_200, 'results' =>$entity];
     }
 
     /**
@@ -84,8 +73,7 @@ abstract class Base
      */
     protected function failureMessage($message,$code)
     {
-        $message = array("message"=>$message,'code'=>$code);
-        return $message;
+        return ['message'=>$message,'code'=>$code];
     }
 
     /**
