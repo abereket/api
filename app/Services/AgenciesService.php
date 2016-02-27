@@ -26,7 +26,17 @@ class AgenciesService extends Base
 
         //create the agency
         $agency   =   Agency::create(['uuid' =>  Uuid::uuid(),'name'=>$request->json()->get('name'),'user_id'=>$request->json()->get('user_id'),'description'=>$request->json()->get('description')]);
+        $user   =   User::find($agency->user_id);
 
+        $emailVerification = new EmailVerificationsService();
+        $code = $emailVerification->create('agency',$user->id);
+
+        $emailService = new EmailsService();
+        $from       =   "info@zemployee.com";
+        $subject    =   " ";
+        $body       =   "please activate your account";
+        $templateId =   "67ae6661-bc1c-49ac-a70b-2205c9926b1b";
+        $emailService->send($user->email,$from,$subject,$body,$user->first_name." ".$user->last_name,$code,$templateId);
         $agency=$this->buildCreateSuccessMessage("success",$agency);
         return $agency;
     }

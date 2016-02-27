@@ -21,7 +21,7 @@ class EmailsService{
      * @param $html
      * @return bool
      */
-    public function send($to, $from, $subject, $html,$invitedBy,$code)
+    public function send($to, $from, $subject, $html,$invitedBy,$code,$templateId)
     {
         $environment =    new EnvironmentInformationService();
         $env         =    $environment->getUrl();
@@ -37,17 +37,33 @@ class EmailsService{
         $emailClass  = new \ReflectionClass('\\SendGrid\\Email');
         $email = $emailClass->newInstance();
 
-        $email->addTo($to)
-            ->setFrom($from)
-            ->setSubject($subject)
-            ->addSubstitution("%AdminName%",array($invitedBy))
-            ->addSubstitution("%AppEnv.%",array($env))
-            ->addSubstitution("%code%",array($code))
-            ->setHtml(' ')
-            ->setTemplateId('45bd4441-12f8-4b18-82dd-03256f261876');
+        switch($templateId){
+            case '45bd4441-12f8-4b18-82dd-03256f261876':
+                $email->addTo($to)
+                    ->setFrom($from)
+                    ->setSubject($subject)
+                    ->addSubstitution("%AdminName%",array($invitedBy))
+                    ->addSubstitution("%AppEnv.%",array($env))
+                    ->addSubstitution("%code%",array($code))
+                    ->setHtml(' ')
+                    ->setTemplateId($templateId);
 
-        $sendGrid->send($email);
+                $sendGrid->send($email);
+                return true;
+            break;
+            case '67ae6661-bc1c-49ac-a70b-2205c9926b1b':
+                $email->addTo($to)
+                    ->setFrom($from)
+                    ->setSubject($subject)
+                    ->addSubstitution("%UserName%",array($invitedBy))
+                    ->addSubstitution("%AppEnv.%",array($env))
+                    ->addSubstitution("%code%",array($code))
+                    ->setHtml(' ')
+                    ->setTemplateId($templateId);
 
-        return true;
+                $sendGrid->send($email);
+                return true;
+            break;
+        }
     }
 }
