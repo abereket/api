@@ -141,10 +141,10 @@ class SurveyResultsService extends Base{
         if(!$job){
             $errors = 'Please enter a valid job_id';
         }
-        $survey = Surveys::find($surveyId);
-        if(!$survey){
-            $errors = 'Please enter a valid survey_id';
-        }
+        //$survey = Surveys::find($surveyId);
+        //if(!$survey){
+           // $errors = 'Please enter a valid survey_id';
+        //}
         return $errors;
     }
 
@@ -172,12 +172,12 @@ class SurveyResultsService extends Base{
                 $errors = 'Please enter a valid job_id';
             }
         }
-        if($surveyId || empty($surveyId)){
-           $survey = Surveys::find($surveyId);
-            if(!$survey){
-               $errors = 'Please enter a valid survey_id';
-            }
-        }
+        //if($surveyId || empty($surveyId)){
+           //$survey = Surveys::find($surveyId);
+           // if(!$survey){
+              // $errors = 'Please enter a valid survey_id';
+            //}
+        //}
         return $errors;
     }
 
