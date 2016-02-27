@@ -46,7 +46,7 @@ class EmailsService{
                     ->addSubstitution("%AppEnv.%",array($env))
                     ->addSubstitution("%code%",array($code))
                     ->setHtml(' ')
-                    ->setTemplateId('45bd4441-12f8-4b18-82dd-03256f261876');
+                    ->setTemplateId($templateId);
 
                 $sendGrid->send($email);
                 return true;
@@ -59,7 +59,7 @@ class EmailsService{
                     ->addSubstitution("%AppEnv.%",array($env))
                     ->addSubstitution("%code%",array($code))
                     ->setHtml(' ')
-                    ->setTemplateId('67ae6661-bc1c-49ac-a70b-2205c9926b1b');
+                    ->setTemplateId($templateId);
 
                 $sendGrid->send($email);
                 return true;
