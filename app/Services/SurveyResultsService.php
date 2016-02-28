@@ -37,11 +37,11 @@ class SurveyResultsService extends Base{
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
-        $surveyResult->user_id               =    $request->json()->get('user_id',$surveyResult->user_id);
-        $surveyResult->job_id                =    $request->json()->get('job_id',$surveyResult->job_id);
-        $surveyResult->survey_id             =    $request->json()->get('survey_id',$surveyResult->survey_id);
-        $surveyResult->rating                =    $request->json()->get('rating',$surveyResult->rating);
-        $surveyResult->years_of_experience   =    $request->json()->get('years_of_experience',$surveyResult->years_of_experience);
+        $surveyResult->user_id               =    ($request->json()->get('user_id'))?$request->json()->get('user_id'):$surveyResult->user_id;
+        $surveyResult->job_id                =    ($request->json()->get('job_id'))?$request->json()->get('job_id'):$surveyResult->job_id;
+        $surveyResult->survey_id             =    ($request->json()->get('survey_id'))?$request->json()->get('survey_id'):$surveyResult->survey_id;
+        $surveyResult->rating                =    ($request->json()->get('rating'))?$request->json()->get('rating'):$surveyResult->rating;
+        $surveyResult->years_of_experience   =    ($request->json()->get('years_of_experience'))?$request->json()->get('years_of_experience'):$surveyResult->years_of_experience;
         $surveyResult->save();
 
         $surveyResult = $this->buildUpdateSuccessMessage('success',$surveyResult);
@@ -161,19 +161,19 @@ class SurveyResultsService extends Base{
         if(!$surveyResult){
             $errors = 'The survey result you are looking is not found.Please enter a valid survey result id';
         }
-        if($userId || empty($userId)){
+        if($userId){
             $user = User::find($userId);
             if(!$user){
                 $errors = 'Please enter a valid user_id';
             }
         }
-        if($jobId || empty($surveyId)){
+        if($jobId){
             $job = Job::find($jobId);
             if(!$job){
                 $errors = 'Please enter a valid job_id';
             }
         }
-        if($surveyId || empty($surveyId)){
+        if($surveyId){
            $survey = Surveys::find($surveyId);
             if(!$survey){
                $errors = 'Please enter a valid survey_id';
