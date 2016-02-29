@@ -36,8 +36,8 @@ class surveysService extends Base{
             return $valError;
         }
         $survey->job_id   =  $request->json()->get('job_id');
-        $survey->user_id  =  $request->json()->get('user_id',$survey->user_id);
-        $survey->name     =  $request->json()->get('name',$survey->name);
+        $survey->user_id  =  ($request->json()->get('user_id'))?$request->json()->get('user_id'):$survey->user_id;
+        $survey->name     =  ($request->json()->get('name'))?$request->json()->get('name'):$survey->name;
         $survey->save();
 
         $survey = $this->buildUpdateSuccessMessage('success',$survey);
@@ -135,7 +135,7 @@ class surveysService extends Base{
         if(!$job){
             $errors = 'please enter a valid job_id';
         }
-        if($userId || empty($userId)){
+        if($userId){
             $user = User::find($userId);
             if(!$user){
                 $errors = 'please enter a valid user_id';
