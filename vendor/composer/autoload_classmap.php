@@ -12,6 +12,8 @@ return array(
     'CreateEmailVerificationsTable' => $baseDir . '/database/migrations/2016_01_05_194316_create_email_verifications_table.php',
     'CreateJobSkillsTable' => $baseDir . '/database/migrations/2016_01_26_182950_create_job_skills_table.php',
     'CreateJobsTable' => $baseDir . '/database/migrations/2016_01_22_184005_create_jobs_table.php',
+    'CreateSurveyResultsTable' => $baseDir . '/database/migrations/2016_02_26_203659_create_survey_results_table.php',
+    'CreateSurveySkillsTable' => $baseDir . '/database/migrations/2016_02_29_223818_create_survey_skills_table.php',
     'CreateTableAgencies' => $baseDir . '/database/migrations/2015_12_14_210940_create_table_agencies.php',
     'CreateTableSurveys' => $baseDir . '/database/migrations/2016_02_26_174239_create_table_surveys.php',
     'CreateTableTeams' => $baseDir . '/database/migrations/2015_12_15_212639_create_table_teams.php',
