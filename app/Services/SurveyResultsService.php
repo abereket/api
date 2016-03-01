@@ -59,35 +59,31 @@ class SurveyResultsService extends Base{
         $surveyId           =   $request->input('survey_id');
         $rating             =   $request->input('rating');
         $yearsOfExperience  =   $request->input('years_of_experience');
-        $createdAt          =   $request->input('created_at');
         $updatedAt          =   $request->input('updated_at');
         $deletedAt          =   $request->input('deleted_at');
         $order_by           =   ($request->input('order_by'))? ($request->input('order_by')) : 'updated_at';
 
         $surveyResult = new SurveyResults();
         if ($userId) {
-            $surveyResult = $surveyResult->where('name' , 'like', '%'.$userId.'%');
+            $surveyResult = $surveyResult->where('user_id' , 'like', '%'.$userId.'%');
         }
         if ($jobId) {
-            $surveyResult = $surveyResult->where('description',  'like', '%'.$jobId.'%');
+            $surveyResult = $surveyResult->where('job_id',  'like', '%'.$jobId.'%');
         }
         if ($surveyId) {
-            $surveyResult = $surveyResult->where('name' , 'like', '%'.$surveyId.'%');
+            $surveyResult = $surveyResult->where('survey_id' , 'like', '%'.$surveyId.'%');
         }
         if ($rating) {
-            $surveyResult = $surveyResult->where('description',  'like', '%'.$rating.'%');
+            $surveyResult = $surveyResult->where('rating',  'like', '%'.$rating.'%');
         }
         if ($yearsOfExperience) {
-            $surveyResult = $surveyResult->where('name' , 'like', '%'.$yearsOfExperience.'%');
-        }
-        if ($createdAt) {
-            $surveyResult = $surveyResult->where('description',  'like', '%'.$createdAt.'%');
+            $surveyResult = $surveyResult->where('years_of_experience' , 'like', '%'.$yearsOfExperience.'%');
         }
         if ($updatedAt) {
-            $surveyResult= $surveyResult->where('name' , 'like', '%'.$updatedAt.'%');
+            $surveyResult= $surveyResult->where('updated_at' , 'like', '%'.$updatedAt.'%');
         }
         if ($deletedAt) {
-            $surveyResult = $surveyResult->where('description',  'like', '%'.$deletedAt.'%');
+            $surveyResult = $surveyResult->where('deleted_at',  'like', '%'.$deletedAt.'%');
         }
         $surveyResult = $surveyResult->orderby($order_by)->paginate($limit);
 
