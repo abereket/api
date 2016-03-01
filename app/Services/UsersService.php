@@ -33,6 +33,8 @@ class UsersService extends Base
         $user->save();
 
         if($user->type != 'agency'){
+            $userInv= User::find($user->invited_by);
+            $invitedBy = $userInv->first_name." ".$userInv->last_name;
             $emailVerification = new EmailVerificationsService();
             $code = $emailVerification->create($user->type,$user->id);
 
@@ -42,7 +44,7 @@ class UsersService extends Base
             $subject      = " ";
             $body         = "Please click the link below to active your account " . $code;
             $templateId   = "45bd4441-12f8-4b18-82dd-03256f261876";
-            $emailService->send($user->email, $from, $subject, $body,$user->invited_by,$code,$templateId);
+            $emailService->send($user->email, $from, $subject, $body,$invitedBy,$code,$templateId);
         }
         if($type and $email){
             return $user;
