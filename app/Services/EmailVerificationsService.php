@@ -108,11 +108,11 @@ class EmailVerificationsService extends Base{
     protected function validateRetrieveOne($emailVerification){
         $errors = array();
         if(!$emailVerification){
-            $errors = "The email verification and user information you are looking is not found.Please enter a valid code";
+            $errors['code'] = "The email verification and user information you are looking is not found.Please enter a valid code";
             return $errors;
         }
         if($emailVerification->is_verified == 1){
-            $errors= "the email is already verified";
+            $errors['verified']= "the email is already verified";
         }
         return $errors;
     }

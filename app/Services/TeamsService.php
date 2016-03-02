@@ -108,7 +108,7 @@ class TeamsService extends Base{
         $errors = array();
             $agency = Agency::find($agencyId);
             if (!$agency) {
-                $errors = "The value you entered not exists.please enter a valid agency id";
+                $errors['agency_id'] = "The value you entered not exists.please enter a valid agency id";
             }
         return $errors;
     }
@@ -121,7 +121,7 @@ class TeamsService extends Base{
     protected function validateRetrieve($agencyId){
         $errors = array();
         if(!$agencyId){
-            $errors ="You are advised to enter agencyId of the values you want to be searched";
+            $errors['agency_id'] ="You are advised to enter agencyId of the values you want to be searched";
         }
         return $errors;
     }
@@ -134,7 +134,7 @@ class TeamsService extends Base{
     protected function validateRetrieveOne($team){
         $errors        =    array();
         if(!$team){
-            $errors  =    "Please provide a valid team";
+            $errors['team_id']  =    "Please provide a valid team id";
         }
         return $errors;
     }
@@ -148,12 +148,12 @@ class TeamsService extends Base{
     protected function validateUpdate($team,$agencyId){
         $errors            =   array();
         if(!$team){
-            $errors      =  "Please provide a valid team";
+            $errors['team_id']      =  "Please provide a valid team id";
         }
         if($agencyId) {
             $agency        =   Agency::find($agencyId);
             if(!$agency){
-                $errors  =   "The value you entered not exists.please enter a valid agency id";
+                $errors['agency_id']  =   "The value you entered not exists.please enter a valid agency id";
             }
         }
         return $errors;
@@ -167,7 +167,7 @@ class TeamsService extends Base{
     protected function validateDelete($team){
         $errors       =  array();
         if(!$team){
-            $errors =   "Please provide a valid team";
+            $errors['team_id'] =   "Please provide a valid team id";
         }
         return $errors;
     }

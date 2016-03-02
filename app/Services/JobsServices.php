@@ -149,7 +149,7 @@ class JobsServices extends Base{
         $errors = array();
         $user = User::find($userId);
         if(!$user){
-            $errors = "The user id you have entered not exists.Please enter a valid user id";
+            $errors['user_id'] = "The user id you have entered not exists.Please enter a valid user id";
         }
         return $errors;
     }
@@ -162,11 +162,11 @@ class JobsServices extends Base{
     protected function validateUpdate($job,$userId){
         $errors = array();
         if(!$job){
-            $errors = "The job you are looking for not exists.Please use a valid job id";
+            $errors['job_id'] = "The job you are looking for not exists.Please use a valid job id";
         }
         $user = User::find($userId);
         if(!$user){
-            $errors="The user id you have entered not exists.Please enter a valid user id";
+            $errors['user_id']="The user id you have entered not exists.Please enter a valid user id";
         }
         return $errors;
     }
@@ -178,7 +178,7 @@ class JobsServices extends Base{
     protected function validateDelete($job){
        $errors = array();
         if(!$job){
-            $errors = "The job you are looking for not exists.Please use a valid job id";
+            $errors['job_id'] = "The job you are looking for not exists.Please use a valid job id";
         }
         return $errors;
     }
@@ -190,7 +190,7 @@ class JobsServices extends Base{
     protected function validateRetrieveOne($job){
         $errors = array();
         if(!$job){
-           $errors ="The job you are looking for not exists.Please use a valid job id";
+           $errors['job_id'] ="The job you are looking for not exists.Please use a valid job id";
         }
         return $errors;
     }

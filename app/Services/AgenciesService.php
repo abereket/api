@@ -129,12 +129,12 @@ class AgenciesService extends Base
     protected function validateCreate($user){
         $errors        =    array();
         if(!$user){
-            $errors = "Please provide a valid user id.The value you entered not exists";
+            $errors['user_id'] = "Please provide a valid user id.The value you entered not exists";
             return $errors;
         }
         $agency = Agency::where('user_id','=',$user->id)->first();
         if($agency and $user->verified ==1 ){
-            $errors = "There is already an active agency for the user";
+            $errors['active-agency'] = "There is already an active agency for the user";
         }
         return $errors;
     }
@@ -147,7 +147,7 @@ class AgenciesService extends Base
     protected function validateRetrieveOne($agency){
         $errors       =    array();
         if(!$agency){
-            $errors   =    "please provide a valid agency";
+            $errors['agency_id']   =    "please provide a valid agency id";
         }
         return $errors;
     }
@@ -161,17 +161,17 @@ class AgenciesService extends Base
     protected function validateUpdate($agency, $userId){
         $errors        =  array();
         if(!$agency){
-            $errors    =  "please provide a valid agency";
+            $errors['agency_id']    =  "please provide a valid agency id";
         }
         if($userId) {
             $user         =   User::find($userId);
             if(!$user){
-                $errors  =  "The value you entered not exists.please enter a valid user id";
+                $errors['user_id']  =  "The value you entered not exists.please enter a valid user id";
                 return $errors;
             }
             $agency = Agency::where('user_id','=',$user->id)->first();
             if($agency and $user->verified ==1){
-                $errors = "There is already an active agency for the user";
+                $errors['active agency'] = "There is already an active agency for the user";
             }
         }
         return $errors;
@@ -185,7 +185,7 @@ class AgenciesService extends Base
     protected function validateDelete($agency) {
         $errors        =   array();
         if(!$agency){
-            $errors    = "Please provide valid agency id";
+            $errors['agency_id']    = "Please provide valid agency id";
         }
         return $errors;
     }

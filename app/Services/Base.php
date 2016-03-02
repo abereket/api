@@ -25,7 +25,7 @@ abstract class Base
      */
     protected function buildCreateSuccessMessage($successMessage, $entity)
     {
-        return ['message' => $successMessage, 'code' => self::HTTP_201, 'results' => $entity];
+        return ['message' => $successMessage, 'code' => self::HTTP_201, 'results' => [$entity]];
     }
 
     /**
@@ -35,7 +35,7 @@ abstract class Base
      */
     protected function buildUpdateSuccessMessage($successMessage, $entity)
     {
-        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'results' => $entity];
+        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'results' => [$entity]];
     }
 
     /**
@@ -45,7 +45,7 @@ abstract class Base
      */
     protected function buildRetrieveSuccessMessage($successMessage,$entity){
 
-        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'results' => $entity];
+        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'data' => [$entity]];
     }
     /**
      * @param $successMessage
@@ -54,7 +54,7 @@ abstract class Base
      */
     protected function buildRetrieveOneSuccessMessage($successMessage, $entity)
     {
-        return ['message' => $successMessage, 'code' => self::HTTP_200, 'results' => $entity];
+        return ['message' => $successMessage, 'code' => self::HTTP_200, 'results' => [$entity]];
     }
 
     /**
@@ -63,17 +63,18 @@ abstract class Base
      * @return array
      */
     protected function buildEmailVerificationSuccessMessage($successMessage,$entity){
-       return ['message' => $successMessage,'code' =>self::HTTP_200, 'results' =>$entity];
+       return ['message' => $successMessage,'code' =>self::HTTP_200, 'results' =>[$entity]];
     }
 
     /**
-     * @param $message
+     * @param $errors
      * @param $code
      * @return array
      */
-    protected function failureMessage($message,$code)
+    protected function failureMessage($errors,$code)
     {
-        return ['message'=>$message,'code'=>$code];
+        $message = "Please fix your errors";
+        return ['message'=>$message,'code'=>$code,'errors'=>[$errors]];
     }
 
     /**

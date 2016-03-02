@@ -193,7 +193,7 @@ class UsersService extends Base
     protected function validateRetrieveOne($user){
         $errors       = array();
         if(!$user){
-            $errors   = "please provide a valid user";
+            $errors['user_id']   = "please provide a valid user id";
         }
         return $errors;
     }
@@ -206,7 +206,7 @@ class UsersService extends Base
     protected function validateUpdate($user){
         $errors        = array();
         if(!$user){
-            $errors  = "please provide a valid user";
+            $errors['user_id']  = "please provide a valid user id";
         }
         return $errors;
     }
@@ -219,7 +219,7 @@ class UsersService extends Base
     protected function validateDelete($user){
         $errors        =  array();
         if(!$user){
-            $errors  =  "please provide a valid user";
+            $errors['user_id']  =  "please provide a valid user id";
         }
        return $errors;
     }
