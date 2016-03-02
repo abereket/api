@@ -25,6 +25,7 @@ abstract class Base
      */
     protected function buildCreateSuccessMessage($successMessage, $entity)
     {
+        $entity = $this->buildSuccessResponse($entity);
         return ['message' => $successMessage, 'code' => self::HTTP_201, 'results' => [$entity]];
     }
 
@@ -35,6 +36,7 @@ abstract class Base
      */
     protected function buildUpdateSuccessMessage($successMessage, $entity)
     {
+        //$entity = $this->buildSuccessResponse($entity);
         return ['message' => $successMessage, 'code' =>self::HTTP_200, 'results' => [$entity]];
     }
 
@@ -44,7 +46,7 @@ abstract class Base
      * @return array
      */
     protected function buildRetrieveSuccessMessage($successMessage,$entity){
-
+        $entity = $this->buildSuccessResponse($entity);
         return ['message' => $successMessage, 'code' =>self::HTTP_200, 'data' => [$entity]];
     }
     /**
@@ -54,7 +56,8 @@ abstract class Base
      */
     protected function buildRetrieveOneSuccessMessage($successMessage, $entity)
     {
-        return ['message' => $successMessage, 'code' => self::HTTP_200, 'results' => [$entity]];
+        $entity = $this->buildSuccessResponse($entity);
+        return ['message' => $successMessage, 'code' => self::HTTP_200, 'data' => [$entity]];
     }
 
     /**
@@ -63,7 +66,8 @@ abstract class Base
      * @return array
      */
     protected function buildEmailVerificationSuccessMessage($successMessage,$entity){
-       return ['message' => $successMessage,'code' =>self::HTTP_200, 'results' =>[$entity]];
+       $entity = $this->buildSuccessResponse($entity);
+       return ['message' => $successMessage,'code' =>self::HTTP_200, 'data' =>[$entity]];
     }
 
     /**
@@ -89,6 +93,20 @@ abstract class Base
             'current_page'  => $input['current_page'],
             'last_page'     => $input['last_page'],
             'results'       => $input['data'],
+        ];
+    }
+
+    /**
+     * @param $entity
+     * @return array
+     */
+    protected  function buildSuccessResponse($entity){
+        return [
+             'total'        => count($entity),
+             'per_page'     => 1,
+             'current_page' => 1,
+             'last_page'    => 1,
+             'results'      => [$entity]
         ];
     }
 }
