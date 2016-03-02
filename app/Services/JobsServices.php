@@ -101,8 +101,8 @@ class JobsServices extends Base{
         $city             =   $request->input('city');
         $state            =   $request->input('state');
         $zipCode          =   $request->input('zip_code');
-        $order_by         =   ($request->input('order_by'))? ($request->input('order_by')) : 'created_at';
-        $sort_by          =   ($request->input('sort_by'))?$request->input('sort_by'):'ASC';
+        $orderBy         =   ($request->input('order_by'))? ($request->input('order_by')):'created_at';
+        $sortBy          =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
 
 
 
@@ -133,7 +133,7 @@ class JobsServices extends Base{
         if($is_closed){
             $job = $job->where('is_closed', '=' , $is_closed);
         }
-        $job = $job->orderby($order_by,$sort_by)->Paginate($limit);
+        $job = $job->orderby($orderBy,$sortBy)->Paginate($limit);
 
         $job = $this->buildRetrieveResponse($job->toArray());
         $job = $this->buildRetrieveSuccessMessage('success',$job);

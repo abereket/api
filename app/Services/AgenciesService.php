@@ -47,10 +47,11 @@ class AgenciesService extends Base
      */
     public function retrieve($request)
     {
-        $limit          =   ($request->input('per_page'))?($request->input('per_page')) : 15;
+        $limit          =   ($request->input('per_page'))?$request->input('per_page'):15;
         $name           =   $request->input('name');
         $description    =   $request->input('description');
-        $order_by       =   ($request->input('order_by'))? ($request->input('order_by')) : 'updated_at';
+        $orderBy        =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
+        $sortBy         =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
 
         $agency =  new Agency();
         if ($name) {
@@ -59,7 +60,7 @@ class AgenciesService extends Base
         if ($description) {
             $agency = $agency->where('description',  'like', '%'.$description.'%');
         }
-        $agency = $agency->orderby($order_by)->paginate($limit);
+        $agency = $agency->orderby($orderBy,$sortBy)->paginate($limit);
 
         $agency = $this->buildRetrieveResponse($agency->toArray());
         $agency = $this->buildRetrieveSuccessMessage("success",$agency);

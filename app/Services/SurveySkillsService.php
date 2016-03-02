@@ -50,10 +50,11 @@ class SurveySkillsService extends Base{
      * @return SurveySkills|array
      */
     public function retrieve($request){
-        $limit      =   ($request->input('per_page'))?($request->input('per_page')) : 15;
+        $limit      =   ($request->input('per_page'))?$request->input('per_page'):15;
         $userId     =   $request->input('user_id');
         $surveyId   =   $request->input('survey_id');
-        $order_by   =   ($request->input('order_by'))? ($request->input('order_by')) : 'updated_at';
+        $orderBy    =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
+        $sortBy     =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
 
         $surveySkills = new SurveySkills();
         if ($userId) {
@@ -62,7 +63,7 @@ class SurveySkillsService extends Base{
         if ($surveyId) {
             $surveySkills = $surveySkills->where('survey_id',  'like', '%'.$surveyId.'%');
         }
-        $surveySkills= $surveySkills->orderby($order_by)->paginate($limit);
+        $surveySkills= $surveySkills->orderby($orderBy,$sortBy)->paginate($limit);
 
         $surveySkills = $this->buildRetrieveResponse($surveySkills->toArray());
         $surveySkills = $this->buildRetrieveSuccessMessage("success",$surveySkills);

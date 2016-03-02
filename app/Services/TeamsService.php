@@ -29,14 +29,15 @@ class TeamsService extends Base{
     public function retrieve($request){
         $agencyId    =    $request->input('agency_id');
         $limit       =    ($request->input('per_page'))?$request->input('per_page'):15;
-        $order_by    =    ($request->input('order_by'))?$request->input('order_by'):'updated_at';
+        $orderBy     =    ($request->input('order_by'))?$request->input('order_by'):'created_at';
+        $sortBy      =    ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
 
         $valError = $this->validateRetrieve($agencyId);
         if($valError){
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
-        $team = Team::where('agency_id',$agencyId)->orderby($order_by)->Paginate($limit);
+        $team = Team::where('agency_id',$agencyId)->orderby($orderBy,$sortBy)->Paginate($limit);
 
         $team = $this->buildRetrieveResponse($team->toArray());
         $team = $this->buildRetrieveSuccessMessage("success",$team);

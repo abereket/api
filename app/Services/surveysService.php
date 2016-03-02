@@ -54,7 +54,8 @@ class surveysService extends Base{
         $jobId   =  $request->input('job_id');
         $userId  =  $request->input('user_id');
         $name    =  $request->input('name');
-        $orderBy = ($request->input('order_by'))?$request->input('order_by'):'updated_at';
+        $orderBy = ($request->input('order_by'))?$request->input('order_by'):'created_at';
+        $sortBy     =  ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
 
         $survey = new Surveys();
         if($jobId){
@@ -66,7 +67,7 @@ class surveysService extends Base{
         if($name){
             $survey = $survey->where('name','like','%'.$name.'%');
         }
-        $survey = $survey->orderby($orderBy)->paginate($limit);
+        $survey = $survey->orderby($orderBy,$sortBy)->paginate($limit);
         $survey = $this->buildRetrieveResponse($survey->toArray());
         $survey = $this->buildRetrieveSuccessMessage('success',$survey);
         return $survey;
