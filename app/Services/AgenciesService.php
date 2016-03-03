@@ -135,7 +135,7 @@ class AgenciesService extends Base
         }
         $agency = Agency::where('user_id','=',$user->id)->first();
         if($agency and $user->verified ==1 ){
-            $errors['active-agency'] = "There is already an active agency for the user";
+            $errors['active_agency'] = "There is already an active agency for the user";
         }
         return $errors;
     }
@@ -172,7 +172,7 @@ class AgenciesService extends Base
             }
             $agency = Agency::where('user_id','=',$user->id)->first();
             if($agency and $user->verified ==1){
-                $errors['active agency'] = "There is already an active agency for the user";
+                $errors['active_agency'] = "There is already an active agency for the user";
             }
         }
         return $errors;

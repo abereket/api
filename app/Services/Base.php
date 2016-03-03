@@ -36,7 +36,7 @@ abstract class Base
      */
     protected function buildUpdateSuccessMessage($successMessage, $entity)
     {
-        //$entity = $this->buildSuccessResponse($entity);
+        $entity = $this->buildSuccessResponse($entity);
         return ['message' => $successMessage, 'code' =>self::HTTP_200, 'results' => [$entity]];
     }
 
