@@ -25,7 +25,8 @@ abstract class Base
      */
     protected function buildCreateSuccessMessage($successMessage, $entity)
     {
-        return ['message' => $successMessage, 'code' => self::HTTP_201, 'results' => $entity];
+        $entity = $this->buildSuccessResponse($entity);
+        return ['message' => $successMessage, 'code' => self::HTTP_201, 'results' => [$entity]];
     }
 
     /**
@@ -35,7 +36,8 @@ abstract class Base
      */
     protected function buildUpdateSuccessMessage($successMessage, $entity)
     {
-        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'results' => $entity];
+        //$entity = $this->buildSuccessResponse($entity);
+        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'results' => [$entity]];
     }
 
     /**
@@ -44,8 +46,8 @@ abstract class Base
      * @return array
      */
     protected function buildRetrieveSuccessMessage($successMessage,$entity){
-
-        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'results' => $entity];
+        $entity = $this->buildSuccessResponse($entity);
+        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'data' => [$entity]];
     }
     /**
      * @param $successMessage
@@ -54,7 +56,8 @@ abstract class Base
      */
     protected function buildRetrieveOneSuccessMessage($successMessage, $entity)
     {
-        return ['message' => $successMessage, 'code' => self::HTTP_200, 'results' => $entity];
+        $entity = $this->buildSuccessResponse($entity);
+        return ['message' => $successMessage, 'code' => self::HTTP_200, 'data' => [$entity]];
     }
 
     /**
@@ -63,17 +66,19 @@ abstract class Base
      * @return array
      */
     protected function buildEmailVerificationSuccessMessage($successMessage,$entity){
-       return ['message' => $successMessage,'code' =>self::HTTP_200, 'results' =>$entity];
+       $entity = $this->buildSuccessResponse($entity);
+       return ['message' => $successMessage,'code' =>self::HTTP_200, 'data' =>[$entity]];
     }
 
     /**
-     * @param $message
+     * @param $errors
      * @param $code
      * @return array
      */
-    protected function failureMessage($message,$code)
+    protected function failureMessage($errors,$code)
     {
-        return ['message'=>$message,'code'=>$code];
+        $message = "Please fix your errors";
+        return ['message'=>$message,'code'=>$code,'errors'=>[$errors]];
     }
 
     /**
@@ -88,6 +93,20 @@ abstract class Base
             'current_page'  => $input['current_page'],
             'last_page'     => $input['last_page'],
             'results'       => $input['data'],
+        ];
+    }
+
+    /**
+     * @param $entity
+     * @return array
+     */
+    protected  function buildSuccessResponse($entity){
+        return [
+             'total'        => count($entity),
+             'per_page'     => 1,
+             'current_page' => 1,
+             'last_page'    => 1,
+             'results'      => [$entity]
         ];
     }
 }

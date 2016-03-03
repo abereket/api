@@ -132,15 +132,15 @@ class SurveyResultsService extends Base{
         $errors = array();
         $user = User::find($userId);
         if(!$user){
-           $errors = 'Please enter a valid user_id';
+           $errors['user_id'] = 'Please enter a valid user_id';
         }
         $job = Job::find($jobId);
         if(!$job){
-            $errors = 'Please enter a valid job_id';
+            $errors['job_id']= 'Please enter a valid job_id';
         }
         $survey = Surveys::find($surveyId);
         if(!$survey){
-            $errors = 'Please enter a valid survey_id';
+            $errors['survey_id'] = 'Please enter a valid survey_id';
         }
         return $errors;
     }
@@ -155,24 +155,24 @@ class SurveyResultsService extends Base{
     protected function validateUpdate($surveyResult,$userId,$jobId,$surveyId){
         $errors = array();
         if(!$surveyResult){
-            $errors = 'The survey result you are looking is not found.Please enter a valid survey result id';
+            $errors['survey_result_id'] = 'The survey result you are looking is not found.Please enter a valid survey result id';
         }
         if($userId){
             $user = User::find($userId);
             if(!$user){
-                $errors = 'Please enter a valid user_id';
+                $errors['user_id'] = 'Please enter a valid user_id';
             }
         }
         if($jobId){
             $job = Job::find($jobId);
             if(!$job){
-                $errors = 'Please enter a valid job_id';
+                $errors['job_id'] = 'Please enter a valid job_id';
             }
         }
         if($surveyId){
            $survey = Surveys::find($surveyId);
             if(!$survey){
-               $errors = 'Please enter a valid survey_id';
+               $errors['survey_id'] = 'Please enter a valid survey_id';
             }
         }
         return $errors;
@@ -185,7 +185,7 @@ class SurveyResultsService extends Base{
     protected function validateRetrieveOne($surveyResult){
         $errors = array();
         if(!$surveyResult){
-            $errors = "The validate result you are looking is not found.Please enter a valid validate result id";
+            $errors['survey_result_id'] = "The validate result you are looking is not found.Please enter a valid validate result id";
         }
         return $errors;
     }
@@ -197,7 +197,7 @@ class SurveyResultsService extends Base{
     protected function validateDelete($surveyResult){
         $errors = array();
         if(!$surveyResult){
-            $errors = "The validate result you want to delete is not found.Please enter a valid validate result id";
+            $errors['survey_result_id'] = "The validate result you want to delete is not found.Please enter a valid validate result id";
         }
         return $errors;
     }

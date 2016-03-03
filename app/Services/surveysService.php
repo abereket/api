@@ -111,11 +111,11 @@ class surveysService extends Base{
         $errors = array();
         $job = Job::find($jobId);
         if(!$job){
-           $errors = 'please enter a valid job_id';
+           $errors['job_id'] = 'please enter a valid job_id';
         }
         $user = User::find($userId);
         if(!$user){
-            $errors = 'please enter a valid user_id';
+            $errors['user_id'] = 'please enter a valid user_id';
         }
         return $errors;
     }
@@ -129,16 +129,16 @@ class surveysService extends Base{
     protected function validateUpdate($survey,$jobId,$userId){
         $errors = array();
         if(!$survey){
-            $errors = 'The survey you are looking is not found.Please enter a valid survey id';
+            $errors['survey_id'] = 'The survey you are looking is not found.Please enter a valid survey id';
         }
         $job = Job::find($jobId);
         if(!$job){
-            $errors = 'please enter a valid job_id';
+            $errors['job_id'] = 'please enter a valid job_id';
         }
         if($userId){
             $user = User::find($userId);
             if(!$user){
-                $errors = 'please enter a valid user_id';
+                $errors['user_id'] = 'please enter a valid user_id';
             }
         }
         return $errors;
@@ -151,7 +151,7 @@ class surveysService extends Base{
     protected function validateRetrieveOne($survey){
         $errors = array();
         if(!$survey){
-            $errors = 'The survey you are looking is not found.Please enter a valid survey id';
+            $errors['survey_id'] = 'The survey you are looking is not found.Please enter a valid survey id';
         }
         return $errors;
     }
@@ -163,7 +163,7 @@ class surveysService extends Base{
     protected function validateDelete($survey){
         $errors = array();
         if(!$survey){
-            $errors = 'The survey you are looking is not found.Please enter a valid survey id';
+            $errors['survey_id'] = 'The survey you are looking is not found.Please enter a valid survey id';
         }
         return $errors;
     }

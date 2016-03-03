@@ -104,11 +104,11 @@ class SurveySkillsService extends Base{
         $errors = array();
         $user = User::find($userId);
         if(!$user){
-            $errors = 'Please enter a valid user_id';
+            $errors['user_id'] = 'Please enter a valid user_id';
         }
         $survey = Surveys::find($surveyId);
         if(!$survey){
-            $errors = 'Please enter a valid survey_id';
+            $errors['survey_id'] = 'Please enter a valid survey_id';
         }
         return $errors;
     }
@@ -122,18 +122,18 @@ class SurveySkillsService extends Base{
     protected function validateUpdate($survey,$userId,$surveyId){
         $errors = array();
         if(!$survey){
-           $errors = 'The survey skills you are looking is not found please enter a valid id';
+           $errors['survey_skills_id'] = 'The survey skills you are looking is not found please enter a valid id';
         }
         if($userId){
             $user = User::find($userId);
             if(!$user){
-                $errors = 'Please enter a valid user_id';
+                $errors['user_id'] = 'Please enter a valid user_id';
             }
         }
         if($surveyId){
             $survey = Surveys::find($surveyId);
             if(!$survey){
-                $errors = 'Please enter a valid survey_id';
+                $errors['survey_id'] = 'Please enter a valid survey_id';
             }
         }
         return $errors;
@@ -146,7 +146,7 @@ class SurveySkillsService extends Base{
     protected function validateRetrieveOne($surveySkills){
         $errors = array();
         if(!$surveySkills){
-            $errors = 'The survey skills you are looking is not found.Please enter a valid id';
+            $errors['survey_skills_id'] = 'The survey skills you are looking is not found.Please enter a valid id';
         }
         return $errors;
     }
@@ -158,7 +158,7 @@ class SurveySkillsService extends Base{
     protected function validateDelete($surveySkills){
         $errors = array();
         if(!$surveySkills){
-            $errors = 'The survey skills you want to delete is not found.Please enter a valid id';
+            $errors['survey_skills_id'] = 'The survey skills you want to delete is not found.Please enter a valid id';
         }
         return $errors;
     }
