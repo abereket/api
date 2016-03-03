@@ -46,7 +46,7 @@ abstract class Base
      * @return array
      */
     protected function buildRetrieveSuccessMessage($successMessage,$entity){
-        $entity = $this->buildSuccessResponse($entity);
+        //$entity = $this->buildSuccessResponse($entity);
         return ['message' => $successMessage, 'code' =>self::HTTP_200, 'data' => [$entity]];
     }
     /**
