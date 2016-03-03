@@ -53,15 +53,15 @@ class SurveyResultsService extends Base{
      * @return SurveyResults
      */
     public function retrieve($request){
-        $limit              =   ($request->input('per_page'))?($request->input('per_page')) : 15;
+        $limit              =   ($request->input('per_page'))?$request->input('per_page'):15;
         $userId             =   $request->input('user_id');
         $jobId              =   $request->input('job_id');
         $surveyId           =   $request->input('survey_id');
         $rating             =   $request->input('rating');
         $yearsOfExperience  =   $request->input('years_of_experience');
         $updatedAt          =   $request->input('updated_at');
-        $deletedAt          =   $request->input('deleted_at');
-        $order_by           =   ($request->input('order_by'))? ($request->input('order_by')) : 'updated_at';
+        $orderBy            =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
+        $sortBy             =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
 
         $surveyResult = new SurveyResults();
         if ($userId) {
@@ -82,10 +82,7 @@ class SurveyResultsService extends Base{
         if ($updatedAt) {
             $surveyResult= $surveyResult->where('updated_at' , 'like', '%'.$updatedAt.'%');
         }
-        if ($deletedAt) {
-            $surveyResult = $surveyResult->where('deleted_at',  'like', '%'.$deletedAt.'%');
-        }
-        $surveyResult = $surveyResult->orderby($order_by)->paginate($limit);
+        $surveyResult = $surveyResult->orderby($orderBy,$sortBy)->paginate($limit);
 
         $surveyResult= $this->buildRetrieveResponse($surveyResult->toArray());
         $surveyResult= $this->buildRetrieveSuccessMessage("success",$surveyResult);

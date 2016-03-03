@@ -37,7 +37,8 @@ class TeamMembersService extends Base{
     public function retrieve($request){
         $teamId      =   $request->input('team_id');
         $limit       =   ($request->input('per_page'))?$request->input('per_page'):15;
-        $order_by    =   ($request->input('order_by'))?$request->input('order_by'):'updated_at';
+        $orderBy    =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
+        $sortBy     =  ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
 
         $valError = $this->validateRetrieve($teamId);
         if($valError){
@@ -53,7 +54,7 @@ class TeamMembersService extends Base{
         foreach ($teamMember as $teamMember) {
             $userId[] = $teamMember->user_id;
         }
-        $user = User::whereIn('id',$userId)->orderby($order_by)->Paginate($limit);
+        $user = User::whereIn('id',$userId)->orderby($orderBy,$sortBy)->Paginate($limit);
 
         $user = $this->buildRetrieveResponse($user->toArray());
         $user = $this->buildRetrieveSuccessMessage("success",$user);

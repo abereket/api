@@ -59,14 +59,15 @@ class UsersService extends Base
      * @return mixed
      */
     public function retrieve($request){
-        $limit      =   ($request->input('per_page'))?($request->input('per_page')):15;
+        $limit      =   ($request->input('per_page'))?$request->input('per_page'):15;
         $firstName  =   $request->input('first_name');
         $lastName   =   $request->input('last_name');
         $email      =   $request->input('email');
         $type       =   $request->input('type');
         $invitedBy  =   $request->input('invited_by');
         $verified   =   $request->input('verified');
-        $order_by   =  ($request->input('order_by'))? ($request->input('order_by')):'updated_at';
+        $orderBy    =  ($request->input('order_by'))?$request->input('order_by'):'created_at';
+        $sortBy     =  ($request->input('sort_by'))?$request->input('sort_by') :'DESC';
 
         $user  = new User();
 
@@ -88,7 +89,7 @@ class UsersService extends Base
         if($verified){
            $user = $user->where('verified','=',$verified);
         }
-        $user = $user->orderby($order_by)->Paginate($limit);
+        $user = $user->orderby($orderBy,$sortBy)->Paginate($limit);
 
         $user = $this->buildRetrieveResponse($user->toArray());
 
