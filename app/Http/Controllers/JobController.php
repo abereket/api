@@ -27,8 +27,9 @@ class JobController extends Controller{
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function update(Request $request,$jobId){
-        $rules = ['user_id'=>'required|integer','tittle'=>'string|max:50','company_name'=>'string|max:50','type'=>'string|max:50',
-                  'link'=>'string|max:256','is_fulfilled'=>'boolean','is_closed'=>'boolean','city'=>'string|max:50','state'=>'string|max:2','zip_code'=>'max:10'];
+        $rules = ['user_id'=>'required|integer','tittle'=>'sometimes|required|string|max:50','company_name'=>'sometimes|required|string|max:50','type'=>'sometimes|required|string|max:50',
+                  'link'=>'sometimes|required|string|max:256','is_fulfilled'=>'boolean','is_closed'=>'boolean','city'=>'sometimes|required|string|max:50','state'=>'sometimes|required|string|max:2',
+                  'zip_code'=>'sometimes|required|max:10'];
         $this->validate($request,$rules);
 
         $jobService = new JobsServices();

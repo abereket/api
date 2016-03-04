@@ -61,7 +61,7 @@ class AgencyController extends Controller{
      */
     public function update(Request $request,$agency_id){
 
-          $rules=['name'        =>     'string|max:50',  'user_id'   => 'integer'];
+          $rules=['name'        =>     'sometimes|required|string|max:50',  'description'=>'sometimes|required','user_id'   => 'integer'];
 
           $this->validate($request,$rules);
           $agencyService=new AgenciesService();
