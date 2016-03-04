@@ -66,8 +66,8 @@ class UsersService extends Base
         $type       =   $request->input('type');
         $invitedBy  =   $request->input('invited_by');
         $verified   =   $request->input('verified');
-        $orderBy    =  ($request->input('order_by'))?$request->input('order_by'):'created_at';
-        $sortBy     =  ($request->input('sort_by'))?$request->input('sort_by') :'DESC';
+        $orderBy    =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
+        $sortBy     =   ($request->input('sort_by'))?$request->input('sort_by') :'DESC';
 
         $user  = new User();
 

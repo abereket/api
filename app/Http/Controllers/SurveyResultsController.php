@@ -26,7 +26,7 @@ class SurveyResultsController extends Controller{
      */
     public function update(Request $request,$id){
         $rules = ['user_id'=>'integer','job_id'=>'integer','survey_id'=>'integer',
-                  'rating'=>'string|max:50', 'years_of_experience'=>'Integer'];
+                  'rating'=>'sometimes|required|string|max:50', 'years_of_experience'=>'Integer'];
         $this->validate($request,$rules);
 
         $surveyResultService = new SurveyResultsService();

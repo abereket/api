@@ -24,7 +24,7 @@ class SurveysController extends Controller{
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function update(Request $request,$id){
-        $rules = ['job_id'=>'required|integer','user_id'=>'integer',"name"=>'string|max:100'];
+        $rules = ['job_id'=>'required|integer','user_id'=>'integer',"name"=>'sometimes|required|string|max:100'];
         $this->validate($request,$rules);
         
         $surveyService = new surveysService();
