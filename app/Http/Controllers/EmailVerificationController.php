@@ -15,7 +15,7 @@ class EmailVerificationController extends Controller{
 
         $EmailVerificationService = new EmailVerificationsService();
         $emailVerification=$EmailVerificationService->update($code);
-        return response()->json([$emailVerification]);
+        return response()->json($emailVerification);
     }
 
     /**
@@ -26,6 +26,6 @@ class EmailVerificationController extends Controller{
 
         $EmailVerificationService = new EmailVerificationsService();
         $emailVerification = $EmailVerificationService->retrieveOne($code);
-        return response()->json([$emailVerification]);
+        return response()->json($emailVerification);
     }
 }
