@@ -92,13 +92,13 @@ class UsersService extends Base
         $user = $user->orderby($orderBy,$sortBy)->Paginate($limit);
 
         $user = $this->buildRetrieveResponse($user->toArray());
-
-        foreach($user['results'] as $results){
-            unset($user['password']);
-            $result[] = $results;
+        if(!empty($user['results'])){
+            foreach($user['results'] as $results){
+                unset($user['password']);
+                $result[] = $results;
+            }
+            $user['results'] = $result;
         }
-        $user['results'] = $result;
-
         $user = $this->buildRetrieveSuccessMessage("success",$user);
         return $user;
     }
