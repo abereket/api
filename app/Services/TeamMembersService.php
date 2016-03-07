@@ -95,7 +95,7 @@ class TeamMembersService extends Base{
           return $valError;
       }
       $teamMember->user_id  =  ($request->json()->get('user_id'))?($request->json()->get('user_id')):$teamMember->user_id;
-      $teamMember->team_id  =  ($request->json()->get('team_id'))?($request->json()->get('team_d')):$teamMember->team_id;
+      $teamMember->team_id  =  ($request->json()->get('team_id'))?($request->json()->get('team_id')):$teamMember->team_id;
       $teamMember->save();
 
       $teamMember           =   $this->buildUpdateSuccessMessage("success",$teamMember);
