@@ -464,5 +464,7 @@ return array(
     'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Resources/stubs/SessionHandlerInterface.php',
     'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
-    'UpdateUsers' => $baseDir . '/database/migrations/2016_03_01_170301_update_users.php',
+    'UpdateSurveyResults' => $baseDir . '/database/migrations/2016_03_04_161512_update_survey_results.php',
+    'UpdateUsers' => $baseDir . '/database/migrations/2016_03_01_175022_update_users.php',
+    'UpdateUsersTable' => $baseDir . '/database/migrations/2016_03_07_213015_update_users_table.php',
 );

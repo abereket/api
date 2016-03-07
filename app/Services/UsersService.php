@@ -33,8 +33,11 @@ class UsersService extends Base
         $user->save();
 
         if($user->type != 'agency'){
-            $userInv= User::find($user->invited_by);
-            $invitedBy = $userInv->first_name." ".$userInv->last_name;
+            if($user->invited_by!=null){
+                $userInv= User::find($user->invited_by);
+                $invitedBy = $userInv->first_name." ".$userInv->last_name;
+            }
+            $invitedBy=(isset($invitedBy))?$invitedBy:'Zemployee Admin';
             $emailVerification = new EmailVerificationsService();
             $code = $emailVerification->create($user->type,$user->id);
 
