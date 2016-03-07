@@ -47,7 +47,7 @@ class TeamMembersService extends Base{
         }
         $teamMember = TeamMember::where('team_id',$teamId)->get();
         if(!$teamMember->count()) {
-            $valError = "There is no corresponding data related to your teamId ";
+            $valError['team_id'] = "There is no corresponding data related to your teamId ";
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
