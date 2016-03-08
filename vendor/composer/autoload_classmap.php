@@ -30,6 +30,7 @@ return array(
     'Illuminate\\Foundation\\Testing\\DatabaseMigrations' => $vendorDir . '/laravel/lumen-framework/src/Foundation/Testing/DatabaseMigrations.php',
     'Illuminate\\Foundation\\Testing\\DatabaseTransactions' => $vendorDir . '/laravel/lumen-framework/src/Foundation/Testing/DatabaseTransactions.php',
     'Illuminate\\Foundation\\Testing\\WithoutMiddleware' => $vendorDir . '/laravel/lumen-framework/src/Foundation/Testing/WithoutMiddleware.php',
+    'ModifyJobsTable' => $baseDir . '/database/migrations/2016_03_07_202835_modify_jobs_table.php',
     'PHPUnit_Exception' => $vendorDir . '/phpunit/phpunit/src/Exception.php',
     'PHPUnit_Extensions_GroupTestSuite' => $vendorDir . '/phpunit/phpunit/src/Extensions/GroupTestSuite.php',
     'PHPUnit_Extensions_PhptTestCase' => $vendorDir . '/phpunit/phpunit/src/Extensions/PhptTestCase.php',
@@ -467,4 +468,6 @@ return array(
     'UpdateSurveyResults' => $baseDir . '/database/migrations/2016_03_04_161512_update_survey_results.php',
     'UpdateUsers' => $baseDir . '/database/migrations/2016_03_01_175022_update_users.php',
     'UpdateUsersTable' => $baseDir . '/database/migrations/2016_03_07_213015_update_users_table.php',
+    'UpdateSurveyResults' => $baseDir . '/database/migrations/2016_03_04_161512_update_survey_results.php',
+    'UpdateUsers' => $baseDir . '/database/migrations/2016_03_01_175022_update_users.php',
 );

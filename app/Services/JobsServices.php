@@ -16,11 +16,11 @@ class JobsServices extends Base{
         $valError = $this->failureMessage($valError,parent::HTTP_404);
         return $valError;
     }
-    $job = Job::create(['user_id'=>$request->json()->get('user_id'),'tittle'=>$request->json()->get('tittle'),
-                        'company_name'=>$request->json()->get('company_name'),'type'=>$request->json()->get('type'),
-                        'link'=>$request->json()->get('link'),'is_fulfilled'=>$request->json()->get('is_fulfilled',0),
-                        'is_closed'=>$request->json()->get('is_closed',0),'city'=>$request->json()->get('city'),
-                        'state'=>$request->json()->get('state'),'zip_code'=>$request->json()->get('zip_code')]);
+    $job = Job::create(['user_id'=>$request->json()->get('user_id'),'title'=>$request->json()->get('title'),
+                        'company_name'=>$request->json()->get('company_name'),'link'=>$request->json()->get('link'),
+                        'is_fulfilled'=>$request->json()->get('is_fulfilled',0),'is_closed'=>$request->json()->get('is_closed',0),
+                        'city'=>$request->json()->get('city'),'state'=>$request->json()->get('state'),
+                        'zip_code'=>$request->json()->get('zip_code')]);
 
     $job = $this->buildCreateSuccessMessage('success',$job);
     return $job;
@@ -40,15 +40,14 @@ class JobsServices extends Base{
             return $valError;
         }
         $job->user_id      =  $request->json()->get('user_id');
-        $job->tittle       =  $request->json()->get('tittle',$job->tittle);
-        $job->company_name =  $request->json()->get('company_name',$job->company_name);
-        $job->type         =  $request->json()->get('type',$job->type);
-        $job->link         =  $request->json()->get('link',$job->link);
-        $job->is_fulfilled =  $request->json()->get('is_fulfilled',$job->is_fulfilled);
-        $job->is_closed    =  $request->json()->get('is_closed',$job->is_closed);
-        $job->city         =  $request->json()->get('city',$job->city);
-        $job->state        =  $request->json()->get('state',$job->state);
-        $job->zip_code     =  $request->json()->get('zip_code',$job->zip_code);
+        $job->title        =  ($request->json()->get('title'))?$request->json()->get('title'):$job->title;
+        $job->company_name =  ($request->json()->get('company_name'))?$request->json()->get('company_name'):$job->company_name;
+        $job->link         =  ($request->json()->get('link'))?$request->json()->get('link'):$job->link;
+        $job->is_fulfilled =  ($request->json()->get('is_fulfilled'))?$request->json()->get('is_fulfilled'):$job->is_fulfilled;
+        $job->is_closed    =  ($request->json()->get('is_closed'))?$request->json()->get('is_closed'):$job->is_closed;
+        $job->city         =  ($request->json()->get('city'))?$request->json()->get('city'):$job->city;
+        $job->state        =  ($request->json()->get('state'))?$request->json()->get('state'):$job->state;
+        $job->zip_code     =  ($request->json()->get('zip_code'))?$request->json()->get('zip_code'):$job->zip_code;
         $job->save();
 
         $job = $this->buildUpdateSuccessMessage('success',$job);
@@ -94,15 +93,14 @@ class JobsServices extends Base{
     public function retrieve($request){
         $limit            =   ($request->input('per_page'))?($request->input('per_page')) : 15;
         $userId           =   $request->input('user_id');
-        $tittle           =   $request->input('tittle');
+        $title            =   $request->input('title');
         $companyName      =   $request->input('company_name');
-        $type             =   $request->input('type');
         $is_closed        =   $request->input('is_closed');
         $city             =   $request->input('city');
         $state            =   $request->input('state');
         $zipCode          =   $request->input('zip_code');
-        $orderBy         =   ($request->input('order_by'))? ($request->input('order_by')):'created_at';
-        $sortBy          =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
+        $orderBy          =   ($request->input('order_by'))? ($request->input('order_by')):'created_at';
+        $sortBy           =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
 
 
 
@@ -111,16 +109,12 @@ class JobsServices extends Base{
         if($userId){
            $job = $job->where('user_id' , 'like', '%'.$userId.'%');
         }
-        if($tittle){
-            $job = $job->where('tittle' , 'like', '%'.$tittle.'%');
+        if($title){
+            $job = $job->where('tittle' , 'like', '%'.$title.'%');
         }
         if($companyName){
             $job = $job->where('company_name' , 'like', '%'.$companyName.'%');
         }
-        if($type){
-            $job = $job->where('type' , 'like', '%'.$type.'%');
-        }
-
         if($city){
             $job = $job->where('city' , 'like', '%'.$city.'%');
         }
