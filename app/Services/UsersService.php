@@ -16,25 +16,20 @@ use Illuminate\Pagination;
 class UsersService extends Base
 {
     /**
-     * takes request as a parameter and  creates a user
      * @param $request
-     * @return mixed
+     * @param string $email
+     * @param string $type
+     * @return array|static
      */
     public function create($request,$email='',$type='')
     {
-        $user = new User();
-        $user->uuid         =  Uuid::uuid();
-        $user->first_name   =  $request->json()->get('first_name');
-        $user->last_name    =  $request->json()->get('last_name');
-        $user->email        =  ($request->json()->get('email'))?$request->json()->get('email'):$email;
-        $user->password     =  hash('sha512',$request->json()->get('password'));
-        $user->type         =  ($request->json()->get('type'))?($request->json()->get('type')):$type;
-        $user->invited_by   =  $request->json()->get('invited_by');
-        $user->save();
+        $user = User::create(['uuid'=>Uuid::uuid(),'first_name'=>$request->json()->get('first_name'),
+                              'last_name'=>$request->json()->get('last_name'),'email'=>$request->json()->get('email',$email),
+                              'password'=>hash('sha512',$request->json()->get('password')),
+                              'type'=>$request->json()->get('type',$type),'invited_by'=>$request->json()->get('invited_by')]);
 
         if($user->type != 'agency'){
-            $userInv= User::find($user->invited_by);
-            $invitedBy = $userInv->first_name." ".$userInv->last_name;
+            $invitedBy = $this->setInvitedBy($user);
             $emailVerification = new EmailVerificationsService();
             $code = $emailVerification->create($user->type,$user->id);
 
@@ -92,13 +87,13 @@ class UsersService extends Base
         $user = $user->orderby($orderBy,$sortBy)->Paginate($limit);
 
         $user = $this->buildRetrieveResponse($user->toArray());
-
-        foreach($user['results'] as $results){
-            unset($user['password']);
-            $result[] = $results;
+        if(!empty($user['results'])){
+            foreach($user['results'] as $results){
+                unset($user['password']);
+                $result[] = $results;
+            }
+            $user['results'] = $result;
         }
-        $user['results'] = $result;
-
         $user = $this->buildRetrieveSuccessMessage("success",$user);
         return $user;
     }
@@ -225,5 +220,18 @@ class UsersService extends Base
             $errors['user_id']  =  "please provide a valid user id";
         }
        return $errors;
+    }
+
+    /**
+     * @param $user
+     * @return string
+     */
+    protected function setInvitedBy($user){
+        if($user->invited_by!=null){
+            $userInv= User::find($user->invited_by);
+            $invitedBy = $userInv->first_name." ".$userInv->last_name;
+        }
+        $invitedBy=(isset($invitedBy))?$invitedBy:'Zemployee Admin';
+        return $invitedBy;
     }
 }
