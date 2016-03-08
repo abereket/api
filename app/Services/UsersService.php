@@ -33,8 +33,7 @@ class UsersService extends Base
         $user->save();
 
         if($user->type != 'agency'){
-            $userInv= User::find($user->invited_by);
-            $invitedBy = $userInv->first_name." ".$userInv->last_name;
+            $invitedBy = $this->setInvitedBy($user);
             $emailVerification = new EmailVerificationsService();
             $code = $emailVerification->create($user->type,$user->id);
 
@@ -225,5 +224,18 @@ class UsersService extends Base
             $errors['user_id']  =  "please provide a valid user id";
         }
        return $errors;
+    }
+
+    /**
+     * @param $user
+     * @return string
+     */
+    protected function setInvitedBy($user){
+        if($user->invited_by!=null){
+            $userInv= User::find($user->invited_by);
+            $invitedBy = $userInv->first_name." ".$userInv->last_name;
+        }
+        $invitedBy=(isset($invitedBy))?$invitedBy:'Zemployee Admin';
+        return $invitedBy;
     }
 }
