@@ -50,6 +50,11 @@ class EmailVerificationsService extends Base{
         $emailVerification->is_verified = 1;
         $emailVerification->save();
         $user = User::find($emailVerification->user_id);
+        if(!$user){
+            $valError['deleted_user'] = "The user you want to activate is already deleted";
+            $valError = $this->failureMessage($valError,parent::HTTP_404);
+            return $valError;
+        }
         $user->verified = 1;
         $user->save();
         $entity["updated"] ="your account is successfully updated";
