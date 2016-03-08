@@ -120,10 +120,9 @@ class TeamMembersService extends Base{
     }
 
     /**
-     * This method performs business class validation for Team members create method
-     * @param $userId
+     *  This method performs business class validation for Team members create method
      * @param $teamId
-     * @return array|string
+     * @return array
      */
     protected function validateCreate($teamId){
         $errors = array();
