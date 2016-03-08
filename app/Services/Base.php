@@ -26,7 +26,7 @@ abstract class Base
     protected function buildCreateSuccessMessage($successMessage, $entity)
     {
         $entity = $this->buildSuccessResponse($entity);
-        return ['message' => $successMessage, 'code' => self::HTTP_201, 'results' => [$entity]];
+        return ['message' => $successMessage, 'code' => self::HTTP_201, 'data' => $entity];
     }
 
     /**
@@ -37,7 +37,7 @@ abstract class Base
     protected function buildUpdateSuccessMessage($successMessage, $entity)
     {
         $entity = $this->buildSuccessResponse($entity);
-        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'results' => [$entity]];
+        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'data' => $entity];
     }
 
     /**
@@ -46,8 +46,7 @@ abstract class Base
      * @return array
      */
     protected function buildRetrieveSuccessMessage($successMessage,$entity){
-        //$entity = $this->buildSuccessResponse($entity);
-        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'data' => [$entity]];
+        return ['message' => $successMessage, 'code' =>self::HTTP_200, 'data' => $entity];
     }
     /**
      * @param $successMessage
@@ -57,7 +56,7 @@ abstract class Base
     protected function buildRetrieveOneSuccessMessage($successMessage, $entity)
     {
         $entity = $this->buildSuccessResponse($entity);
-        return ['message' => $successMessage, 'code' => self::HTTP_200, 'data' => [$entity]];
+        return ['message' => $successMessage, 'code' => self::HTTP_200, 'data' => $entity];
     }
 
     /**
@@ -67,7 +66,7 @@ abstract class Base
      */
     protected function buildEmailVerificationSuccessMessage($successMessage,$entity){
        $entity = $this->buildSuccessResponse($entity);
-       return ['message' => $successMessage,'code' =>self::HTTP_200, 'data' =>[$entity]];
+       return ['message' => $successMessage,'code' =>self::HTTP_200, 'data' =>$entity];
     }
 
     /**
@@ -106,7 +105,7 @@ abstract class Base
              'per_page'     => 1,
              'current_page' => 1,
              'last_page'    => 1,
-             'results'      => [$entity]
+             'results'      => (count($entity)>1)?$entity:[$entity]
         ];
     }
 }

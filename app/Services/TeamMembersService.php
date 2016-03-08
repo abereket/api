@@ -47,7 +47,7 @@ class TeamMembersService extends Base{
         }
         $teamMember = TeamMember::where('team_id',$teamId)->get();
         if(!$teamMember->count()) {
-            $valError = "There is no corresponding data related to your teamId ";
+            $valError['team_id'] = "There is no corresponding data related to your teamId ";
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
@@ -95,7 +95,7 @@ class TeamMembersService extends Base{
           return $valError;
       }
       $teamMember->user_id  =  ($request->json()->get('user_id'))?($request->json()->get('user_id')):$teamMember->user_id;
-      $teamMember->team_id  =  ($request->json()->get('team_id'))?($request->json()->get('team_d')):$teamMember->team_id;
+      $teamMember->team_id  =  ($request->json()->get('team_id'))?($request->json()->get('team_id')):$teamMember->team_id;
       $teamMember->save();
 
       $teamMember           =   $this->buildUpdateSuccessMessage("success",$teamMember);
@@ -120,10 +120,9 @@ class TeamMembersService extends Base{
     }
 
     /**
-     * This method performs business class validation for Team members create method
-     * @param $userId
+     *  This method performs business class validation for Team members create method
      * @param $teamId
-     * @return array|string
+     * @return array
      */
     protected function validateCreate($teamId){
         $errors = array();

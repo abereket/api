@@ -30,7 +30,7 @@ class EmailVerificationsService extends Base{
     {
         list($token,$expired_at,$verification_type) = $this->decomposeCode($code);
         if (time() > $expired_at) {
-            $valError = "Your token has no longer valid";
+            $valError['invalid_token'] = "Your token has no longer valid";
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
@@ -52,7 +52,8 @@ class EmailVerificationsService extends Base{
         $user = User::find($emailVerification->user_id);
         $user->verified = 1;
         $user->save();
-        $user = $this->buildEmailVerificationSuccessMessage("success","your account is successfully updated");
+        $entity["updated"] ="your account is successfully updated";
+        $user = $this->buildEmailVerificationSuccessMessage("success",$entity);
         return $user;
     }
 
@@ -63,7 +64,7 @@ class EmailVerificationsService extends Base{
     public function retrieveOne($code){
         list($token,$expired_at,$verification_type) = $this->decomposeCode($code);
         if(time() > $expired_at){
-            $valError = "Your token has no longer valid";
+            $valError['invalid_token'] = "Your token has no longer valid";
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
@@ -95,7 +96,7 @@ class EmailVerificationsService extends Base{
     protected function validateUpdate($emailVerification){
         $errors = array();
         if(!$emailVerification){
-            $errors = "You can not activate your account";
+            $errors['not_activate'] = 'You can not activate your account';
         }
         return $errors;
     }
@@ -108,7 +109,7 @@ class EmailVerificationsService extends Base{
     protected function validateRetrieveOne($emailVerification){
         $errors = array();
         if(!$emailVerification){
-            $errors['code'] = "The email verification and user information you are looking is not found.Please enter a valid code";
+            $errors['token'] = "The email verification and user information you are looking is not found.Please enter a valid token";
             return $errors;
         }
         if($emailVerification->is_verified == 1){
