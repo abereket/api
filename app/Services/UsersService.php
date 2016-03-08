@@ -22,15 +22,20 @@ class UsersService extends Base
      */
     public function create($request,$email='',$type='')
     {
-        $user = new User();
-        $user->uuid         =  Uuid::uuid();
-        $user->first_name   =  $request->json()->get('first_name');
-        $user->last_name    =  $request->json()->get('last_name');
-        $user->email        =  ($request->json()->get('email'))?$request->json()->get('email'):$email;
-        $user->password     =  hash('sha512',$request->json()->get('password'));
-        $user->type         =  ($request->json()->get('type'))?($request->json()->get('type')):$type;
-        $user->invited_by   =  $request->json()->get('invited_by');
-        $user->save();
+        //$user = new User();
+        //$user->uuid         =  Uuid::uuid();
+        //$user->first_name   =  $request->json()->get('first_name');
+        //$user->last_name    =  $request->json()->get('last_name');
+        //$user->email        =  ($request->json()->get('email'))?$request->json()->get('email'):$email;
+        //$user->password     =  hash('sha512',$request->json()->get('password'));
+        //$user->type         =  ($request->json()->get('type'))?($request->json()->get('type')):$type;
+        //$user->invited_by   =  $request->json()->get('invited_by');
+        //$user->save();
+
+        $user = User::create(['uuid'=>Uuid::uuid(),'first_name'=>$request->json()->get('first_name'),
+                              'last_name'=>$request->json()->get('last_name'),'email'=>$request->json()->get('email',$email),
+                              'password'=>hash('sha512',$request->json()->get('password')),
+                              'type'=>$request->json()->get('type',$type),'invited_by'=>$request->json()->get('invited_by')]);
 
         if($user->type != 'agency'){
             $userInv= User::find($user->invited_by);
