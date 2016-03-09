@@ -9,7 +9,7 @@ class SurveySkillsService extends Base{
 
     /**
      * @param $request
-     * @return array|static
+     * @return array
      */
     public function create($request){
         $valError = $this->validateCreate($request->json()->get('user_id'),$request->json()->get('survey_id'));
@@ -17,9 +17,10 @@ class SurveySkillsService extends Base{
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
-        $surveySkills = SurveySkills::create(['user_id'=>$request->json()->get('user_id'),'survey_id'=>$request->json()->get('survey_id'),
-                                              'skill_name'=>$request->json()->get('skill_name')]);
-
+        $skill_names = $request->json()->get('skill_names');
+        for($i=0;$i<count($skill_names);$i++) {
+            $surveySkills[] = $this->upsert($request->json()->get('user_id'),$request->json()->get('survey_id'),$skill_names[$i]['skill_name']);
+        }
         $surveySkills = $this->buildCreateSuccessMessage('success',$surveySkills);
         return $surveySkills;
     }
@@ -112,6 +113,22 @@ class SurveySkillsService extends Base{
             $errors['survey_id'] = 'Please enter a valid survey_id';
         }
         return $errors;
+    }
+
+    /**
+     * @param $userId
+     * @param $surveyId
+     * @param $skillName
+     * @return static
+     */
+    protected function upsert($userId,$surveyId,$skillName){
+        $surveySkill = SurveySkills::where('skill_name',$skillName)
+                                     ->where('survey_id',$surveyId)
+                                     ->first();
+        if(!$surveySkill){
+            $surveySkill = SurveySkills::create(['user_id'=>$userId,'survey_id'=>$surveyId,'skill_name' => $skillName]);
+        }
+        return $surveySkill;
     }
 
     /**

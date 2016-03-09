@@ -10,8 +10,15 @@ class SurveySkillsController extends Controller{
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function create(Request $request){
-        $rules =['user_id'=>'required|integer','survey_id'=>'required|integer','skill_name'=>'required|string|max:50'];
-        $this->validate($request,$rules);
+        $len = count($request->json()->get('skill_names'));
+        $i   = 0;
+        do{
+            $rules =['user_id'=>'required|integer','survey_id'=>'required|integer','skill_names'=>'required|array',
+                     "skill_names.$i.skill_name"=>'required|string|max:50'];
+            $this->validate($request,$rules);
+            $i++;
+        }while($i<$len);
+
 
         $surveySkillService = new SurveySkillsService();
         $surveySkills = $surveySkillService->create($request);
