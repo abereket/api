@@ -27,15 +27,20 @@ class SurveySkillsController extends Controller{
 
     /**
      * @param Request $request
-     * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function update(Request $request,$id){
-        $rules =['user_id'=>'integer','survey_id'=>'integer','skill_name'=>'sometimes|required|string|max:50'];
-        $this->validate($request,$rules);
+    public function update(Request $request){
+        $len = count($request->json()->get('skill_names'));
+        $i   = 0;
+        do{
+            $rules =['user_id'=>'required|integer','survey_id'=>'required|integer','skill_names'=>'required|array',
+                "skill_names.$i.skill_name"=>'required|string|max:50'];
+            $this->validate($request,$rules);
+            $i++;
+        }while($i<$len);
 
         $surveySkillService = new SurveySkillsService();
-        $surveySkills = $surveySkillService->update($request,$id);
+        $surveySkills = $surveySkillService->update($request);
         return response()->json($surveySkills);
     }
 
