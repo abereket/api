@@ -30,8 +30,7 @@ class SurveySkillsService extends Base{
      * @return array|\Illuminate\Database\Eloquent\Collection|static[]
      */
     public function update($request){
-
-       $valError = $this->validateUpdate($request->json()->get('user_id'),$request->json()->get('survey_id'));
+        $valError = $this->validateUpdate($request->json()->get('user_id'),$request->json()->get('survey_id'));
        if($valError){
            $valError = $this->failureMessage($valError,parent::HTTP_404);
            return $valError;
