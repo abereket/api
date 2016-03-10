@@ -26,7 +26,11 @@ class TeamMembersService extends Base{
             $id[]=$teamMember->id;
         }
         $teamMember = TeamMember::whereIn('id',$id)->get();
-        $teamMember = $this->buildCreateSuccessMessage("success", $teamMember);
+        foreach($teamMember as $teamMemberEntity){
+            $teamMembers[] = $teamMemberEntity;
+        }
+        //$teamMember = json_decode(json_encode($teamMember), false);
+        $teamMember = $this->buildCreateSuccessMessage("success", $teamMembers);
         return $teamMember;
     }
 

@@ -105,7 +105,7 @@ abstract class Base
              'per_page'     => 1,
              'current_page' => 1,
              'last_page'    => 1,
-             'results'      => (count($entity)>1)?$entity:[$entity]
+             'results'      => (is_array($entity) || count($entity)>1)?$entity:[$entity]
         ];
     }
 }
