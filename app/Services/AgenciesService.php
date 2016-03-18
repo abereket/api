@@ -48,8 +48,9 @@ class AgenciesService extends Base
     public function retrieve($request)
     {
         $limit          =   ($request->input('per_page'))?$request->input('per_page'):15;
-        $name           =   $request->input('name');
-        $description    =   $request->input('description');
+        $name           =    $request->input('name');
+        $description    =    $request->input('description');
+        $userId         =    $request->input('user_id');
         $orderBy        =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
         $sortBy         =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
 
@@ -59,6 +60,9 @@ class AgenciesService extends Base
         }
         if ($description) {
             $agency = $agency->where('description',  'like', '%'.$description.'%');
+        }
+        if ($userId) {
+            $agency = $agency->where('user_id',  '=', $userId);
         }
         $agency = $agency->orderby($orderBy,$sortBy)->paginate($limit);
 
