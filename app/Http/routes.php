@@ -71,4 +71,6 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
     $app->get('survey-skills','SurveySkillsController@retrieve');                   //searches survey skills
     $app->get('survey-skills/{id}','SurveySkillsController@retrieveOne');           //retrieves one survey skills
     $app->delete('survey-skills/{id}','SurveySkillsController@delete');             //deletes survey skills
+
+    $app->post('authenticate','IsAuthenticatedController@authenticate');
 });

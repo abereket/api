@@ -69,6 +69,10 @@ abstract class Base
        return ['message' => $successMessage,'code' =>self::HTTP_200, 'data' =>$entity];
     }
 
+    protected function buildAuthenticateSuccessMessage($successMessage, $entity)
+    {   $entity=['results'=>[$entity]];
+        return ['message' => $successMessage, 'code' => self::HTTP_200, 'data' => $entity];
+    }
     /**
      * @param $errors
      * @param $code

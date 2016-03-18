@@ -154,16 +154,18 @@ class UsersService extends Base
 
         $user = User::where('email', '=', $userName)
             ->where('password', '=', $password)
-            ->where('verified', '=', 1)
+            //->where('verified', '=', 1)
             ->get()
             ->first();
-        return $user;
-        //if (!$user) {
-            //echo 'not allowed';
-            //throw new Exception("Please provide valid username and password");
-        //}
+        if(!$user) {
+            $valError['incorrect_pattern'] = "Your user name or password may be incorrect";
+            $user = $this->failureMessage($valError,parent::HTTP_404);
+            return $user;
+        }
+        unset($user['password']);
+        $user= $this->buildAuthenticateSuccessMessage('success',$user);
 
-        //return $user;
+        return $user;
     }
 
     /**
