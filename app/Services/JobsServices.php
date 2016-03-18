@@ -128,10 +128,6 @@ class JobsServices extends Base{
         if($is_closed){
             $job = $job->where('is_closed', '=' , $is_closed);
         }
-        if($is_fulfilled){
-            $job = $job->where('is_fulfilled', '=' , $is_fulfilled);
-        }
-
         $job = $job->orderby($orderBy,$sortBy)->Paginate($limit);
 
         $job = $this->buildRetrieveResponse($job->toArray());
