@@ -96,7 +96,6 @@ class JobsServices extends Base{
         $title            =   $request->input('title');
         $companyName      =   $request->input('company_name');
         $is_closed        =   $request->input('is_closed');
-        $is_fulfilled     =   $request->input('is_fulfilled');
         $city             =   $request->input('city');
         $state            =   $request->input('state');
         $zipCode          =   $request->input('zip_code');
