@@ -107,7 +107,7 @@ class JobsServices extends Base{
         $job = new Job();
 
         if($userId){
-           $job = $job->where('user_id' , 'like', '%'.$userId.'%');
+           $job = $job->where('user_id' , '=', $userId);
         }
         if($title){
             $job = $job->where('tittle' , 'like', '%'.$title.'%');

@@ -65,22 +65,19 @@ class SurveyResultsService extends Base{
 
         $surveyResult = new SurveyResults();
         if ($userId) {
-            $surveyResult = $surveyResult->where('user_id' , 'like', '%'.$userId.'%');
+            $surveyResult = $surveyResult->where('user_id' , '=', $userId);
         }
         if ($jobId) {
-            $surveyResult = $surveyResult->where('job_id',  'like', '%'.$jobId.'%');
+            $surveyResult = $surveyResult->where('job_id',  '=', $jobId);
         }
         if ($surveyId) {
-            $surveyResult = $surveyResult->where('survey_id' , 'like', '%'.$surveyId.'%');
+            $surveyResult = $surveyResult->where('survey_id' , '=', $surveyId);
         }
         if ($rating) {
             $surveyResult = $surveyResult->where('rating',  'like', '%'.$rating.'%');
         }
         if ($yearsOfExperience) {
-            $surveyResult = $surveyResult->where('years_of_experience' , 'like', '%'.$yearsOfExperience.'%');
-        }
-        if ($updatedAt) {
-            $surveyResult= $surveyResult->where('updated_at' , 'like', '%'.$updatedAt.'%');
+            $surveyResult = $surveyResult->where('years_of_experience' , '=', $yearsOfExperience);
         }
         $surveyResult = $surveyResult->orderby($orderBy,$sortBy)->paginate($limit);
 
