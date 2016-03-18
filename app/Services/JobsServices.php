@@ -96,6 +96,7 @@ class JobsServices extends Base{
         $title            =   $request->input('title');
         $companyName      =   $request->input('company_name');
         $is_closed        =   $request->input('is_closed');
+        $is_fulfilled     =   $request->input('is_fulfilled');
         $city             =   $request->input('city');
         $state            =   $request->input('state');
         $zipCode          =   $request->input('zip_code');
@@ -127,6 +128,10 @@ class JobsServices extends Base{
         if($is_closed){
             $job = $job->where('is_closed', '=' , $is_closed);
         }
+        if($is_fulfilled){
+            $job = $job->where('is_fulfilled', '=' , $is_fulfilled);
+        }
+
         $job = $job->orderby($orderBy,$sortBy)->Paginate($limit);
 
         $job = $this->buildRetrieveResponse($job->toArray());
