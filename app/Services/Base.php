@@ -108,5 +108,28 @@ abstract class Base
              'results'      => (is_array($entity) || count($entity)>1)?$entity:[$entity]
         ];
     }
+
+    /**
+     * @return bool
+     */
+    protected function searchValueExists()
+    {
+        foreach (func_get_args() as $arg)
+            if (empty($arg))
+                continue;
+            else
+                return false;
+        return true;
+    }
+
+    /**
+     * @param $code
+     * @return array
+     */
+    protected function buildEmptyErrorResponse($code){
+        $message = 'Please fix your errors';
+        $errors['search_parameter'] = "There should be search parameters";
+        return ['message'=>$message,'code'=>$code,'errors'=>[$errors]];
+    }
 }
 ?>

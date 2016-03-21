@@ -59,10 +59,13 @@ class SurveyResultsService extends Base{
         $surveyId           =   $request->input('survey_id');
         $rating             =   $request->input('rating');
         $yearsOfExperience  =   $request->input('years_of_experience');
-        $updatedAt          =   $request->input('updated_at');
         $orderBy            =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
         $sortBy             =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
-
+        $search  =  $this->searchValueExists($userId,$jobId,$surveyId,$rating,$yearsOfExperience);
+        if($search){
+            $valError = $this->buildEmptyErrorResponse(parent::HTTP_404);
+            return $valError;
+        }
         $surveyResult = new SurveyResults();
         if ($userId) {
             $surveyResult = $surveyResult->where('user_id' , 'like', '%'.$userId.'%');
@@ -79,9 +82,7 @@ class SurveyResultsService extends Base{
         if ($yearsOfExperience) {
             $surveyResult = $surveyResult->where('years_of_experience' , 'like', '%'.$yearsOfExperience.'%');
         }
-        if ($updatedAt) {
-            $surveyResult= $surveyResult->where('updated_at' , 'like', '%'.$updatedAt.'%');
-        }
+
         $surveyResult = $surveyResult->orderby($orderBy,$sortBy)->paginate($limit);
 
         $surveyResult= $this->buildRetrieveResponse($surveyResult->toArray());

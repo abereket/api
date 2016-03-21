@@ -67,7 +67,11 @@ class SurveySkillsService extends Base{
         $surveyId   =   $request->input('survey_id');
         $orderBy    =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
         $sortBy     =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
-
+        $search     =  $this->searchValueExists($userId,$surveyId);
+        if($search){
+            $valError = $this->buildEmptyErrorResponse(parent::HTTP_404);
+            return $valError;
+        }
         $surveySkills = new SurveySkills();
         if ($userId) {
             $surveySkills = $surveySkills->where('user_id' , 'like', '%'.$userId.'%');

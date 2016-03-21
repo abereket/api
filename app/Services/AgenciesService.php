@@ -52,7 +52,11 @@ class AgenciesService extends Base
         $description    =   $request->input('description');
         $orderBy        =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
         $sortBy         =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
-
+        $search     =  $this->searchValueExists($name,$description);
+        if($search){
+            $valError = $this->buildEmptyErrorResponse(parent::HTTP_404);
+            return $valError;
+        }
         $agency =  new Agency();
         if ($name) {
             $agency = $agency->where('name' , 'like', '%'.$name.'%');

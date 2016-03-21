@@ -63,7 +63,11 @@ class UsersService extends Base
         $verified   =   $request->input('verified');
         $orderBy    =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
         $sortBy     =   ($request->input('sort_by'))?$request->input('sort_by') :'DESC';
-
+        $search     =   $this->searchValueExists($firstName,$lastName,$email,$type,$invitedBy,$verified);
+        if($search){
+            $valError = $this->buildEmptyErrorResponse(parent::HTTP_404);
+            return $valError;
+        }
         $user  = new User();
 
         if($firstName){

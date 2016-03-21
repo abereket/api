@@ -101,8 +101,11 @@ class JobsServices extends Base{
         $zipCode          =   $request->input('zip_code');
         $orderBy          =   ($request->input('order_by'))? ($request->input('order_by')):'created_at';
         $sortBy           =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
-
-
+        $search           =  $this->searchValueExists($userId,$title,$companyName,$is_closed,$city,$state,$zipCode);
+        if($search){
+            $entity = $this->buildEmptyErrorResponse(parent::HTTP_404);
+            return $entity;
+        }
 
         $job = new Job();
 
