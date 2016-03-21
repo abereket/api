@@ -74,10 +74,10 @@ class SurveySkillsService extends Base{
         }
         $surveySkills = new SurveySkills();
         if ($userId) {
-            $surveySkills = $surveySkills->where('user_id' , 'like', '%'.$userId.'%');
+            $surveySkills = $surveySkills->where('user_id' , '=', $userId);
         }
         if ($surveyId) {
-            $surveySkills = $surveySkills->where('survey_id',  'like', '%'.$surveyId.'%');
+            $surveySkills = $surveySkills->where('survey_id',  '=', $surveyId);
         }
         $surveySkills= $surveySkills->orderby($orderBy,$sortBy)->paginate($limit);
 

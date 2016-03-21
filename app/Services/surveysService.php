@@ -63,10 +63,10 @@ class surveysService extends Base{
         }
         $survey = new Surveys();
         if($jobId){
-          $survey = $survey->where('job_id', 'like','%'.$jobId.'%');
+          $survey = $survey->where('job_id', '=', $jobId);
         }
         if($userId){
-            $survey = $survey->where('user_id', 'like','%'.$userId.'%');
+            $survey = $survey->where('user_id', '=', $userId);
         }
         if($name){
             $survey = $survey->where('name','like','%'.$name.'%');

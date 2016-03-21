@@ -80,10 +80,10 @@ class UsersService extends Base
            $user = $user->where('email','like','%'.$email.'%');
         }
         if($type){
-           $user = $user->where('type','like','%'.$type.'%');
+           $user = $user->where('type','=', $type);
         }
         if($invitedBy){
-            $user = $user->where('invited_by','like','%'.$invitedBy.'%');
+            $user = $user->where('invited_by','=', $invitedBy);
         }
         if($verified){
            $user = $user->where('verified','=',$verified);
