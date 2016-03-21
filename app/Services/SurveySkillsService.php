@@ -63,11 +63,11 @@ class SurveySkillsService extends Base{
      */
     public function retrieve($request){
         $limit      =   ($request->input('per_page'))?$request->input('per_page'):15;
-        $userId     =   $request->input('user_id');
-        $surveyId   =   $request->input('survey_id');
+        $userId     =    $request->input('user_id');
+        $surveyId   =    $request->input('survey_id');
         $orderBy    =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
         $sortBy     =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
-        $search     =  $this->searchValueExists($userId,$surveyId);
+        $search     =    $this->searchValueExists($userId,$surveyId);
         if($search){
             $valError = $this->buildEmptyErrorResponse(parent::HTTP_404);
             return $valError;
