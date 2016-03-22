@@ -11,8 +11,15 @@ class JobController extends Controller{
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function create(Request $request){
+
+         if($request->json()->get('is_closed')===true or $request->json()->get('is_closed')===false){
+             $array=[true,false];
+         }else{
+             $array = ['',''];
+         }
+
         $rules = ['user_id'=>'required|integer','title'=>'required|string|max:50','company_name'=>'string|max:50',
-                  'link'=>'string|max:256','is_fulfilled'=>'boolean','is_closed'=>'boolean','city'=>'string|max:50','state'=>'string|max:2','zipCode'=>'max:10'];
+                  'link'=>'string|max:256','is_fulfilled'=>'boolean','is_closed'=>"boolean|in:$array[0],$array[1]",'is_active'=>'boolean','city'=>'string|max:50','state'=>'string|max:2','zipCode'=>'max:10'];
         $this->validate($request,$rules);
 
         $jobService = new JobsServices();
@@ -28,7 +35,7 @@ class JobController extends Controller{
      */
     public function update(Request $request,$jobId){
         $rules = ['user_id'=>'required|integer','title'=>'sometimes|required|string|max:50','company_name'=>'sometimes|required|string|max:50',
-                  'link'=>'sometimes|required|string|max:256','is_fulfilled'=>'boolean','is_closed'=>'boolean','city'=>'sometimes|required|string|max:50','state'=>'sometimes|required|string|max:2',
+                  'link'=>'sometimes|required|string|max:256','is_fulfilled'=>'boolean','is_closed'=>'boolean','is_active'=>'boolean','city'=>'sometimes|required|string|max:50','state'=>'sometimes|required|string|max:2',
                   'zip_code'=>'sometimes|required|max:10'];
         $this->validate($request,$rules);
 

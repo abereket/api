@@ -19,6 +19,7 @@ class JobsServices extends Base{
     $job = Job::create(['user_id'=>$request->json()->get('user_id'),'title'=>$request->json()->get('title'),
                         'company_name'=>$request->json()->get('company_name'),'link'=>$request->json()->get('link'),
                         'is_fulfilled'=>$request->json()->get('is_fulfilled',0),'is_closed'=>$request->json()->get('is_closed',0),
+                        'is_active'=>$request->json()->get('is_active',0),
                         'city'=>$request->json()->get('city'),'state'=>$request->json()->get('state'),
                         'zip_code'=>$request->json()->get('zip_code')]);
 
@@ -45,6 +46,7 @@ class JobsServices extends Base{
         $job->link         =  ($request->json()->get('link'))?$request->json()->get('link'):$job->link;
         $job->is_fulfilled =  ($request->json()->get('is_fulfilled'))?$request->json()->get('is_fulfilled'):$job->is_fulfilled;
         $job->is_closed    =  ($request->json()->get('is_closed'))?$request->json()->get('is_closed'):$job->is_closed;
+        $job->is_active    =  ($request->json()->get('is_active'))?$request->json()->get('is_active'):$job->is_active;
         $job->city         =  ($request->json()->get('city'))?$request->json()->get('city'):$job->city;
         $job->state        =  ($request->json()->get('state'))?$request->json()->get('state'):$job->state;
         $job->zip_code     =  ($request->json()->get('zip_code'))?$request->json()->get('zip_code'):$job->zip_code;

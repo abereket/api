@@ -8,7 +8,7 @@ class Job extends Model{
     use SoftDeletes;
     protected $table = 'jobs';
 
-    protected $fillable = ['id','user_id','title','company_name','link','is_fulfilled','is_closed','city','state','zip_code','deleted_at'];
+    protected $fillable = ['id','user_id','title','company_name','link','is_fulfilled','is_closed','is_active','city','state','zip_code','deleted_at'];
 
     protected $dates = ['deleted_at'];
 }
