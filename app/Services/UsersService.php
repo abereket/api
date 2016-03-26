@@ -154,7 +154,7 @@ class UsersService extends Base
 
         $user = User::where('email', '=', $userName)
             ->where('password', '=', $password)
-            //->where('verified', '=', 1)
+            ->where('verified', '=', 1)
             ->get()
             ->first();
         if(!$user) {
