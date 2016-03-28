@@ -19,9 +19,11 @@ class JobsServices extends Base{
     $job = Job::create(['user_id'=>$request->json()->get('user_id'),'title'=>$request->json()->get('title'),
                         'company_name'=>$request->json()->get('company_name'),'link'=>$request->json()->get('link'),
                         'is_fulfilled'=>$request->json()->get('is_fulfilled',0),'is_closed'=>$request->json()->get('is_closed',0),
+                        'is_active'=>$request->json()->get('is_active',0),
                         'city'=>$request->json()->get('city'),'state'=>$request->json()->get('state'),
                         'zip_code'=>$request->json()->get('zip_code')]);
 
+    list($job->is_closed,$job->is_fulfilled,$job->is_active)=$this->assignBoolean($job->is_closed,$job->is_fulfilled,$job->is_active);
     $job = $this->buildCreateSuccessMessage('success',$job);
     return $job;
 
@@ -45,11 +47,13 @@ class JobsServices extends Base{
         $job->link         =  ($request->json()->get('link'))?$request->json()->get('link'):$job->link;
         $job->is_fulfilled =  ($request->json()->get('is_fulfilled'))?$request->json()->get('is_fulfilled'):$job->is_fulfilled;
         $job->is_closed    =  ($request->json()->get('is_closed'))?$request->json()->get('is_closed'):$job->is_closed;
+        $job->is_active    =  ($request->json()->get('is_active'))?$request->json()->get('is_active'):$job->is_active;
         $job->city         =  ($request->json()->get('city'))?$request->json()->get('city'):$job->city;
         $job->state        =  ($request->json()->get('state'))?$request->json()->get('state'):$job->state;
         $job->zip_code     =  ($request->json()->get('zip_code'))?$request->json()->get('zip_code'):$job->zip_code;
         $job->save();
 
+        list($job->is_closed,$job->is_fulfilled,$job->is_active)=$this->assignBoolean($job->is_closed,$job->is_fulfilled,$job->is_active);
         $job = $this->buildUpdateSuccessMessage('success',$job);
         return $job;
 
@@ -82,6 +86,7 @@ class JobsServices extends Base{
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
+        list($job->is_closed,$job->is_fulfilled,$job->is_active)=$this->assignBoolean($job->is_closed,$job->is_fulfilled,$job->is_active);
         $job = $this->buildRetrieveOneSuccessMessage("success",$job);
         return $job;
     }
@@ -133,6 +138,13 @@ class JobsServices extends Base{
         $job = $job->orderby($orderBy,$sortBy)->Paginate($limit);
 
         $job = $this->buildRetrieveResponse($job->toArray());
+        if(!empty($job['results'])){
+            foreach($job['results'] as $results){
+                list($results['is_closed'],$results['is_fulfilled'],$results['is_active'])=$this->assignBoolean($results['is_closed'],$results['is_fulfilled'],$results['is_active']);
+                $result[]=$results;
+            }
+            $job['results'] = $result;
+        }
         $job = $this->buildRetrieveSuccessMessage('success',$job);
 
         return $job;
@@ -190,5 +202,19 @@ class JobsServices extends Base{
            $errors['job_id'] ="The job you are looking for not exists.Please use a valid job id";
         }
         return $errors;
+    }
+
+    /**
+     * @param $isClosed
+     * @param $isFulfilled
+     * @param $isActive
+     * @return array
+     */
+    protected function assignBoolean($isClosed,$isFulfilled,$isActive){
+        $isClosed     =  (bool)$isClosed;
+        $isFulfilled  =  (bool)$isFulfilled;
+        $isActive     =  (bool)$isActive;
+
+        return array($isClosed,$isFulfilled,$isActive);
     }
 }

@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AddColumnsToJobs' => $baseDir . '/database/migrations/2016_02_12_192525_add_columns_to_jobs.php',
+    'AddIsActiveColumnToJobs' => $baseDir . '/database/migrations/2016_03_21_170901_add_isActiveColumn_to_jobs.php',
     'AddVerifiedByColumn' => $baseDir . '/database/migrations/2016_02_18_200308_add_verified_by_column.php',
     'CreateEmailVerificationTable' => $baseDir . '/database/migrations/2015_12_28_201830_create_email_verification_table.php',
     'CreateEmailVerificationsTable' => $baseDir . '/database/migrations/2016_01_05_194316_create_email_verifications_table.php',
@@ -468,6 +469,5 @@ return array(
     'UpdateSurveyResults' => $baseDir . '/database/migrations/2016_03_04_161512_update_survey_results.php',
     'UpdateUsers' => $baseDir . '/database/migrations/2016_03_01_175022_update_users.php',
     'UpdateUsersTable' => $baseDir . '/database/migrations/2016_03_07_213015_update_users_table.php',
-    'UpdateSurveyResults' => $baseDir . '/database/migrations/2016_03_04_161512_update_survey_results.php',
-    'UpdateUsers' => $baseDir . '/database/migrations/2016_03_01_175022_update_users.php',
+
 );

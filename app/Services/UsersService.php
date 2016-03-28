@@ -93,7 +93,7 @@ class UsersService extends Base
         $user = $this->buildRetrieveResponse($user->toArray());
         if(!empty($user['results'])){
             foreach($user['results'] as $results){
-                unset($user['password']);
+                unset($results['password']);
                 $result[] = $results;
             }
             $user['results'] = $result;
