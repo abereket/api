@@ -55,8 +55,12 @@ class surveysService extends Base{
         $userId  =  $request->input('user_id');
         $name    =  $request->input('name');
         $orderBy = ($request->input('order_by'))?$request->input('order_by'):'created_at';
-        $sortBy     =  ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
-
+        $sortBy  = ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
+        $search  =  $this->searchValueExists($jobId,$userId,$name);
+        if($search){
+            $valError = $this->buildEmptyErrorResponse(parent::HTTP_404);
+            return $valError;
+        }
         $survey = new Surveys();
         if($jobId){
           $survey = $survey->where('job_id', '=', $jobId);
