@@ -6,6 +6,7 @@ abstract class Base
 {
 
     const HTTP_404 = 404;
+    const HTTP_401 = 401;
     const HTTP_200 = 200;
     const HTTP_201 = 201;
 
