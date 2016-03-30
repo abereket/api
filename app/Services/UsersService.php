@@ -163,7 +163,7 @@ class UsersService extends Base
             ->first();
         if(!$user) {
             $valError['incorrect_pattern'] = "Your user name or password may be incorrect";
-            $user = $this->failureMessage($valError,parent::HTTP_404);
+            $user = $this->failureMessage($valError,parent::HTTP_401);
             return $user;
         }
         unset($user['password']);
