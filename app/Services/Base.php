@@ -92,11 +92,11 @@ abstract class Base
     public function buildRetrieveResponse(array $input)
     {
         return [
-            'total'         => $input['total'],
-            'per_page'      => $input['per_page'],
-            'current_page'  => $input['current_page'],
-            'last_page'     => $input['last_page'],
-            'results'       => $input['data'],
+            'total'         => isset($input['total'])?$input['total']:0,
+            'per_page'      => isset($input['per_page'])?$input['per_page']:15,
+            'current_page'  => isset($input['current_page'])?$input['current_page']:1,
+            'last_page'     => isset($input['last_page'])?$input['last_page']:0,
+            'results'       => isset($input['data'])?$input['data']:[],
         ];
     }
 
@@ -135,6 +135,19 @@ abstract class Base
         $message = 'Please fix your errors';
         $errors['search_parameter'] = "There should be search parameters";
         return ['message'=>$message,'code'=>$code,'errors'=>[$errors]];
+    }
+
+    /**
+     * @param $user
+     * @return mixed
+     */
+    protected function hidePassword($user){
+        foreach($user['results'] as $results){
+            unset($results['password']);
+            $result[] = $results;
+        }
+        $user['results'] = $result;
+        return $user;
     }
 }
 ?>
