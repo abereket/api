@@ -27,6 +27,7 @@ abstract class Base
     protected function buildCreateSuccessMessage($successMessage, $entity)
     {
         $entity = $this->buildSuccessResponse($entity);
+        $entity = $this->hidePassword($entity);
         return ['message' => $successMessage, 'code' => self::HTTP_201, 'data' => $entity];
     }
 
@@ -38,6 +39,7 @@ abstract class Base
     protected function buildUpdateSuccessMessage($successMessage, $entity)
     {
         $entity = $this->buildSuccessResponse($entity);
+        $entity = $this->hidePassword($entity);
         return ['message' => $successMessage, 'code' =>self::HTTP_200, 'data' => $entity];
     }
 
@@ -57,6 +59,7 @@ abstract class Base
     protected function buildRetrieveOneSuccessMessage($successMessage, $entity)
     {
         $entity = $this->buildSuccessResponse($entity);
+        $entity = $this->hidePassword($entity);
         return ['message' => $successMessage, 'code' => self::HTTP_200, 'data' => $entity];
     }
 

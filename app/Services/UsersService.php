@@ -44,7 +44,6 @@ class UsersService extends Base
         if($type and $email){
             return $user;
         }
-        unset($user['password']);
         $user=$this->buildCreateSuccessMessage('success',$user);
         return $user;
     }
@@ -111,7 +110,6 @@ class UsersService extends Base
             $valError  =     $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
-        unset($user['password']);
         $user          = $this->buildRetrieveOneSuccessMessage('success',$user);
         return $user;
     }
@@ -137,7 +135,6 @@ class UsersService extends Base
         $user->type        =   ($request->json()->get('type'))?($request->json()->get('type')):$user->type;
         $user->verified    =   ($request->json()->get('verified'))?($request->json()->get('verified')):$user->verified;
         $user->save();
-        unset($user['password']);
         $user=$this->buildUpdateSuccessMessage('success',$user);
         return $user;
 
