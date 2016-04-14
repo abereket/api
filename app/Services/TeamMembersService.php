@@ -51,16 +51,18 @@ class TeamMembersService extends Base{
         }
         $teamMember = TeamMember::where('team_id',$teamId)->get();
         if(!$teamMember->count()) {
-            $valError['team_id'] = "There is no corresponding data related to your teamId ";
-            $valError = $this->failureMessage($valError,parent::HTTP_404);
-            return $valError;
+            $teamMember = $this->buildRetrieveResponse((array)$teamMember);
+            $teamMember = $this->buildRetrieveSuccessMessage('success',$teamMember);
+            return $teamMember;
         }
         foreach ($teamMember as $teamMember) {
             $userId[] = $teamMember->user_id;
         }
         $user = User::whereIn('id',$userId)->orderby($orderBy,$sortBy)->Paginate($limit);
-
         $user = $this->buildRetrieveResponse($user->toArray());
+        if(!empty($user['results'])){
+            $user = $this->hidePassword($user);
+        }
         $user = $this->buildRetrieveSuccessMessage("success",$user);
         return $user;
 
@@ -203,4 +205,5 @@ class TeamMembersService extends Base{
         }
         return $errors;
     }
+
 }
