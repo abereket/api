@@ -479,4 +479,5 @@ return array(
     'UpdateUsers' => $baseDir . '/database/migrations/2016_03_01_175022_update_users.php',
     'UpdateUsersTable' => $baseDir . '/database/migrations/2016_03_07_213015_update_users_table.php',
     'UpdateUsersTypeField' => $baseDir . '/database/migrations/2016_04_15_001310_update_users_type_field.php',
+    'UpdateUsersTypeFieldNotNull' => $baseDir . '/database/migrations/2016_04_15_002846_update_users_type_field_notNull.php',
 );
