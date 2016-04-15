@@ -467,7 +467,16 @@ return array(
     'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
     'UpdateSurveyResults' => $baseDir . '/database/migrations/2016_03_04_161512_update_survey_results.php',
+    'UpdateTableAgencies' => $baseDir . '/database/migrations/2016_04_14_195225_update_table_agencies.php',
+    'UpdateTableEmailVerifications' => $baseDir . '/database/migrations/2016_04_14_203338_update_table_email_verifications.php',
+    'UpdateTableJobSkills' => $baseDir . '/database/migrations/2016_04_14_205202_update_table_job_skills.php',
+    'UpdateTableJobs' => $baseDir . '/database/migrations/2016_04_14_204916_update_table_jobs.php',
+    'UpdateTableSurveyResults' => $baseDir . '/database/migrations/2016_04_14_205511_update_table_survey_results.php',
+    'UpdateTableSurveySkills' => $baseDir . '/database/migrations/2016_04_14_210041_update_table_survey_skills.php',
+    'UpdateTableSurveys' => $baseDir . '/database/migrations/2016_04_14_205813_update_table_surveys.php',
+    'UpdateTableTeamMembers' => $baseDir . '/database/migrations/2016_04_14_204346_update_table_team_members.php',
+    'UpdateTableTeams' => $baseDir . '/database/migrations/2016_04_14_203943_update_table_teams.php',
     'UpdateUsers' => $baseDir . '/database/migrations/2016_03_01_175022_update_users.php',
     'UpdateUsersTable' => $baseDir . '/database/migrations/2016_03_07_213015_update_users_table.php',
-
+    'UpdateUsersTypeField' => $baseDir . '/database/migrations/2016_04_15_001310_update_users_type_field.php',
 );
