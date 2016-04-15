@@ -73,7 +73,7 @@ class UserController extends Controller
             'first_name'    => 'sometimes|required|string|max:50',
             'last_name'     => 'sometimes|required|string|max:50',
             'password'      => 'sometimes|required|string|max:60',
-            'type'          => 'sometimes|required|in:recruiter,candidate,agency,zemployee,user,admin',
+            'type'          => 'sometimes|required|in:recruiter,candidate,agency,zemployee',
             'verified'      => 'boolean'
         ];
 
