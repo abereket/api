@@ -478,6 +478,7 @@ return array(
     'UpdateTableTeams' => $baseDir . '/database/migrations/2016_04_14_203943_update_table_teams.php',
     'UpdateUsers' => $baseDir . '/database/migrations/2016_03_01_175022_update_users.php',
     'UpdateUsersTable' => $baseDir . '/database/migrations/2016_03_07_213015_update_users_table.php',
+    'UpdateUsersType' => $baseDir . '/database/migrations/2016_04_15_152841_update_users_type.php',
     'UpdateUsersTypeField' => $baseDir . '/database/migrations/2016_04_15_001310_update_users_type_field.php',
     'UpdateUsersTypeFieldNotNull' => $baseDir . '/database/migrations/2016_04_15_002846_update_users_type_field_notNull.php',
 );
