@@ -208,6 +208,7 @@ class UsersService extends Base
             User::create($users);
         }
         $user = User::all();
+        $user = $this->buildRetrieveOneSuccessMessage("success",$user);
         return $user;
     }
 
