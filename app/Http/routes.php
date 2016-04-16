@@ -67,10 +67,15 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
     $app->delete('survey-results/{id}','SurveyResultsController@delete');           //deletes a survey
 
     $app->post('survey-skills','SurveySkillsController@create');                    //creates survey skills
-    $app->put('survey-skills','SurveySkillsController@update');                //updates survey skills
+    $app->put('survey-skills','SurveySkillsController@update');                     //updates survey skills
     $app->get('survey-skills','SurveySkillsController@retrieve');                   //searches survey skills
     $app->get('survey-skills/{id}','SurveySkillsController@retrieveOne');           //retrieves one survey skills
     $app->delete('survey-skills/{id}','SurveySkillsController@delete');             //deletes survey skills
 
     $app->post('authenticate','IsAuthenticatedController@authenticate');
+
+    $app->post('documents','DocumentsController@create');                           //creates documents
+    $app->get('documents/{id}','DocumentsController@retrieveOne');                  //retrieves one documents
+    $app->delete('documents/{id}','DocumentsController@delete');                    //deletes documents
+
 });
