@@ -184,6 +184,37 @@ class UsersService extends Base
     }
 
     /**
+     * @return array|\Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function deleteUsers()
+    {
+        $user = User::withTrashed()
+                    ->get();
+
+        if ($user->count()) {
+            foreach ($user as $users) {
+                $users->forceDelete();
+            }
+        }
+        $user = [
+            '{"first_name":"Test", "last_name":"Admin", "email": "admin", "password": "admin", "type": "zemployee", "invited_by": "0", "verified": "0"}',
+            '{"first_name": "Test", "last_name": "Agency", "email": "agency", "password": "agency", "type": "agency", "invited_by": "0", "verified": "0"}',
+            '{"first_name": "Test", "last_name": "Recruiter", "email": "rec", "password": "rec", "type": "recruiter", "invited_by": "0", "verified": "0"}',
+            '{"first_name": "Test", "last_name": "Candidate", "email": "can", "password": "can", "type": "candidate", "invited_by": "0", "verified": "0"}',
+            '{"first_name": "Test", "last_name": "Reference", "email": "ref", "password": "ref", "type": "candidate", "invited_by": "0", "verified": "0"}'
+        ];
+        foreach ($user as $users) {
+            $users = json_decode($users, true);
+            User::create($users);
+        }
+        $user = User::all();
+        $user = $this->buildRetrieveOneSuccessMessage("success",$user);
+        return $user;
+    }
+
+
+
+    /**
      * This method performs business class validation for users retrieveOne method
      * @param $user
      * @return array
