@@ -74,4 +74,8 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
 
     $app->post('authenticate','IsAuthenticatedController@authenticate');           //retrieves a user if authenticated
     $app->delete('users','TestController@deleteUsers');                                 //deletes all users
+
+    $app->post('documents','DocumentsController@create');                           //creates documents
+    $app->get('documents/{id}','DocumentsController@retrieveOne');                  //retrieves one documents
+    $app->delete('documents/{id}','DocumentsController@delete');                    //deletes documents
 });
