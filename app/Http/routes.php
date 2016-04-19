@@ -72,8 +72,9 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
     $app->get('survey-skills/{id}','SurveySkillsController@retrieveOne');           //retrieves one survey skills
     $app->delete('survey-skills/{id}','SurveySkillsController@delete');             //deletes survey skills
 
-    $app->post('authenticate','IsAuthenticatedController@authenticate');           //retrieves a user if authenticated
-    $app->delete('delete-users','TestController@deleteUsers');                                 //deletes all users
+    $app->post('authenticate','IsAuthenticatedController@authenticate');            //retrieves a user if authenticated
+
+    $app->delete('test/delete-users','TestController@deleteUsers');                 //deletes all users
 
     $app->post('documents','DocumentsController@create');                           //creates documents
     $app->get('documents/{id}','DocumentsController@retrieveOne');                  //retrieves one documents
