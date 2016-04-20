@@ -152,7 +152,6 @@ class UsersService extends Base
         $user = User::where('email', '=', $userName)
                      ->where('password', '=', $password)
                      ->where('verified', '=', 1)
-                     ->get()
                      ->first();
         if(!$user) {
             $valError['incorrect_pattern'] = "Your user name or password may be incorrect";
