@@ -149,12 +149,11 @@ class UsersService extends Base
     public function authenticate($userName, $password)
     {
         $password = hash('sha512', $password);
-
         $user = User::where('email', '=', $userName)
-            ->where('password', '=', $password)
-            ->where('verified', '=', 1)
-            ->get()
-            ->first();
+                     ->where('password', '=', $password)
+                     ->where('verified', '=', 1)
+                     ->get()
+                     ->first();
         if(!$user) {
             $valError['incorrect_pattern'] = "Your user name or password may be incorrect";
             $user = $this->failureMessage($valError,parent::HTTP_401);
