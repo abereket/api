@@ -18,11 +18,16 @@ class DocumentsService extends Base{
         }
 
         //@TODO.
-        //1. Change path to aws_path
+        //1. Add extension to documents table. And make it come from request. and store it in db
 
-        //2. path - will contain path to the file
+        //2. Change type to file_type, make it enum. for now make it have one value (resume)
 
-        //3. Upload the file to AWS. Upload to the following information...
+        //3. Postman/Request will give you file_contents .. This is actual file bytes. For security frontend will base64_encode it,
+        // all u need to do is base64_decode it and upload the file to AWS
+
+        //4. Once document is uploaded to ASW, u will get the path and store it to db. The path is going to be, bucket_name/
+
+        //5. Upload the file to AWS. Upload to the following information...
         // Bucket name: zemployee-dev
         //Path in S3: /Resumes
 
