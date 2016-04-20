@@ -16,6 +16,16 @@ class DocumentsService extends Base{
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
+
+        //@TODO.
+        //1. Change path to aws_path
+
+        //2. path - will contain path to the file
+
+        //3. Upload the file to AWS. Upload to the following information...
+        // Bucket name: zemployee-dev
+        //Path in S3: /Resumes
+
         $document = Documents::create(['user_id'=>$request->json()->get('user_id'),
                                        'name'=>$request->json()->get('name'),
                                        'path'=>$request->json()->get('path'),
