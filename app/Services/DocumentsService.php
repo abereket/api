@@ -19,11 +19,11 @@ class DocumentsService extends Base{
            $valError = $this->failureMessage($valError,parent::HTTP_404);
            return $valError;
         }
-            $documentFileName = $request->json()->get('name').'.'.$request->json()->get('extension');
-            $s3 = Storage::disk('s3');
-            $filePath = '/Resumes/' .$documentFileName ;
-            $contents = base64_decode($request->json()->get('document_bytes'));
-            $s3->put($filePath, $contents);
+        $documentFileName = $request->json()->get('name').'.'.$request->json()->get('extension');
+        $s3 = Storage::disk('s3');
+        $filePath = '/Resumes/' .$documentFileName ;
+        $contents = base64_decode($request->json()->get('document_bytes'));
+        $s3->put($filePath, $contents);
 
         $document = Documents::create(['user_id'=>$request->json()->get('user_id'),
                                        'name'=>$request->json()->get('name'),
