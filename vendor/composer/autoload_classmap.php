@@ -469,6 +469,7 @@ return array(
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
     'UpdateSurveyResults' => $baseDir . '/database/migrations/2016_03_04_161512_update_survey_results.php',
     'UpdateTableAgencies' => $baseDir . '/database/migrations/2016_04_14_195225_update_table_agencies.php',
+    'UpdateTableDocuments' => $baseDir . '/database/migrations/2016_04_20_195940_update_table_documents.php',
     'UpdateTableEmailVerifications' => $baseDir . '/database/migrations/2016_04_14_203338_update_table_email_verifications.php',
     'UpdateTableJobSkills' => $baseDir . '/database/migrations/2016_04_14_205202_update_table_job_skills.php',
     'UpdateTableJobs' => $baseDir . '/database/migrations/2016_04_14_204916_update_table_jobs.php',
