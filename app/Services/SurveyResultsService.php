@@ -182,7 +182,7 @@ class SurveyResultsService extends Base{
     protected function validateRetrieveOne($surveyResult){
         $errors = array();
         if(!$surveyResult){
-            $errors['survey_result_id'] = "The validate result you are looking is not found.Please enter a valid validate result id";
+            $errors['survey_result_id'] = "The survey result you are looking is not found.Please enter a valid survey result id";
         }
         return $errors;
     }
@@ -194,7 +194,7 @@ class SurveyResultsService extends Base{
     protected function validateDelete($surveyResult){
         $errors = array();
         if(!$surveyResult){
-            $errors['survey_result_id'] = "The validate result you want to delete is not found.Please enter a valid validate result id";
+            $errors['survey_result_id'] = "The survey result you want to delete is not found.Please enter a valid validate result id";
         }
         return $errors;
     }

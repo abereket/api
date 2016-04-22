@@ -158,9 +158,7 @@ class UsersService extends Base
             $user = $this->failureMessage($valError,parent::HTTP_401);
             return $user;
         }
-        unset($user['password']);
         $user= $this->buildAuthenticateSuccessMessage('success',$user);
-
         return $user;
     }
 
