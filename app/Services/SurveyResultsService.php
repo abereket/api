@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Models\Job;
 use App\Models\SurveyResults;
 use App\Models\Surveys;
+use App\Models\SurveySkills;
 use App\Models\User;
 
 class SurveyResultsService extends Base{
@@ -12,14 +13,17 @@ class SurveyResultsService extends Base{
      * @return array|static
      */
     public function create($request){
-        $valError = $this->validateCreate($request->json()->get('user_id'),$request->json()->get('job_id'),$request->json()->get('survey_id'));
+        $valError = $this->validateCreate($request->json()->get('user_id'),$request->json()->get('job_id'),
+                                          $request->json()->get('survey_id'),$request->json()->get('survey_skill_id'));
         if($valError){
             $valError = $this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
         $surveyResults = SurveyResults::create(['user_id'=>$request->json()->get('user_id'),'job_id'=>$request->json()->get('job_id'),
-                                               'survey_id'=>$request->json()->get('survey_id'),'rating'=>$request->json()->get('rating'),
-                                               'years_of_experience'=>$request->json()->get('years_of_experience')]);
+                                                'survey_id'=>$request->json()->get('survey_id'),
+                                                'survey_skill_id'=>$request->json()->get('survey_skill_id'),
+                                                'rating'=>$request->json()->get('rating'),
+                                                'years_of_experience'=>$request->json()->get('years_of_experience')]);
         $surveyResults = $this->buildCreateSuccessMessage('success',$surveyResults);
         return $surveyResults;
     }
@@ -54,14 +58,15 @@ class SurveyResultsService extends Base{
      */
     public function retrieve($request){
         $limit              =   ($request->input('per_page'))?$request->input('per_page'):15;
-        $userId             =   $request->input('user_id');
-        $jobId              =   $request->input('job_id');
-        $surveyId           =   $request->input('survey_id');
-        $rating             =   $request->input('rating');
-        $yearsOfExperience  =   $request->input('years_of_experience');
+        $userId             =    $request->input('user_id');
+        $jobId              =    $request->input('job_id');
+        $surveyId           =    $request->input('survey_id');
+        $surveySkillId      =    $request->input('survey_skill_id');
+        $rating             =    $request->input('rating');
+        $yearsOfExperience  =    $request->input('years_of_experience');
         $orderBy            =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
         $sortBy             =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
-        $search  =  $this->searchValueExists($userId,$jobId,$surveyId,$rating,$yearsOfExperience);
+        $search  =  $this->searchValueExists($userId,$jobId,$surveyId,$surveySkillId,$rating,$yearsOfExperience);
         if($search){
             $valError = $this->buildEmptyErrorResponse(parent::HTTP_404);
             return $valError;
@@ -75,6 +80,9 @@ class SurveyResultsService extends Base{
         }
         if ($surveyId) {
             $surveyResult = $surveyResult->where('survey_id' , '=', $surveyId);
+        }
+        if ($surveySkillId) {
+            $surveyResult = $surveyResult->where('survey_skill_id' , '=', $surveySkillId);
         }
         if ($rating) {
             $surveyResult = $surveyResult->where('rating',  'like', '%'.$rating.'%');
@@ -123,9 +131,10 @@ class SurveyResultsService extends Base{
      * @param $userId
      * @param $jobId
      * @param $surveyId
-     * @return array|string
+     * @param $surveySkillId
+     * @return array
      */
-    protected function validateCreate($userId,$jobId,$surveyId){
+    protected function validateCreate($userId,$jobId,$surveyId,$surveySkillId){
         $errors = array();
         $user = User::find($userId);
         if(!$user){
@@ -138,6 +147,10 @@ class SurveyResultsService extends Base{
         $survey = Surveys::find($surveyId);
         if(!$survey){
             $errors['survey_id'] = 'Please enter a valid survey_id';
+        }
+        $surveySkill = SurveySkills::find($surveySkillId);
+        if(!$surveySkill){
+            $errors['survey_skill_id'] = 'please enter a valid survey_skill_id';
         }
         return $errors;
     }
