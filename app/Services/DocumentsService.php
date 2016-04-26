@@ -3,7 +3,10 @@ namespace App\Services;
 
 use App\Models\Documents;
 use App\Models\User;
-
+use Aws\Laravel\AwsServiceProvider;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 class DocumentsService extends Base{
     /**
      * @param $request
@@ -13,28 +16,20 @@ class DocumentsService extends Base{
         $user = User::find($request->json()->get('user_id'));
         $valError = $this->validateCreate($user);
         if($valError){
-            $valError = $this->failureMessage($valError,parent::HTTP_404);
-            return $valError;
+           $valError = $this->failureMessage($valError,parent::HTTP_404);
+           return $valError;
         }
-
-        //@TODO.
-        //1. Add extension to documents table. And make it come from request. and store it in db
-
-        //2. Change type to file_type, make it enum. for now make it have one value (resume)
-
-        //3. Postman/Request will give you file_contents .. This is actual file bytes. For security frontend will base64_encode it,
-        // all u need to do is base64_decode it and upload the file to AWS
-
-        //4. Once document is uploaded to ASW, u will get the path and store it to db. The path is going to be, bucket_name/
-
-        //5. Upload the file to AWS. Upload to the following information...
-        // Bucket name: zemployee-dev
-        //Path in S3: /Resumes
+        $documentFileName = $request->json()->get('name').'.'.$request->json()->get('extension');
+        $s3 = Storage::disk('s3');
+        $filePath = '/Resumes/' .$documentFileName ;
+        $contents = base64_decode($request->json()->get('document_bytes'));
+        $s3->put($filePath, $contents);
 
         $document = Documents::create(['user_id'=>$request->json()->get('user_id'),
                                        'name'=>$request->json()->get('name'),
-                                       'path'=>$request->json()->get('path'),
-                                       'type'=>$request->json()->get('type')]);
+                                       'path'=>'zemployee-dev/Resumes/'.$documentFileName,
+                                       'file_type'=>"resume",
+                                       'extension' => $request->json()->get('extension')]);
         $document = $this->buildCreateSuccessMessage('success',$document);
         return $document;
     }

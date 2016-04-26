@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Services\DocumentsService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class DocumentsController extends Controller{
     /**
@@ -10,9 +11,8 @@ class DocumentsController extends Controller{
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function create(Request $request){
-        $rules = ['user_id'=>'required|integer','name'=>'required|string|max:60','path'=>'required|string|max:256','type'=>'required|string|max:15'];
+        $rules = ['document_bytes'=>'required','name'=>'string|max:60','path'=>'string|max:256','type'=>'string|max:15','extension' => 'string|max:30'];
         $this->validate($request,$rules);
-
         $documentService = new DocumentsService();
         $documents = $documentService->create($request);
 
