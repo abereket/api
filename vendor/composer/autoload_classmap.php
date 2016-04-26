@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'AddColumnsToJobs' => $baseDir . '/database/migrations/2016_02_12_192525_add_columns_to_jobs.php',
     'AddIsActiveColumnToJobs' => $baseDir . '/database/migrations/2016_03_21_170901_add_isActiveColumn_to_jobs.php',
+    'AddSurveySkillIdToSurveyResults' => $baseDir . '/database/migrations/2016_04_26_164842_add_survey_skill_id_to_survey_results.php',
     'AddVerifiedByColumn' => $baseDir . '/database/migrations/2016_02_18_200308_add_verified_by_column.php',
     'CreateDocumetsTable' => $baseDir . '/database/migrations/2016_04_16_201848_create_documets_table.php',
     'CreateEmailVerificationTable' => $baseDir . '/database/migrations/2015_12_28_201830_create_email_verification_table.php',
@@ -467,6 +468,7 @@ return array(
     'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Resources/stubs/SessionHandlerInterface.php',
     'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
+    'UpdateDocumentsTable' => $baseDir . '/database/migrations/2016_04_20_194629_update_documents_table.php',
     'UpdateSurveyResults' => $baseDir . '/database/migrations/2016_03_04_161512_update_survey_results.php',
     'UpdateTableAgencies' => $baseDir . '/database/migrations/2016_04_14_195225_update_table_agencies.php',
     'UpdateTableDocuments' => $baseDir . '/database/migrations/2016_04_20_195940_update_table_documents.php',
@@ -481,6 +483,4 @@ return array(
     'UpdateUsers' => $baseDir . '/database/migrations/2016_03_01_175022_update_users.php',
     'UpdateUsersTable' => $baseDir . '/database/migrations/2016_03_07_213015_update_users_table.php',
     'UpdateUsersType' => $baseDir . '/database/migrations/2016_04_15_152841_update_users_type.php',
-    'UpdateUsersTypeField' => $baseDir . '/database/migrations/2016_04_15_001310_update_users_type_field.php',
-    'UpdateUsersTypeFieldNotNull' => $baseDir . '/database/migrations/2016_04_15_002846_update_users_type_field_notNull.php',
 );
