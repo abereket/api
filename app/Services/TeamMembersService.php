@@ -40,9 +40,9 @@ class TeamMembersService extends Base{
      */
     public function retrieve($request){
         $teamId      =    $request->input('team_id');
-        $limit       =   ($request->input('per_page'))?$request->input('per_page'):15;
-        $orderBy     =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
-        $sortBy      =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
+        $limit       =    ($request->input('per_page'))?$request->input('per_page'):15;
+        $orderBy     =    ($request->input('order_by'))?$request->input('order_by'):'created_at';
+        $sortBy      =    ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
 
         $valError = $this->validateRetrieve($teamId);
         if($valError){
