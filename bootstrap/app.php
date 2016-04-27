@@ -15,7 +15,7 @@ Dotenv::load(__DIR__.'/../');
 |
 */
 
-$app = new Laravel\Lumen\Application(
+$app = new App\Application(
     realpath(__DIR__.'/../')
 );
 
