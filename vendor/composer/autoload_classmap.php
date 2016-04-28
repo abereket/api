@@ -17,6 +17,7 @@ return array(
     'CreateSurveyResultsTable' => $baseDir . '/database/migrations/2016_02_26_203659_create_survey_results_table.php',
     'CreateSurveySkillsTable' => $baseDir . '/database/migrations/2016_02_29_223818_create_survey_skills_table.php',
     'CreateTableAgencies' => $baseDir . '/database/migrations/2015_12_14_210940_create_table_agencies.php',
+    'CreateTableReferences' => $baseDir . '/database/migrations/2016_04_28_175313_create_table_references.php',
     'CreateTableSurveys' => $baseDir . '/database/migrations/2016_02_26_174239_create_table_surveys.php',
     'CreateTableTeams' => $baseDir . '/database/migrations/2015_12_15_212639_create_table_teams.php',
     'CreateTableUsers' => $baseDir . '/database/migrations/2015_12_13_210647_create_table_users.php',
@@ -467,6 +468,7 @@ return array(
     'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Resources/stubs/SessionHandlerInterface.php',
     'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
+    'UpdateDocumentsTable' => $baseDir . '/database/migrations/2016_04_20_194629_update_documents_table.php',
     'UpdateSurveyResults' => $baseDir . '/database/migrations/2016_03_04_161512_update_survey_results.php',
     'UpdateTableAgencies' => $baseDir . '/database/migrations/2016_04_14_195225_update_table_agencies.php',
     'UpdateTableDocuments' => $baseDir . '/database/migrations/2016_04_20_195940_update_table_documents.php',
@@ -481,6 +483,4 @@ return array(
     'UpdateUsers' => $baseDir . '/database/migrations/2016_03_01_175022_update_users.php',
     'UpdateUsersTable' => $baseDir . '/database/migrations/2016_03_07_213015_update_users_table.php',
     'UpdateUsersType' => $baseDir . '/database/migrations/2016_04_15_152841_update_users_type.php',
-    'UpdateUsersTypeField' => $baseDir . '/database/migrations/2016_04_15_001310_update_users_type_field.php',
-    'UpdateUsersTypeFieldNotNull' => $baseDir . '/database/migrations/2016_04_15_002846_update_users_type_field_notNull.php',
 );
