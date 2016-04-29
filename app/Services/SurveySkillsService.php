@@ -37,9 +37,7 @@ class SurveySkillsService extends Base{
        }
        $existingSkills = $this->getAllCurrentSkillsForThisSurvey($request->json()->get('survey_id'));
        if(!$existingSkills->count()){
-        $valError['survey_id'] = "You can not perform update.there are not any skills for this survey";
-        $valError = $this->failureMessage($valError,parent::HTTP_404);
-        return $valError;
+           $currentSkills = array();
        }
        for($i=0;$i<count($existingSkills);$i++){
             $currentSkills[] = $existingSkills[$i]->skill_name;
