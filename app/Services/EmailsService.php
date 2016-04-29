@@ -21,7 +21,7 @@ class EmailsService{
      * @param $html
      * @return bool
      */
-    public function send($to, $from, $subject, $html,$invitedBy,$code,$templateId)
+    public function send($to, $from, $subject, $html,$invitedBy,$orgName='',$code,$templateId)
     {
         $environment =    new EnvironmentInformationService();
         $env         =    $environment->getUrl();
@@ -55,6 +55,7 @@ class EmailsService{
                 $email->addTo($to)
                     ->setFrom($from)
                     ->setSubject($subject)
+                    ->addSubstitution("%orgName%",array($orgName))
                     ->addSubstitution("%UserName%",array($invitedBy))
                     ->addSubstitution("%AppEnv.%",array($env))
                     ->addSubstitution("%code%",array($code))
