@@ -21,7 +21,7 @@ class EmailsService{
      * @param $html
      * @return bool
      */
-    public function send($to, $from, $subject, $html,$invitedBy,$orgName='',$code,$templateId)
+    public function send($to, $from, $subject, $html,$invitedBy,$code,$templateId,$orgName='')
     {
         $environment =    new EnvironmentInformationService();
         $env         =    $environment->getUrl();
