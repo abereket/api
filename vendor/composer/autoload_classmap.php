@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'AddColumnsToJobs' => $baseDir . '/database/migrations/2016_02_12_192525_add_columns_to_jobs.php',
     'AddIsActiveColumnToJobs' => $baseDir . '/database/migrations/2016_03_21_170901_add_isActiveColumn_to_jobs.php',
+    'AddSurveySkillIdToSurveyResults' => $baseDir . '/database/migrations/2016_04_26_164842_add_survey_skill_id_to_survey_results.php',
     'AddVerifiedByColumn' => $baseDir . '/database/migrations/2016_02_18_200308_add_verified_by_column.php',
     'CreateDocumetsTable' => $baseDir . '/database/migrations/2016_04_16_201848_create_documets_table.php',
     'CreateEmailVerificationTable' => $baseDir . '/database/migrations/2015_12_28_201830_create_email_verification_table.php',
