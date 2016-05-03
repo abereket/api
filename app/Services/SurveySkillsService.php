@@ -30,31 +30,31 @@ class SurveySkillsService extends Base{
      * @return array|\Illuminate\Database\Eloquent\Collection|static[]
      */
     public function update($request){
-        $valError = $this->validateUpdate($request->json()->get('user_id'),$request->json()->get('survey_id'));
+       $valError = $this->validateUpdate($request->json()->get('user_id'),$request->json()->get('survey_id'));
        if($valError){
            $valError = $this->failureMessage($valError,parent::HTTP_404);
            return $valError;
        }
-       $existingSkills = $this->getAllCurrentSkillsInDatabase();
-       $updatedSkills = array();
+       $existingSkills = $this->getAllCurrentSkillsForThisSurvey($request->json()->get('survey_id'));
+       if(!$existingSkills->count()){
+           $currentSkills = array();
+       }
+       for($i=0;$i<count($existingSkills);$i++){
+            $currentSkills[] = $existingSkills[$i]->skill_name;
+       }
        $skillNames = $request->json()->get('skill_names');
        foreach ($skillNames as $skills) {
            foreach ($skills as $skill) {
-               $skillEntity = $this->upsert($request->json()->get('user_id'), $request->json()->get('survey_id'), $skill);
-               $updatedSkills[$skillEntity->id] = $skillEntity;
+               $updatedSkills[] = $skill;
            }
        }
-       foreach($existingSkills as $skill) {
-           if(!array_key_exists($skill->id, $updatedSkills)) {
-            $skill->delete();
-           }
-       }
-       $surveySkills = $this->getAllCurrentSkillsInDatabase();
-        foreach($surveySkills as $skill){
-            $surveySkill[] = $skill;
+        $newSkills = array_diff($updatedSkills,$currentSkills);
+        foreach($newSkills as $skill){
+             $this->upsert($request->json()->get('user_id'), $request->json()->get('survey_id'), $skill);
         }
-       $surveySkills = $this->buildUpdateSuccessMessage('success',$surveySkill);
-       return $surveySkills;
+        $surveySkills = $this->getAllCurrentSkillsForThisSurvey($request->json()->get('survey_id'));
+        $surveySkills = $this->buildUpdateSuccessMessage('success',$surveySkills);
+        return $surveySkills;
     }
 
     /**
@@ -137,12 +137,7 @@ class SurveySkillsService extends Base{
      * @return static
      */
     protected function upsert($userId,$surveyId,$skillName){
-        $surveySkill = SurveySkills::where('skill_name',$skillName)
-                                     ->where('survey_id',$surveyId)
-                                     ->first();
-        if(!$surveySkill){
-            $surveySkill = SurveySkills::create(['user_id'=>$userId,'survey_id'=>$surveyId,'skill_name' => $skillName]);
-        }
+        $surveySkill = SurveySkills::create(['user_id'=>$userId,'survey_id'=>$surveyId,'skill_name' => $skillName]);
         return $surveySkill;
     }
 
@@ -169,10 +164,12 @@ class SurveySkillsService extends Base{
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @param $surveyId
+     * @return mixed
      */
-    protected function getAllCurrentSkillsInDatabase(){
-        $surveySkills = SurveySkills::all();
+    protected function getAllCurrentSkillsForThisSurvey($surveyId){
+        $surveySkills = SurveySkills::where('survey_id',$surveyId)
+                                      ->get();
         return $surveySkills;
     }
 
