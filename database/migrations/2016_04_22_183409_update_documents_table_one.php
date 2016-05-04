@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateDocumentsTableFour extends Migration
+class UpdateDocumentsTableOne extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class UpdateDocumentsTableFour extends Migration
     public function up()
     {
         Schema::table('documents', function (Blueprint $table) {
+            $table->dropColumn('extension');
 
-            $table->string('extension',15)->after('file_type');
         });
     }
 
@@ -25,6 +25,6 @@ class UpdateDocumentsTableFour extends Migration
      */
     public function down()
     {
-        //
+
     }
 }
