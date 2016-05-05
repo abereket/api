@@ -79,4 +79,10 @@ $app->group(['prefix'=>'api/v1','namespace'=>'App\Http\Controllers'],function($a
     $app->post('documents','DocumentsController@create');                           //creates documents
     $app->get('documents/{id}','DocumentsController@retrieveOne');                  //retrieves one documents
     $app->delete('documents/{id}','DocumentsController@delete');                    //deletes documents
+
+    $app->post('references','ReferenceController@create');                          //creates references
+    $app->put('references/{id}', 'ReferenceController@update');                     //updates references
+    $app->get('references','ReferenceController@retrieve');                         //searches references
+    $app->get('references/{id}','ReferenceController@retrieveOne');                 //retrieves one references
+    $app->delete('references/{id}','ReferenceController@delete');                   //deletes references
 });
