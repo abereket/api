@@ -202,8 +202,8 @@ class UsersService extends Base
             '{"first_name": "Test", "last_name": "Reference","email": "ref@zemployee.com", "password": "ref", "type": "candidate", "invited_by": "0", "verified": "1"}'
         ];
         foreach ($user as $users) {
-            $users['password'] = hash('sha512', $users['password']);
             $users = json_decode($users, true);
+            $users['password'] = hash('sha512', $users['password']);
             User::create($users);
         }
         $user = User::all();
