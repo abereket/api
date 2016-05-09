@@ -60,7 +60,11 @@ class ReferenceResultsService extends Base{
         $referenceId    =    $request->input('reference_id');
         $orderBy        =   ($request->input('order_by'))?$request->input('order_by'):'created_at';
         $sortBy         =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
-
+        $search         =    $this->searchValueExists($userId,$referenceId);
+        if($search){
+            $valError = $this->buildEmptyErrorResponse(parent::HTTP_404);
+            return $valError;
+        }
         $referenceResult = new ReferenceResult();
         if($userId){
             $referenceResult = $referenceResult->where('user_id','=',$userId);
