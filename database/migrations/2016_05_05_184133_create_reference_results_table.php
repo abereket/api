@@ -14,11 +14,11 @@ class CreateReferenceResultsTable extends Migration
     {
         Schema::create('reference_results', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('reference_id');
+            $table->integer('reference_id')->unsigned();
             $table->foreign('reference_id')->references('id')->on('references')->onDelete('cascade');
-            $table->integer('skill_id');
+            $table->integer('skill_id')->unsigned();
             $table->foreign('skill_id')->references('id')->on('survey_skills')->onDelete('cascade');
             $table->string('comments',256)->nullable();
             $table->timestamps();
