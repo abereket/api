@@ -149,6 +149,7 @@ class UsersService extends Base
     public function authenticate($userName, $password)
     {
         $password = hash('sha512', $password);
+        //return $password;
         $user = User::where('email', '=', $userName)
                      ->where('password', '=', $password)
                      ->where('verified', '=', 1)
@@ -192,15 +193,18 @@ class UsersService extends Base
                 $users->forceDelete();
             }
         }
+
+
         $user = [
-            '{"first_name":"Test", "last_name":"Admin","email":"admin@zemployee.com","password": "admin", "type": "zemployee", "invited_by": "0", "verified": "0"}',
-            '{"first_name": "Test", "last_name": "Agency","email": "agency@zemployee.com", "password": "agency", "type": "agency", "invited_by": "0", "verified": "0"}',
-            '{"first_name": "Test", "last_name": "Recruiter","email": "rec@zemployee.com", "password": "rec", "type": "recruiter", "invited_by": "0", "verified": "0"}',
-            '{"first_name": "Test", "last_name": "Candidate","email": "can@zemployee.com", "password": "can", "type": "candidate", "invited_by": "0", "verified": "0"}',
-            '{"first_name": "Test", "last_name": "Reference","email": "ref@zemployee.com", "password": "ref", "type": "candidate", "invited_by": "0", "verified": "0"}'
+            '{"first_name":"Test", "last_name":"Admin","email":"admin@zemployee.com","password": "admin", "type": "zemployee", "invited_by": "0", "verified": "1"}',
+            '{"first_name": "Test", "last_name": "Agency","email": "agency@zemployee.com", "password": "agency", "type": "agency", "invited_by": "0", "verified": "1"}',
+            '{"first_name": "Test", "last_name": "Recruiter","email": "rec@zemployee.com", "password": "rec", "type": "recruiter", "invited_by": "0", "verified": "1"}',
+            '{"first_name": "Test", "last_name": "Candidate","email": "can@zemployee.com", "password": "can", "type": "candidate", "invited_by": "0", "verified": "1"}',
+            '{"first_name": "Test", "last_name": "Reference","email": "ref@zemployee.com", "password": "ref", "type": "candidate", "invited_by": "0", "verified": "1"}'
         ];
         foreach ($user as $users) {
             $users = json_decode($users, true);
+            $users['password'] = hash('sha512', $users['password']);
             User::create($users);
         }
         $user = User::all();
