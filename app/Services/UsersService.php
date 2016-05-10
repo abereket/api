@@ -149,7 +149,6 @@ class UsersService extends Base
     public function authenticate($userName, $password)
     {
         $password = hash('sha512', $password);
-        //return $password;
         $user = User::where('email', '=', $userName)
                      ->where('password', '=', $password)
                      ->where('verified', '=', 1)
