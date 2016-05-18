@@ -30,8 +30,8 @@ class ReferenceController extends Controller{
                   'last_name'=>'sometimes|string|max:60','email'=>'sometimes|email|max:60',
                   'company_with_candidate'=>'sometimes|string|max:100',
                   'position'=>'sometimes|string|max:100',
-                  'relationship'=>'sometimes|string|max:30|in:Peer,Academic,Professor,Manager',
-                  'contact_mobile'=>'sometimes|string|max:20'];
+                  'relationship'=>'sometimes|required|string|max:30|in:Peer,Academic,Professor,Manager',
+                  'contact_mobile'=>'sometimes|required|string|max:20'];
         $this->validate($request,$rules);
         $referenceService = new ReferencesService();
         $reference = $referenceService->update($request,$id);
