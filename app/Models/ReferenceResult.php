@@ -7,7 +7,7 @@ class ReferenceResult extends Model{
     use SoftDeletes;
     protected $table = 'reference_results';
 
-    protected $fillable = ['id','user_id','reference_id','skill_id','comments','deleted_at'];
+    protected $fillable = ['id','user_id','reference_id','skill_id','comments','skill_value','deleted_at'];
 
     protected $dates = ['deleted_at'];
 }

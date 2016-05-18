@@ -472,6 +472,7 @@ return array(
     'UpdateDocumentsTable' => $baseDir . '/database/migrations/2016_04_20_194629_update_documents_table.php',
     'UpdateDocumentsTableOne' => $baseDir . '/database/migrations/2016_04_22_183409_update_documents_table_one.php',
     'UpdateDocumentsTableTwo' => $baseDir . '/database/migrations/2016_04_22_184801_update_documents_table_two.php',
+    'UpdateReferenceResultsTable' => $baseDir . '/database/migrations/2016_05_18_192602_update_reference_results_table.php',
     'UpdateSurveyResults' => $baseDir . '/database/migrations/2016_03_04_161512_update_survey_results.php',
     'UpdateTableAgencies' => $baseDir . '/database/migrations/2016_04_14_195225_update_table_agencies.php',
     'UpdateTableDocuments' => $baseDir . '/database/migrations/2016_04_20_195940_update_table_documents.php',
@@ -483,6 +484,7 @@ return array(
     'UpdateTableTeamMembers' => $baseDir . '/database/migrations/2016_04_14_204346_update_table_team_members.php',
     'UpdateTableTeams' => $baseDir . '/database/migrations/2016_04_14_203943_update_table_teams.php',
     'UpdateUsers' => $baseDir . '/database/migrations/2016_03_01_175022_update_users.php',
+    'UpdateUsersPassword' => $baseDir . '/database/migrations/2016_05_07_183457_update_users_password.php',
     'UpdateUsersTable' => $baseDir . '/database/migrations/2016_03_07_213015_update_users_table.php',
     'UpdateUsersType' => $baseDir . '/database/migrations/2016_04_15_152841_update_users_type.php',
 );
