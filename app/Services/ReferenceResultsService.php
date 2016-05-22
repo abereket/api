@@ -23,7 +23,8 @@ class ReferenceResultsService extends Base{
      $referenceResult = ReferenceResult::create(['user_id'=>$request->json()->get('user_id'),
                                                  'reference_id'=>$request->json()->get('reference_id'),
                                                  'skill_id'=>$request->json()->get('skill_id'),
-                                                 'comments'=>$request->json()->get('comments')]);
+                                                 'comments'=>$request->json()->get('comments'),
+                                                 'skill_value'=>$request->json()->get('skill_value')]);
      $referenceResult = $this->buildCreateSuccessMessage("success",$referenceResult);
      return $referenceResult;
     }
@@ -44,6 +45,7 @@ class ReferenceResultsService extends Base{
      $referenceResult->reference_id = ($request->json()->get('reference_id'))?$request->json()->get('reference_id'):$referenceResult->reference_id;
      $referenceResult->skill_id = ($request->json()->get('skill_id'))?$request->json()->get('skill_id'):$referenceResult->skill_id;
      $referenceResult->comments = ($request->json()->get('comments'))?$request->json()->get('comments'):$referenceResult->comments;
+     $referenceResult->skill_value = ($request->json()->get('skill_value'))?$request->json()->get('skill_value'):$referenceResult->skill_value;
 
      $referenceResult->save();
      $referenceResult = $this->buildUpdateSuccessMessage("success",$referenceResult);

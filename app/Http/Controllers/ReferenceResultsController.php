@@ -11,7 +11,7 @@ class ReferenceResultsController extends Controller{
      */
     public function create(Request $request){
         $rules = ['user_id'=>'required|integer','reference_id'=>'required|integer','skill_id'=>'required|integer',
-                  'comments'=>'string|max:256'];
+                  'comments'=>'string|max:256','skill_value'=>'string|max:10'];
         $this->validate($request,$rules);
         $referenceResultService = new ReferenceResultsService();
         $referenceResult = $referenceResultService->create($request);
@@ -26,7 +26,7 @@ class ReferenceResultsController extends Controller{
      */
     public function update(Request $request,$id){
         $rules = ['user_id'=>'integer','reference_id'=>'integer','skill_id'=>'integer',
-                  'comments'=>'sometimes|string|max:256'];
+                  'comments'=>'sometimes|required|string|max:256','skill_value'=>'sometimes|required|string|max:10'];
         $this->validate($request,$rules);
         $referenceResultService  = new ReferenceResultsService();
         $referenceResult = $referenceResultService->update($request,$id);
