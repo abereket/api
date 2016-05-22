@@ -23,7 +23,9 @@ class ReferencesService extends Base{
                                         'last_name'=>$request->json()->get('last_name'),
                                         'email'=>$request->json()->get('email'),
                                         'company_with_candidate'=>$request->json()->get('company_with_candidate'),
-                                        'position'=>$request->json()->get('position')]);
+                                        'position'=>$request->json()->get('position'),
+                                        'relationship'=>$request->json()->get('relationship'),
+                                        'contact_mobile'=>$request->json()->get('contact_mobile')]);
         $reference = $this->buildCreateSuccessMessage("success",$reference);
         return $reference;
     }
@@ -47,6 +49,8 @@ class ReferencesService extends Base{
         $reference->email=($request->json()->get('email'))?$request->json()->get('email'):$reference->email;
         $reference->company_with_candidate=($request->json()->get('company_with_candidate'))?$request->json()->get('company_with_candidate'):$reference->company_with_candidate;
         $reference->position=($request->json()->get('position'))?$request->json()->get('position'):$reference->position;
+        $reference->relationship=($request->json()->get('relationship'))?$request->json()->get('relationship'):$reference->relationship;
+        $reference->contact_mobile=($request->json()->get('contact_mobile'))?$request->json()->get('contact_mobile'):$reference->contact_mobile;
         $reference->save();
 
         $reference = $this->buildUpdateSuccessMessage("success",$reference);
