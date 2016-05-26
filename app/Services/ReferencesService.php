@@ -26,6 +26,20 @@ class ReferencesService extends Base{
                                         'position'=>$request->json()->get('position'),
                                         'relationship'=>$request->json()->get('relationship'),
                                         'contact_mobile'=>$request->json()->get('contact_mobile')]);
+
+        $user = User::find($reference->user_id);
+        $invitedBy = $this->setInvitedBy($user);
+        $emailVerification = new EmailVerificationsService();
+        $code = $emailVerification->create($user->type,$user->id);
+
+        //Send user activation email
+        $emailService = new EmailsService();
+        $from         = "info@zemployee.com";
+        $subject      = " ";
+        $body         = "Please click the link below to active your account " . $code;
+        $templateId   = "45bd4441-12f8-4b18-82dd-03256f261876";
+        $emailService->send($reference->email, $from, $subject, $body,$invitedBy,$code,$templateId);
+
         $reference = $this->buildCreateSuccessMessage("success",$reference);
         return $reference;
     }
