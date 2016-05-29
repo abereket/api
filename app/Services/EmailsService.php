@@ -65,6 +65,19 @@ class EmailsService{
                 $sendGrid->send($email);
                 return true;
             break;
+            case '4b1bc046-6ba1-45e2-afec-11ec6ad50846':
+                $email->addTo($to)
+                    ->setFrom($from)
+                    ->setSubject($subject)
+                    ->addSubstitution("%CandidateName%",array($invitedBy))
+                    ->addSubstitution("%ReferenceName%",array($orgName))
+                    ->setHtml(' ')
+                    ->setTemplateId($templateId);
+
+                $sendGrid->send($email);
+                return true;
+            break;
+
         }
     }
 }
