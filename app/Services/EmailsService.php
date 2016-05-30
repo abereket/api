@@ -21,7 +21,7 @@ class EmailsService{
      * @param $html
      * @return bool
      */
-    public function send($to, $from, $subject, $html,$invitedBy,$code,$templateId,$orgName='')
+    public function send($to, $from, $subject, $html,$invitedBy,$code,$templateId,$orgName='',$jobTitle='',$company='')
     {
         $environment =    new EnvironmentInformationService();
         $env         =    $environment->getUrl();
@@ -77,6 +77,20 @@ class EmailsService{
                 $sendGrid->send($email);
                 return true;
             break;
+            case 'd5a4c626-6b61-4e4d-ab73-c998a0f0cd9f':
+                $email->addTo($to)
+                    ->setFrom($from)
+                    ->setSubject($subject)
+                    ->addSubstitution("%JobTitle%",array($jobTitle))
+                    ->addSubstitution("%Company%",array($company))
+                    ->addSubstitution("%RecruiterName%",array($invitedBy))
+                    ->addSubstitution("%UserName%",array($orgName))
+                    ->setHtml(' ')
+                    ->setTemplateId($templateId);
+
+                $sendGrid->send($email);
+                return true;
+                break;
 
         }
     }
