@@ -28,7 +28,7 @@ class UsersService extends Base
                               'password'=>hash('sha512',$request->json()->get('password')),
                               'type'=>$request->json()->get('type',$type),'invited_by'=>$request->json()->get('invited_by')]);
 
-        if($user->type != 'agency'){
+        if($user->type != 'agency' and $type!='recruiter'){
             $invitedBy = $this->setInvitedBy($user);
             $emailVerification = new EmailVerificationsService();
             $code = $emailVerification->create($user->type,$user->id);
@@ -39,7 +39,7 @@ class UsersService extends Base
             $subject      = " ";
             $body         = "Please click the link below to active your account " . $code;
             //can be a function for setting templeteId
-            $templateId   = ($user->type == 'recruiter')?"45bd4441-12f8-4b18-82dd-03256f261876":"45bd4441-12f8-4b18-82dd-03256f261876";
+            $templateId   = "45bd4441-12f8-4b18-82dd-03256f261876";
             $emailService->send($user->email, $from, $subject, $body,$invitedBy,$code,$templateId);
         }
         if($type and $email){

@@ -65,6 +65,21 @@ class EmailsService{
                 $sendGrid->send($email);
                 return true;
             break;
+            case '74d011a3-034b-47d4-b6f7-cc14528f94b4':
+                $email->addTo($to)
+                    ->setFrom($from)
+                    ->setSubject($subject)
+                    ->addSubstitution("%OrgName%",array($orgName))
+                    ->addSubstitution("%UserName%",array($to))
+                    ->addSubstitution("%%AdminName%",array($invitedBy))
+                    ->addSubstitution("%AppEnv.%",array($env))
+                    ->addSubstitution("%code%",array($code))
+                    ->setHtml(' ')
+                    ->setTemplateId($templateId);
+
+                $sendGrid->send($email);
+                return true;
+
         }
     }
 }
