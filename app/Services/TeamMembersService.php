@@ -24,7 +24,7 @@ class TeamMembersService extends Base{
                 $userService = new UsersService();
                 $user = $userService->create($request,$emails[$i]['email'],'recruiter');
                 list($admin,$orgName) = $this->adminName($request->json()->get('team_id'));
-                $userName = $emails[$i]['email'];
+                $options=array('orgName'=>$orgName,'userName'=>$emails[$i]['email']);
                 $emailVerification = new EmailVerificationsService();
                 $code = $emailVerification->create($user['type'],$user['id']);
                 $emailService = new EmailsService();
@@ -32,7 +32,7 @@ class TeamMembersService extends Base{
                 $subject      = " ";
                 $body         = "Please click the link below to active your account " . $code;
                 $templateId   = "74d011a3-034b-47d4-b6f7-cc14528f94b4";
-                $emailService->send($emails[$i], $from, $subject, $body,$admin,$code,$templateId,$orgName,$userName);
+                $emailService->send($emails[$i], $from, $subject, $body,$admin,$code,$templateId,$options);
             }
             $teamMember = TeamMember::create(['user_id' => $user->id, 'team_id' => $request->json()->get('team_id')]);
             $id[]=$teamMember->id;

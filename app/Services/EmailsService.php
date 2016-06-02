@@ -21,7 +21,7 @@ class EmailsService{
      * @param $html
      * @return bool
      */
-    public function send($to, $from, $subject, $html,$invitedBy,$code,$templateId,$orgName='',$userName='')
+    public function send($to, $from, $subject, $html,$invitedBy,$code,$templateId,array $options = array())
     {
         $environment =    new EnvironmentInformationService();
         $env         =    $environment->getUrl();
@@ -55,7 +55,7 @@ class EmailsService{
                 $email->addTo($to)
                     ->setFrom($from)
                     ->setSubject($subject)
-                    ->addSubstitution("%orgName%",array($orgName))
+                    ->addSubstitution("%orgName%",array($options['orgName']))
                     ->addSubstitution("%UserName%",array($invitedBy))
                     ->addSubstitution("%AppEnv.%",array($env))
                     ->addSubstitution("%code%",array($code))
@@ -70,7 +70,7 @@ class EmailsService{
                     ->setFrom($from)
                     ->setSubject($subject)
                     ->addSubstitution("%CandidateName%",array($invitedBy))
-                    ->addSubstitution("%ReferenceName%",array($orgName))
+                    ->addSubstitution("%ReferenceName%",array($options['orgName']))
                     ->setHtml(' ')
                     ->setTemplateId($templateId);
 
@@ -81,10 +81,10 @@ class EmailsService{
                 $email->addTo($to)
                     ->setFrom($from)
                     ->setSubject($subject)
-                    ->addSubstitution("%JobTitle%",array($jobTitle))
-                    ->addSubstitution("%Company%",array($company))
+                    ->addSubstitution("%JobTitle%",array($options['jobTitle']))
+                    ->addSubstitution("%Company%",array($options['company']))
                     ->addSubstitution("%RecruiterName%",array($invitedBy))
-                    ->addSubstitution("%UserName%",array($orgName))
+                    ->addSubstitution("%UserName%",array($options['candName']))
                     ->setHtml(' ')
                     ->setTemplateId($templateId);
 
@@ -96,8 +96,8 @@ class EmailsService{
                 $email->addTo($to)
                     ->setFrom($from)
                     ->setSubject($subject)
-                    ->addSubstitution("%OrgName%",array($orgName))
-                    ->addSubstitution("%UserName%",array($userName))
+                    ->addSubstitution("%OrgName%",array($options['orgName']))
+                    ->addSubstitution("%UserName%",array($options['userName']))
                     ->addSubstitution("%AdminName%",array($invitedBy))
                     ->addSubstitution("%AppEnv.%",array($env))
                     ->addSubstitution("%code%",array($code))
