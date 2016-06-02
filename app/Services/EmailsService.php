@@ -65,6 +65,33 @@ class EmailsService{
                 $sendGrid->send($email);
                 return true;
             break;
+            case '4b1bc046-6ba1-45e2-afec-11ec6ad50846':
+                $email->addTo($to)
+                    ->setFrom($from)
+                    ->setSubject($subject)
+                    ->addSubstitution("%CandidateName%",array($invitedBy))
+                    ->addSubstitution("%ReferenceName%",array($orgName))
+                    ->setHtml(' ')
+                    ->setTemplateId($templateId);
+
+                $sendGrid->send($email);
+                return true;
+            break;
+            case 'd5a4c626-6b61-4e4d-ab73-c998a0f0cd9f':
+                $email->addTo($to)
+                    ->setFrom($from)
+                    ->setSubject($subject)
+                    ->addSubstitution("%JobTitle%",array($jobTitle))
+                    ->addSubstitution("%Company%",array($company))
+                    ->addSubstitution("%RecruiterName%",array($invitedBy))
+                    ->addSubstitution("%UserName%",array($orgName))
+                    ->setHtml(' ')
+                    ->setTemplateId($templateId);
+
+                $sendGrid->send($email);
+                return true;
+                break;
+
             case '74d011a3-034b-47d4-b6f7-cc14528f94b4':
                 $email->addTo($to)
                     ->setFrom($from)

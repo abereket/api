@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Models\Reference;
 use App\Models\User;
+use App\Models\Job;
 
 class ReferencesService extends Base{
     /**
@@ -12,12 +13,14 @@ class ReferencesService extends Base{
     public function create($request){
         $user = User::find($request->json()->get('user_id'));
         $candidate = User::find($request->json()->get('candidate_id'));
-        $valError = $this->validateCreate($user,$candidate);
+        $job = Job::find($request->json()->get('job_id'));
+        $valError = $this->validateCreate($user,$candidate,$job);
         if($valError){
            $valError = $this->failureMessage($valError,parent::HTTP_404);
            return $valError;
         }
         $reference = Reference::create(['user_id'=>$request->json()->get('user_id'),
+                                        'job_id'=>$request->json()->get('job_id'),
                                         'candidate_id'=>$request->json()->get('candidate_id'),
                                         'first_name'=>$request->json()->get('first_name'),
                                         'last_name'=>$request->json()->get('last_name'),
@@ -26,6 +29,28 @@ class ReferencesService extends Base{
                                         'position'=>$request->json()->get('position'),
                                         'relationship'=>$request->json()->get('relationship'),
                                         'contact_mobile'=>$request->json()->get('contact_mobile')]);
+
+        $candidate = User::find($reference->candidate_id);
+        $candidateName = $candidate->first_name." ".$candidate->last_name;
+        $recruiter = User::find($reference->user_id);
+        $recruiterName = $recruiter->first_name." ".$recruiter->last_name;
+        $referenceName =$reference->first_name." ".$reference->last_name;
+        //$job = Reference::find($job_id);
+        //$jobTitle = $job->title;
+        //$company  = $job->company;
+        $emailVerification = new EmailVerificationsService();
+        $code = $emailVerification->create($user->type,$user->id);
+
+        //Send user activation email
+        $emailService = new EmailsService();
+        $from         = "info@zemployee.com";
+        $subject      = " ";
+        $body         = "Please click the link below to active your account " . $code;
+        $templateId   = "4b1bc046-6ba1-45e2-afec-11ec6ad50846";
+        $templateId1  = "d5a4c626-6b61-4e4d-ab73-c998a0f0cd9f";
+        $emailService->send($reference->email, $from,$subject,$body,$candidateName,$code,$templateId,$referenceName);
+        $emailService->send($candidate->email,$from,$subject,$body,$recruiterName,$code,$templateId1,$candidateName/**,$jobTitle,$company**/);
+
         $reference = $this->buildCreateSuccessMessage("success",$reference);
         return $reference;
     }
@@ -43,6 +68,7 @@ class ReferencesService extends Base{
             return $valError;
         }
         $reference->user_id=($request->json()->get('user_id'))?$request->json()->get('user_id'):$reference->user_id ;
+        $reference->job_id=($request->json()->get('job_id'))?$request->json()->get('job_id'):$reference->job_id;
         $reference->candidate_id=($request->json()->get('candidate_id'))?$request->json()->get('candidate_id'):$reference->candidate_id;
         $reference->first_name=($request->json()->get('first_name'))?$request->json()->get('first_name'):$reference->first_name;
         $reference->last_name=($request->json()->get('last_name'))?$request->json()->get('last_name'):$reference->last_name;
@@ -122,13 +148,16 @@ class ReferencesService extends Base{
      * @param $candidate
      * @return array
      */
-    protected function validateCreate($user,$candidate){
+    protected function validateCreate($user,$candidate,$job){
         $errors = array();
         if(!$user){
             $errors['user_id'] = "please provide a valid user id";
         }
         if(!$candidate){
             $errors['candidate_id'] = "please provide a valid candidate id";
+        }
+        if(!$job){
+            $errors['job_id'] = "please provide a valid job id";
         }
         return $errors;
     }
