@@ -158,5 +158,18 @@ abstract class Base
         $user['results'] = $result;
         return $user;
     }
+
+    /**
+     * @param $user
+     * @return string
+     */
+    protected function setInvitedBy($user){
+        if($user->invited_by!=null){
+            $userInv= User::find($user->invited_by);
+            $invitedBy = $userInv->first_name." ".$userInv->last_name;
+        }
+        $invitedBy=(isset($invitedBy))?$invitedBy:'Zemployee Admin';
+        return $invitedBy;
+    }
 }
 ?>
