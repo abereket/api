@@ -8,7 +8,7 @@ class Reference extends Model{
     use SoftDeletes;
     protected $table = 'references';
 
-    protected $fillable = ['user_id','candidate_id','first_name','last_name','email','company_with_candidate','position',
+    protected $fillable = ['user_id','job_id','candidate_id','first_name','last_name','email','company_with_candidate','position',
                            'relationship','contact_mobile'];
 
     protected $dates = ['deleted_at'];

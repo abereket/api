@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Models\Reference;
 use App\Models\User;
+use App\Models\Job;
 
 class ReferencesService extends Base{
     /**
@@ -12,12 +13,14 @@ class ReferencesService extends Base{
     public function create($request){
         $user = User::find($request->json()->get('user_id'));
         $candidate = User::find($request->json()->get('candidate_id'));
-        $valError = $this->validateCreate($user,$candidate);
+        $job = Job::find($request->json()->get('job_id'));
+        $valError = $this->validateCreate($user,$candidate,$job);
         if($valError){
            $valError = $this->failureMessage($valError,parent::HTTP_404);
            return $valError;
         }
         $reference = Reference::create(['user_id'=>$request->json()->get('user_id'),
+                                        'job_id'=>$request->json()->get('job_id'),
                                         'candidate_id'=>$request->json()->get('candidate_id'),
                                         'first_name'=>$request->json()->get('first_name'),
                                         'last_name'=>$request->json()->get('last_name'),
@@ -43,6 +46,7 @@ class ReferencesService extends Base{
             return $valError;
         }
         $reference->user_id=($request->json()->get('user_id'))?$request->json()->get('user_id'):$reference->user_id ;
+        $reference->job_id=($request->json()->get('job_id'))?$request->json()->get('job_id'):$reference->job_id;
         $reference->candidate_id=($request->json()->get('candidate_id'))?$request->json()->get('candidate_id'):$reference->candidate_id;
         $reference->first_name=($request->json()->get('first_name'))?$request->json()->get('first_name'):$reference->first_name;
         $reference->last_name=($request->json()->get('last_name'))?$request->json()->get('last_name'):$reference->last_name;
@@ -122,13 +126,16 @@ class ReferencesService extends Base{
      * @param $candidate
      * @return array
      */
-    protected function validateCreate($user,$candidate){
+    protected function validateCreate($user,$candidate,$job){
         $errors = array();
         if(!$user){
             $errors['user_id'] = "please provide a valid user id";
         }
         if(!$candidate){
             $errors['candidate_id'] = "please provide a valid candidate id";
+        }
+        if(!$job){
+            $errors['job_id'] = "please provide a valid job id";
         }
         return $errors;
     }
