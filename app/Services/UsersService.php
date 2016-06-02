@@ -7,6 +7,7 @@
  */
 
 namespace App\Services;
+use App\Models\Agency;
 use App\Models\User;
 use Faker\Provider\Uuid;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -194,19 +195,24 @@ class UsersService extends Base
         }
 
 
-        $user = [
+        $users = [
             '{"first_name":"Test", "last_name":"Admin","email":"admin@zemployee.com","password": "admin", "type": "zemployee", "invited_by": "0", "verified": "1"}',
             '{"first_name": "Test", "last_name": "Agency","email": "agency@zemployee.com", "password": "agency", "type": "agency", "invited_by": "0", "verified": "1"}',
             '{"first_name": "Test", "last_name": "Recruiter","email": "rec@zemployee.com", "password": "rec", "type": "recruiter", "invited_by": "0", "verified": "1"}',
             '{"first_name": "Test", "last_name": "Candidate","email": "can@zemployee.com", "password": "can", "type": "candidate", "invited_by": "0", "verified": "1"}',
             '{"first_name": "Test", "last_name": "Reference","email": "ref@zemployee.com", "password": "ref", "type": "candidate", "invited_by": "0", "verified": "1"}'
         ];
-        foreach ($user as $users) {
-            $users = json_decode($users, true);
-            $users['password'] = hash('sha512', $users['password']);
-            User::create($users);
+        foreach ($users as $user) {
+            $user = json_decode($user, true);
+            $user['password'] = hash('sha512', $user['password']);
+            User::create($user);
         }
+        $agencyUser = User::where("type","agency")->first();
+        $agency = '{"name" : "TestAgency1","user_id" :"'.$agencyUser->id.'", "description" : "Test Agency"}';
+        $agency = json_decode($agency, true);
+        $agency = Agency::create($agency);
         $user = User::all();
+        $user[] = $agency;
         $user = $this->buildRetrieveOneSuccessMessage("success",$user);
         return $user;
     }
