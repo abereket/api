@@ -36,7 +36,8 @@ class AgenciesService extends Base
         $subject    =   " ";
         $body       =   "please activate your account";
         $templateId =   "67ae6661-bc1c-49ac-a70b-2205c9926b1b";
-        $emailService->send($user->email,$from,$subject,$body,$user->first_name." ".$user->last_name,$code,$templateId,$agency->name);
+        $options    =   array('orgName'=>$agency->name);
+        $emailService->send($user->email,$from,$subject,$body,$user->first_name." ".$user->last_name,$code,$templateId,$options);
         $agency=$this->buildCreateSuccessMessage("success",$agency);
         return $agency;
     }

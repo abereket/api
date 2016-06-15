@@ -35,9 +35,10 @@ class ReferencesService extends Base{
         $recruiter = User::find($reference->user_id);
         $recruiterName = $recruiter->first_name." ".$recruiter->last_name;
         $referenceName =$reference->first_name." ".$reference->last_name;
-        //$job = Reference::find($job_id);
-        //$jobTitle = $job->title;
-        //$company  = $job->company;
+        $job = Job::find($reference->job_id);
+        $jobTitle = $job->title;
+        $company  = $job->company_name;
+        $options = array('orgName'=>$referenceName,'candName'=>$candidateName,'jobTitle'=>$jobTitle,'company'=>$company);
         $emailVerification = new EmailVerificationsService();
         $code = $emailVerification->create($user->type,$user->id);
 
@@ -48,8 +49,8 @@ class ReferencesService extends Base{
         $body         = "Please click the link below to active your account " . $code;
         $templateId   = "4b1bc046-6ba1-45e2-afec-11ec6ad50846";
         $templateId1  = "d5a4c626-6b61-4e4d-ab73-c998a0f0cd9f";
-        $emailService->send($reference->email, $from,$subject,$body,$candidateName,$code,$templateId,$referenceName);
-        $emailService->send($candidate->email,$from,$subject,$body,$recruiterName,$code,$templateId1,$candidateName/**,$jobTitle,$company**/);
+        $emailService->send($reference->email, $from,$subject,$body,$candidateName,$code,$templateId,$options);
+        $emailService->send($candidate->email,$from,$subject,$body,$recruiterName,$code,$templateId1,$options);
 
         $reference = $this->buildCreateSuccessMessage("success",$reference);
         return $reference;

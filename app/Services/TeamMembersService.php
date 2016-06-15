@@ -1,9 +1,11 @@
 <?php
 namespace App\Services;
+use App\Models\Agency;
 use App\Models\Team;
 use App\Models\TeamMember;
 use App\Models\User;
 use Illuminate\Pagination;
+
 class TeamMembersService extends Base{
     /**
      * @param $request
@@ -21,6 +23,16 @@ class TeamMembersService extends Base{
             if (!$user) {
                 $userService = new UsersService();
                 $user = $userService->create($request,$emails[$i]['email'],'recruiter');
+                list($admin,$orgName) = $this->adminName($request->json()->get('team_id'));
+                $options=array('orgName'=>$orgName,'userName'=>$emails[$i]['email']);
+                $emailVerification = new EmailVerificationsService();
+                $code = $emailVerification->create($user['type'],$user['id']);
+                $emailService = new EmailsService();
+                $from         = "info@zemployee.com";
+                $subject      = " ";
+                $body         = "Please click the link below to active your account " . $code;
+                $templateId   = "74d011a3-034b-47d4-b6f7-cc14528f94b4";
+                $emailService->send($emails[$i], $from, $subject, $body,$admin,$code,$templateId,$options);
             }
             $teamMember = TeamMember::create(['user_id' => $user->id, 'team_id' => $request->json()->get('team_id')]);
             $id[]=$teamMember->id;
@@ -29,7 +41,6 @@ class TeamMembersService extends Base{
         foreach($teamMember as $teamMemberEntity){
             $teamMembers[] = $teamMemberEntity;
         }
-        //$teamMember = json_decode(json_encode($teamMember), false);
         $teamMember = $this->buildCreateSuccessMessage("success", $teamMembers);
         return $teamMember;
     }
@@ -204,6 +215,19 @@ class TeamMembersService extends Base{
            $errors['team_member_id'] =  "Please provide a valid teamMember id";
         }
         return $errors;
+    }
+
+    /**
+     * @param $teamId
+     * @return array
+     */
+    protected function adminName($teamId){
+        $team   =  Team::find($teamId);
+        $agency =  Agency::find($team->agency_id);
+        $user   =  User::find($agency->user_id);
+        $admin  = $user->first_name." ".$user->last_name;
+        $orgName = $agency->name;
+        return array($admin,$orgName);
     }
 
 }
