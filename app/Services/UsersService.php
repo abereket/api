@@ -29,7 +29,7 @@ class UsersService extends Base
                               'password'=>hash('sha512',$request->json()->get('password')),
                               'type'=>$request->json()->get('type',$type),'invited_by'=>$request->json()->get('invited_by')]);
 
-        if($user->type != 'agency'){
+        if($user->type != 'agency' and $type!='recruiter'){
             $invitedBy = $this->setInvitedBy($user);
             $emailVerification = new EmailVerificationsService();
             $code = $emailVerification->create($user->type,$user->id);
@@ -39,6 +39,7 @@ class UsersService extends Base
             $from         = "info@zemployee.com";
             $subject      = " ";
             $body         = "Please click the link below to active your account " . $code;
+            //can be a function for setting templeteId
             $templateId   = "45bd4441-12f8-4b18-82dd-03256f261876";
             $emailService->send($user->email, $from, $subject, $body,$invitedBy,$code,$templateId);
         }
@@ -256,5 +257,18 @@ class UsersService extends Base
             $errors['user_id']  =  "please provide a valid user id";
         }
        return $errors;
+    }
+
+    /**
+     * @param $user
+     * @return string
+     */
+    protected function setInvitedBy($user){
+        if($user->invited_by!=null){
+            $userInv= User::find($user->invited_by);
+            $invitedBy = $userInv->first_name." ".$userInv->last_name;
+        }
+        $invitedBy=(isset($invitedBy))?$invitedBy:'Zemployee Admin';
+        return $invitedBy;
     }
 }
