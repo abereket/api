@@ -18,7 +18,7 @@ class JobController extends Controller{
         $is_closed    =  (true === $is_closed or false === $is_closed)?[true,false]:['',''];
         $is_active    =  (true === $is_active or false === $is_active)?[true,false]:['',''];
 
-        $rules = ['user_id'=>'required|integer','title'=>'required|string|max:50','company_name'=>'string|max:50',
+        $rules = ['user_id'=>'required|integer','external_id'=>'string|max:60|required','title'=>'required|string|max:50','company_name'=>'string|max:50',
                   'link'=>'string|max:256','is_fulfilled'=>"boolean|in:$is_fulfilled[0],$is_fulfilled[1]",
                   'is_closed'=>"boolean|in:$is_closed[0],$is_closed[1]",'is_active'=>"boolean|in:$is_active[0],$is_active[1]",
                   'city'=>'string|max:50','state'=>'string|max:2','zipCode'=>'max:10'];
@@ -43,7 +43,7 @@ class JobController extends Controller{
         $is_closed    =  (true === $is_closed or false === $is_closed)?[true,false]:['',''];
         $is_active    =  (true === $is_active or false === $is_active)?[true,false]:['',''];
 
-        $rules = ['user_id'=>'required|integer','title'=>'sometimes|required|string|max:50','company_name'=>'sometimes|required|string|max:50',
+        $rules = ['user_id'=>'required|integer','external_id'=>'sometimes|required|string|max:60','title'=>'sometimes|required|string|max:50','company_name'=>'sometimes|required|string|max:50',
                   'link'=>'sometimes|required|string|max:256','is_fulfilled'=>"boolean|in:$is_fulfilled[0],$is_fulfilled[1]",
                   'is_closed'=>"boolean|in:$is_closed[0],$is_closed[1]",'is_active'=>"boolean|in:$is_active[0],$is_active[1]",
                   'city'=>'sometimes|required|string|max:50','state'=>'sometimes|required|string|max:2',

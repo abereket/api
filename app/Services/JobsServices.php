@@ -8,18 +8,18 @@ class JobsServices extends Base{
 
     /**
      * @param $request
-     * @return array|static
+     * @return mixed
      */
     public function create($request){
-    $valError = $this->validateCreate($request->json()->get('user_id'));
+    $valError = $this->validateCreate($request->json()->get('user_id'),$request->json()->get('external_id'));
     if($valError){
         $valError = $this->failureMessage($valError,parent::HTTP_404);
         return $valError;
     }
-    $job = Job::create(['user_id'=>$request->json()->get('user_id'),'title'=>$request->json()->get('title'),
-                        'company_name'=>$request->json()->get('company_name'),'link'=>$request->json()->get('link'),
-                        'is_fulfilled'=>$request->json()->get('is_fulfilled',0),'is_closed'=>$request->json()->get('is_closed',0),
-                        'is_active'=>$request->json()->get('is_active',0),
+    $job = Job::create(['user_id'=>$request->json()->get('user_id'),'external_id'=>$request->json()->get('external_id'),
+                        'title'=>$request->json()->get('title'),'company_name'=>$request->json()->get('company_name'),
+                        'link'=>$request->json()->get('link'), 'is_fulfilled'=>$request->json()->get('is_fulfilled',0),
+                        'is_closed'=>$request->json()->get('is_closed',0),'is_active'=>$request->json()->get('is_active',0),
                         'city'=>$request->json()->get('city'),'state'=>$request->json()->get('state'),
                         'zip_code'=>$request->json()->get('zip_code')]);
 
@@ -32,16 +32,17 @@ class JobsServices extends Base{
     /**
      * @param $request
      * @param $id
-     * @return array
+     * @return mixed
      */
     public function update($request,$id){
         $job = Job::find($id);
-        $valError = $this->validateUpdate($job,$request->json()->get('user_id'));
+        $valError = $this->validateUpdate($job,$request->json()->get('user_id'),$request->json()->get('external_id'));
         if($valError){
             $valError=$this->failureMessage($valError,parent::HTTP_404);
             return $valError;
         }
         $job->user_id      =  $request->json()->get('user_id');
+        $job->external_id  =  ($request->json()->get('external_id'))?$request->json()->get('external_id'):$job->external_id;
         $job->title        =  ($request->json()->get('title'))?$request->json()->get('title'):$job->title;
         $job->company_name =  ($request->json()->get('company_name'))?$request->json()->get('company_name'):$job->company_name;
         $job->link         =  ($request->json()->get('link'))?$request->json()->get('link'):$job->link;
@@ -98,6 +99,7 @@ class JobsServices extends Base{
     public function retrieve($request){
         $limit            =   ($request->input('per_page'))?($request->input('per_page')) : 15;
         $userId           =   $request->input('user_id');
+        $externalId       =   $request->input('external_id');
         $title            =   $request->input('title');
         $companyName      =   $request->input('company_name');
         $is_closed        =   $request->input('is_closed');
@@ -106,7 +108,7 @@ class JobsServices extends Base{
         $zipCode          =   $request->input('zip_code');
         $orderBy          =   ($request->input('order_by'))? ($request->input('order_by')):'created_at';
         $sortBy           =   ($request->input('sort_by'))?$request->input('sort_by'):'DESC';
-        $search           =  $this->searchValueExists($userId,$title,$companyName,$is_closed,$city,$state,$zipCode);
+        $search           =  $this->searchValueExists($userId,$externalId,$title,$companyName,$is_closed,$city,$state,$zipCode);
         if($search){
             $entity = $this->buildEmptyErrorResponse(parent::HTTP_404);
             return $entity;
@@ -116,6 +118,9 @@ class JobsServices extends Base{
 
         if($userId){
            $job = $job->where('user_id' , '=', $userId);
+        }
+        if($externalId){
+            $job = $job->where('external_id' , 'like', '%'.$externalId.'%');
         }
         if($title){
             $job = $job->where('title' , 'like', '%'.$title.'%');
@@ -150,15 +155,21 @@ class JobsServices extends Base{
         return $job;
 
     }
+
     /**
      * @param $userId
-     * @return array|string
+     * @param $externalId
+     * @return array
      */
-    protected function validateCreate($userId){
+    protected function validateCreate($userId,$externalId){
         $errors = array();
         $user = User::find($userId);
         if(!$user){
             $errors['user_id'] = "The user id you have entered not exists.Please enter a valid user id";
+        }
+        $job = Job::where('external_id','=',$externalId)->first();
+        if($job){
+            $errors['external_id'] = "The external id you have entered should be unique";
         }
         return $errors;
     }
@@ -166,9 +177,10 @@ class JobsServices extends Base{
     /**
      * @param $job
      * @param $userId
-     * @return array|string
+     * @param $externalId
+     * @return array
      */
-    protected function validateUpdate($job,$userId){
+    protected function validateUpdate($job,$userId,$externalId){
         $errors = array();
         if(!$job){
             $errors['job_id'] = "The job you are looking for not exists.Please use a valid job id";
@@ -176,6 +188,10 @@ class JobsServices extends Base{
         $user = User::find($userId);
         if(!$user){
             $errors['user_id']="The user id you have entered not exists.Please enter a valid user id";
+        }
+        $job = Job::where('external_id','=',$externalId)->first();
+        if($job){
+            $errors['external_id'] = "The external id you have entered should be unique";
         }
         return $errors;
     }

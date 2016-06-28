@@ -110,13 +110,17 @@ class surveysService extends Base{
     /**
      * @param $jobId
      * @param $userId
-     * @return array|string
+     * @return array
      */
     protected function validateCreate($jobId,$userId){
         $errors = array();
         $job = Job::find($jobId);
         if(!$job){
            $errors['job_id'] = 'please enter a valid job_id';
+        }
+        $survey = Surveys::where('job_id','=',$jobId)->first();
+        if($survey){
+            $errors['job_existed'] = 'The job you entered already have a survey';
         }
         $user = User::find($userId);
         if(!$user){
